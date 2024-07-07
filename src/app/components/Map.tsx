@@ -1,9 +1,16 @@
 "use client"
 import React, {useState, useEffect, useMemo, useCallback} from "react"
-import {GoogleMap, useLoadScript, MarkerF, OverlayView} from "@react-google-maps/api"
+import {GoogleMap, useLoadScript, MarkerF, OverlayView, Libraries} from "@react-google-maps/api"
 import {useLocation} from "../providers/LocationProvider"
 
-const locations = [
+type Location = {
+    lat: number
+    lng: number
+    name: string
+    points: number
+}
+
+const locations: Location[] = [
     {
         lat: 48.5253,
         lng: 9.0629,
@@ -78,19 +85,19 @@ const LiveLocationPin = () => (
         <div className='absolute w-4 h-4 bg-blue-500 rounded-full animate-ping opacity-75'></div>
     </div>
 )
-const libraries = ["places", "geometry"]
+const libraries: Libraries = ["places", "geometry"]
 
-const Map = () => {
+const Map: React.FC = () => {
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
         libraries
     })
 
     const {userLocation} = useLocation()
-    const [selectedLocation, setSelectedLocation] = useState(null)
-    const [nearbyLocation, setNearbyLocation] = useState(null)
-    const [map, setMap] = useState(null)
-    const [distances, setDistances] = useState({})
+    const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
+    const [nearbyLocation, setNearbyLocation] = useState<Location | null>(null)
+    const [map, setMap] = useState<google.maps.Map | null>(null)
+    const [distances, setDistances] = useState<Record<string, number>>({})
 
     const mapContainerStyle = useMemo(
         () => ({
@@ -108,7 +115,7 @@ const Map = () => {
         []
     )
 
-    const onMapLoad = useCallback((map) => {
+    const onMapLoad = useCallback((map: google.maps.Map) => {
         setMap(map)
     }, [])
 
@@ -116,8 +123,8 @@ const Map = () => {
         if (userLocation && map && window.google) {
             const userLatLng = new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
 
-            const newDistances = {}
-            let closest = null
+            const newDistances: Record<string, number> = {}
+            let closest: Location | null = null
             let closestDistance = Infinity
 
             locations.forEach((location) => {
@@ -137,7 +144,7 @@ const Map = () => {
 
             setDistances(newDistances)
 
-            if (closestDistance <= 50) {
+            if (closest && closestDistance <= 50) {
                 // Within 50 meters
                 setNearbyLocation(closest)
             } else {
@@ -206,7 +213,7 @@ const Map = () => {
                     ) : (
                         <p className='text-md text-blue-600'>
                             Distance:{" "}
-                            {distances[selectedLocation.name]
+                            {distances[selectedLocation.name] !== undefined
                                 ? `${distances[selectedLocation.name].toFixed(2)} meters`
                                 : "Calculating..."}
                         </p>
