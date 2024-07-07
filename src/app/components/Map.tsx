@@ -18,6 +18,12 @@ const locations: Location[] = [
         points: 0
     },
     {
+        lat: 48.519372574825454,
+        lng: 9.055539088469041,
+        name: "Hölderlinturm Museumscafé",
+        points: 1000
+    },
+    {
         lat: 48.5216,
         lng: 9.0576,
         name: "Hohentübingen Castle",
