@@ -30,5 +30,5 @@ export async function GET() {
         })
     }
 
-    return NextResponse.redirect("https://los-beryl.vercel.app")
+    return NextResponse.redirect("http://localhost:3000")
 }
