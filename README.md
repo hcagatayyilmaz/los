@@ -1,5 +1,6 @@
 Los MVP Development
-los-beryl.vercel.app
+https://los-beryl.vercel.app
+http://localhost:3000
 
 ## Getting Started
 
