@@ -1,21 +1,49 @@
-// src/app/providers/LocationProvider.tsx
 "use client"
-import React, {createContext, useState, useContext, ReactNode} from "react"
+import React, {createContext, useState, useEffect, useContext} from "react"
 
-type Location = {
-    lat: number
-    lng: number
-} | null
-
+// Define the shape of the context
 type LocationContextType = {
-    userLocation: Location
-    setUserLocation: React.Dispatch<React.SetStateAction<Location>>
+    userLocation: {lat: number; lng: number} | null
+    setUserLocation: React.Dispatch<React.SetStateAction<{lat: number; lng: number} | null>>
 }
 
+// Create the context with a default value
 const LocationContext = createContext<LocationContextType | undefined>(undefined)
 
-export const LocationProvider: React.FC<{children: ReactNode}> = ({children}) => {
-    const [userLocation, setUserLocation] = useState<Location>(null)
+export const LocationProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+    const [userLocation, setUserLocation] = useState<{lat: number; lng: number} | null>(null)
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            const watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    console.log("New position received:", position.coords)
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    })
+                },
+                (error) => {
+                    console.error("Error getting location:", error)
+                    if (error.code === 1) {
+                        console.log("User denied geolocation permission")
+                    }
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                }
+            )
+
+            // Cleanup function to stop watching location when component unmounts
+            return () => {
+                navigator.geolocation.clearWatch(watchId)
+            }
+        } else {
+            console.log("Geolocation is not supported by this browser.")
+        }
+    }, [])
 
     return (
         <LocationContext.Provider value={{userLocation, setUserLocation}}>
@@ -24,6 +52,7 @@ export const LocationProvider: React.FC<{children: ReactNode}> = ({children}) =>
     )
 }
 
+// Custom hook to use the location context
 export const useLocation = () => {
     const context = useContext(LocationContext)
     if (context === undefined) {

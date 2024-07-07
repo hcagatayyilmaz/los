@@ -1,12 +1,12 @@
 "use client"
-import React, {useState, useEffect} from "react"
-import {GoogleMap, useLoadScript, MarkerF} from "@react-google-maps/api"
+import React, {useState, useEffect, useMemo, useCallback} from "react"
+import {GoogleMap, useLoadScript, MarkerF, OverlayView} from "@react-google-maps/api"
 import {useLocation} from "../providers/LocationProvider"
 
 const locations = [
     {
         lat: 48.5253,
-        lng: 9.0621,
+        lng: 9.0629,
         name: "Bibliothek (My Location)",
         points: 0
     },
@@ -72,31 +72,51 @@ const locations = [
     }
 ]
 
+const LiveLocationPin = () => (
+    <div className='relative'>
+        <div className='absolute w-4 h-4 bg-blue-500 rounded-full border-2 border-blue-300 shadow-lg shadow-blue-500/50'></div>
+        <div className='absolute w-4 h-4 bg-blue-500 rounded-full animate-ping opacity-75'></div>
+    </div>
+)
+const libraries = ["places", "geometry"]
+
 const Map = () => {
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-        libraries: ["places", "geometry"]
+        libraries
     })
 
     const {userLocation} = useLocation()
     const [selectedLocation, setSelectedLocation] = useState(null)
     const [nearbyLocation, setNearbyLocation] = useState(null)
     const [map, setMap] = useState(null)
+    const [distances, setDistances] = useState({})
 
-    const mapContainerStyle = {
-        width: "100vw",
-        height: "calc(100vh - 40px)"
-    }
+    const mapContainerStyle = useMemo(
+        () => ({
+            width: "100vw",
+            height: "calc(100vh - 40px)"
+        }),
+        []
+    )
 
-    const center = {
-        lat: 48.5216, // Centered on Tübingen
-        lng: 9.0576
-    }
+    const center = useMemo(
+        () => ({
+            lat: 48.5216, // Centered on Tübingen
+            lng: 9.0576
+        }),
+        []
+    )
+
+    const onMapLoad = useCallback((map) => {
+        setMap(map)
+    }, [])
 
     useEffect(() => {
         if (userLocation && map && window.google) {
             const userLatLng = new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
 
+            const newDistances = {}
             let closest = null
             let closestDistance = Infinity
 
@@ -107,7 +127,7 @@ const Map = () => {
                     locationLatLng
                 )
 
-                console.log(`Distance to ${location.name}: ${distance.toFixed(2)} meters`)
+                newDistances[location.name] = distance
 
                 if (distance < closestDistance) {
                     closest = location
@@ -115,26 +135,20 @@ const Map = () => {
                 }
             })
 
+            setDistances(newDistances)
+
             if (closestDistance <= 50) {
                 // Within 50 meters
                 setNearbyLocation(closest)
-                console.log(
-                    `You are near ${closest.name}! Distance: ${closestDistance.toFixed(2)} meters`
-                )
             } else {
                 setNearbyLocation(null)
-                console.log(
-                    `Closest location: ${closest.name}, Distance: ${closestDistance.toFixed(
-                        2
-                    )} meters`
-                )
             }
         }
     }, [userLocation, map])
 
-    const onMapLoad = (map) => {
-        setMap(map)
-    }
+    const logUserLocation = useCallback(() => {
+        console.log("Current user location:", userLocation)
+    }, [userLocation])
 
     if (loadError) return <div>Error loading maps</div>
     if (!isLoaded) return <div>Loading maps</div>
@@ -143,11 +157,19 @@ const Map = () => {
         <>
             <div className='bg-black text-white p-2 text-center h-10 flex items-center justify-center'>
                 {userLocation ? (
-                    <p>
-                        Your location: Latitude {userLocation.lat.toFixed(4)}, Longitude{" "}
-                        {userLocation.lng.toFixed(4)}
-                        {nearbyLocation && <span> - You are at {nearbyLocation.name}!</span>}
-                    </p>
+                    <>
+                        <p className='mr-4'>
+                            Your location: Latitude {userLocation.lat.toFixed(4)}, Longitude{" "}
+                            {userLocation.lng.toFixed(4)}
+                            {nearbyLocation && <span> - You are at {nearbyLocation.name}!</span>}
+                        </p>
+                        <button
+                            onClick={logUserLocation}
+                            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded'
+                        >
+                            Log Location
+                        </button>
+                    </>
                 ) : (
                     <p>Waiting for your location...</p>
                 )}
@@ -167,10 +189,12 @@ const Map = () => {
                     />
                 ))}
                 {userLocation && (
-                    <MarkerF
+                    <OverlayView
                         position={userLocation}
-                        icon='http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                    />
+                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                    >
+                        <LiveLocationPin />
+                    </OverlayView>
                 )}
             </GoogleMap>
             {selectedLocation && (
@@ -180,7 +204,12 @@ const Map = () => {
                     {nearbyLocation === selectedLocation ? (
                         <p className='text-md text-blue-600'>You are here!</p>
                     ) : (
-                        <p className='text-md text-blue-600'>Distance: Calculating...</p>
+                        <p className='text-md text-blue-600'>
+                            Distance:{" "}
+                            {distances[selectedLocation.name]
+                                ? `${distances[selectedLocation.name].toFixed(2)} meters`
+                                : "Calculating..."}
+                        </p>
                     )}
                     <button
                         className='mt-2 bg-blue-500 text-white px-4 py-2 rounded'
