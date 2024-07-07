@@ -1,13 +1,21 @@
 import {RegisterLink, LoginLink} from "@kinde-oss/kinde-auth-nextjs/components"
+import Map from "./components/Map"
+import LocationPermissionButton from "./components/LocationPermissionButton"
 
 export default function Home() {
     return (
-        <main>
-            <h1>Los MVP Development</h1>
-            <div className='flex flex-col'>
+        <main className='h-screen w-screen'>
+            <h1 className='text-center'>Los - MVP Development</h1>
+            {/* <div className='flex flex-col'>
                 <LoginLink>Sign in</LoginLink>
                 <RegisterLink>Sign up</RegisterLink>
+            </div> */}
+
+            <div className='text-center mt-4'>
+                <LocationPermissionButton />
             </div>
+
+            <Map />
         </main>
     )
 }
