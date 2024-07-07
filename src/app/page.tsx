@@ -6,10 +6,10 @@ export default function Home() {
     return (
         <main className='h-screen w-screen'>
             <h1 className='text-center'>Los - MVP Development</h1>
-            {/* <div className='flex flex-col'>
+            <div className='flex flex-col justify-center items-center'>
                 <LoginLink>Sign in</LoginLink>
-                <RegisterLink>Sign up</RegisterLink>
-            </div> */}
+                <RegisterLink>Register</RegisterLink>
+            </div>
 
             <div className='text-center mt-4'>
                 <LocationPermissionButton />

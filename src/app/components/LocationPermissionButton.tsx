@@ -27,7 +27,7 @@ const LocationPermissionButton: React.FC = () => {
     return (
         <button
             onClick={requestLocationPermission}
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+            className='bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded'
         >
             Allow Location Access
         </button>

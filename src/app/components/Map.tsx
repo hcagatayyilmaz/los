@@ -168,7 +168,7 @@ const Map: React.FC = () => {
 
     return (
         <>
-            <div className='bg-black text-white p-2 text-center h-10 flex items-center justify-center'>
+            <div className='bg-black text-white p-2 text-center gap-2 flex flex-col items-center justify-center'>
                 {userLocation ? (
                     <>
                         <p className='mr-4'>
@@ -178,7 +178,7 @@ const Map: React.FC = () => {
                         </p>
                         <button
                             onClick={logUserLocation}
-                            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded'
+                            className='bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded'
                         >
                             Log Location
                         </button>
