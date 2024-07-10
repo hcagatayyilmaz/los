@@ -15,9 +15,67 @@ datasource db {
 }
 
 model User {
-  id           String  @id @default(cuid())
-  email        String  @unique
+  id           String        @id @default(cuid())
+  email        String        @unique
   firstName    String
   lastName     String
   profileImage String?
+  points       Int           @default(0)
+  checkIns     CheckIn[]
+  transactions Transaction[]
+}
+
+enum AttractionType {
+  PLACE
+  EVENT
+  POINT
+}
+
+model Attraction {
+  id        String         @id @default(cuid())
+  type      AttractionType
+  name      String
+  latitude  Float
+  longitude Float
+  points    Int
+  cityId    String
+  city      City           @relation(fields: [cityId], references: [id])
+  checkIns  CheckIn[]
+}
+
+model CheckIn {
+  id           String     @id @default(cuid())
+  userId       String
+  attractionId String
+  user         User       @relation(fields: [userId], references: [id])
+  attraction   Attraction @relation(fields: [attractionId], references: [id])
+  createdAt    DateTime   @default(now())
+}
+
+model City {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  slug        String       @unique
+  attractions Attraction[]
+}
+
+model Reward {
+  id           String        @id @default(cuid())
+  name         String
+  points       Int
+  description  Json
+  available    Boolean       @default(true)
+  transactions Transaction[]
+  endAt        DateTime?
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  userId    String
+  rewardId  String
+  user      User     @relation(fields: [userId], references: [id])
+  reward    Reward   @relation(fields: [rewardId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, rewardId])
 }

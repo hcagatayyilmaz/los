@@ -10,24 +10,6 @@ export default async function Home() {
     return (
         <main className='h-screen w-screen'>
             <h1 className='text-center'>Los - MVP Development</h1>
-
-            {user ? (
-                <div className='flex flex-col justify-center items-center'>
-                    <p>Welcome, {user.given_name}!</p>
-                    <LogoutLink>Logout</LogoutLink>
-                </div>
-            ) : (
-                <div className='flex flex-col justify-center items-center'>
-                    <LoginLink>Log in</LoginLink>
-                    <RegisterLink>Register</RegisterLink>
-                </div>
-            )}
-
-            <div className='text-center mt-4'>
-                <LocationPermissionButton />
-            </div>
-
-            <Map />
         </main>
     )
 }
