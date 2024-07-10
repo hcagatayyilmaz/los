@@ -1,6 +1,3 @@
-import {RegisterLink, LoginLink, LogoutLink} from "@kinde-oss/kinde-auth-nextjs/components"
-import Map from "./components/Map"
-import LocationPermissionButton from "./components/LocationPermissionButton"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 
 export default async function Home() {

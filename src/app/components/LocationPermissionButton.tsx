@@ -1,4 +1,3 @@
-// src/app/components/LocationPermissionButton.tsx
 "use client"
 import React from "react"
 import {useLocation} from "../providers/LocationProvider"
