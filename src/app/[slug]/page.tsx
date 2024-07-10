@@ -1,5 +1,6 @@
 import prisma from "@/app/lib/db"
 import Header from "@/app/components/Header"
+import Navbar from "@/app/components/Navbar"
 import {RegisterLink, LoginLink, LogoutLink} from "@kinde-oss/kinde-auth-nextjs/components"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import Map from "@/app/components/Map"
@@ -51,6 +52,7 @@ export default async function CityPage({params}: CityPageParams) {
     return (
         <main className='h-screen w-screen'>
             <Header user={user} name={city.name} />
+            <Navbar />
             {user ? (
                 <div className='flex flex-col justify-center items-center'>
                     <p>Welcome, {user.given_name}!</p>
