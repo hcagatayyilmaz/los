@@ -2,6 +2,7 @@
 import React, {useState, useEffect, useMemo, useCallback} from "react"
 import {GoogleMap, useLoadScript, MarkerF, OverlayView, Libraries} from "@react-google-maps/api"
 import {useLocation} from "../providers/LocationProvider"
+import mapStyle from "../lib/style"
 
 type Location = {
     lat: number
@@ -107,8 +108,8 @@ const Map: React.FC = () => {
 
     const mapContainerStyle = useMemo(
         () => ({
-            width: "100vw",
-            height: "calc(100vh - 40px)"
+            width: "100%",
+            height: "100%"
         }),
         []
     )
@@ -123,6 +124,12 @@ const Map: React.FC = () => {
 
     const onMapLoad = useCallback((map: google.maps.Map) => {
         setMap(map)
+
+        const bounds = new window.google.maps.LatLngBounds()
+        locations.forEach((location) => {
+            bounds.extend(new window.google.maps.LatLng(location.lat, location.lng))
+        })
+        map.fitBounds(bounds)
     }, [])
 
     useEffect(() => {
@@ -168,7 +175,7 @@ const Map: React.FC = () => {
 
     return (
         <>
-            <div className='bg-black text-white p-2 text-center gap-2 flex flex-col items-center justify-center'>
+            {/* <div className='bg-black text-white p-2 text-center gap-2 flex flex-col items-center justify-center'>
                 {userLocation ? (
                     <>
                         <p className='mr-4'>
@@ -186,13 +193,18 @@ const Map: React.FC = () => {
                 ) : (
                     <p>Waiting for your location...</p>
                 )}
-            </div>
+            </div> */}
 
             <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={userLocation || center}
                 zoom={14}
                 onLoad={onMapLoad}
+                options={{
+                    mapTypeControl: false,
+                    fullscreenControl: false,
+                    styles: mapStyle
+                }}
             >
                 {locations.map((location, index) => (
                     <MarkerF

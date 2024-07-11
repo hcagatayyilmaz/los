@@ -1,7 +1,7 @@
 "use client"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
-import {LoginLink, LogoutLink} from "@kinde-oss/kinde-auth-nextjs"
+import {CoinIcon} from "../lib/CustomIcons"
 
 const museumModerno = MuseoModerno({
     subsets: ["latin"]
@@ -14,9 +14,9 @@ interface LogoProps {
 
 export default function Header({name, user}: LogoProps) {
     return (
-        <div className={`${museumModerno.className} px-2 mt-2 pb-5 flex justify-between`}>
+        <div className={`px-2 mt-2 pb-5 flex justify-between`}>
             <Link href={"/"}>
-                <div className='flex items-center space-x-2'>
+                <div className={`flex items-center space-x-2 ${museumModerno.className}`}>
                     <h1 className='text-4xl font-semibold'>
                         <span className='text-black '>Los</span>
                         <span className='text-customYellow text-4xl'>.</span>
@@ -29,7 +29,7 @@ export default function Header({name, user}: LogoProps) {
                     </div>
                 </div>
             </Link>
-            {user ? (
+            {/* {user ? (
                 <div className='bg-black text-white rounded p-2'>
                     <LogoutLink>Logout</LogoutLink>
                 </div>
@@ -37,7 +37,11 @@ export default function Header({name, user}: LogoProps) {
                 <div className='bg-black text-white rounded p-2'>
                     <LoginLink>Login</LoginLink>
                 </div>
-            )}
+            )} */}
+            <div className='flex items-center bg-pink-100 text-customYellow rounded-full px-4 py-2'>
+                <CoinIcon className={"text-customYellow"} />
+                <span className='text-md'>+40</span>
+            </div>
         </div>
     )
 }
