@@ -26,7 +26,7 @@ export async function generateMetadata({params}: CityPageParams) {
         }
     })
     return {
-        title: city ? `Los. ${city.name}` : "City not found"
+        title: city ? `Los - ${city.name}` : "City not found"
     }
 }
 
@@ -50,13 +50,12 @@ export default async function CityPage({params}: CityPageParams) {
     console.log(user)
 
     return (
-        <main className='h-screen w-screen'>
+        <main className='h-screen w-screen flex flex-col'>
             <Header user={user} name={city.name} />
             <Navbar />
-            <div className='text-center mt-4'>
-                <LocationPermissionButton />
+            <div className='flex-grow'>
+                <Map />
             </div>
-            <Map />
         </main>
     )
 }

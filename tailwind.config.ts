@@ -13,8 +13,8 @@ const config: Config = {
                 "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))"
             },
             colors: {
-                customYellow: "#FFD454",
-                neonGreen: "#39FF14"
+                customYellow: "#FF1493",
+                neonGreen: "#2EF441"
             }
         }
     },
