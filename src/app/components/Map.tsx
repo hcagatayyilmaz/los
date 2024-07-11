@@ -88,8 +88,8 @@ const locations: Location[] = [
 
 const LiveLocationPin = () => (
     <div className='relative'>
-        <div className='absolute w-4 h-4 bg-blue-500 rounded-full border-2 border-blue-300 shadow-lg shadow-blue-500/50'></div>
-        <div className='absolute w-4 h-4 bg-blue-500 rounded-full animate-ping opacity-75'></div>
+        <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full border-4 border-[#C71585] shadow-2xl shadow-[#FF1493]/50'></div>
+        <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75'></div>
     </div>
 )
 const libraries: Libraries = ["places", "geometry"]
@@ -203,7 +203,8 @@ const Map: React.FC = () => {
                 options={{
                     mapTypeControl: false,
                     fullscreenControl: false,
-                    styles: mapStyle
+                    styles: mapStyle,
+                    disableDefaultUI: true // Add this line to disable default UI
                 }}
             >
                 {locations.map((location, index) => (
