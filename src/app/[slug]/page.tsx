@@ -4,7 +4,7 @@ import Navbar from "@/app/components/Navbar"
 import {RegisterLink, LoginLink, LogoutLink} from "@kinde-oss/kinde-auth-nextjs/components"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import Map from "@/app/components/Map"
-import LocationPermissionButton from "@/app/components/LocationPermissionButton"
+import ItemCard from "@/app/components/ItemCard"
 
 type CityPageParams = {
     params: {
@@ -50,12 +50,13 @@ export default async function CityPage({params}: CityPageParams) {
     console.log(user)
 
     return (
-        <main className='h-screen w-screen flex flex-col'>
+        <main className='h-screen w-screen flex flex-col relative'>
             <Header user={user} name={city.name} />
             <Navbar />
             <div className='flex-grow'>
                 <Map />
             </div>
+            <ItemCard />
         </main>
     )
 }

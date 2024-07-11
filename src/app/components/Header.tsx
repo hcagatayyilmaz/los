@@ -14,7 +14,7 @@ interface LogoProps {
 
 export default function Header({name, user}: LogoProps) {
     return (
-        <div className={`px-2 mt-2 pb-5 flex justify-between`}>
+        <div className={`px-2 mt-2 pb-5 flex justify-between border-b-2 border-black`}>
             <Link href={"/"}>
                 <div className={`flex items-center space-x-2 ${museumModerno.className}`}>
                     <h1 className='text-4xl font-semibold'>
