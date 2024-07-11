@@ -109,28 +109,29 @@ const Map: React.FC = () => {
     const mapContainerStyle = useMemo(
         () => ({
             width: "100%",
-            height: "100%"
+            height: "100vh"
         }),
         []
     )
 
-    const center = useMemo(
-        () => ({
-            lat: 48.5216, // Centered on Tübingen
-            lng: 9.0576
-        }),
-        []
+    const center = useMemo(() => userLocation || locations[0], [userLocation])
+
+    const onMapLoad = useCallback(
+        (map: google.maps.Map) => {
+            setMap(map)
+
+            if (userLocation) {
+                map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
+            } else {
+                const bounds = new window.google.maps.LatLngBounds()
+                locations.forEach((location) => {
+                    bounds.extend(new window.google.maps.LatLng(location.lat, location.lng))
+                })
+                map.fitBounds(bounds)
+            }
+        },
+        [userLocation]
     )
-
-    const onMapLoad = useCallback((map: google.maps.Map) => {
-        setMap(map)
-
-        const bounds = new window.google.maps.LatLngBounds()
-        locations.forEach((location) => {
-            bounds.extend(new window.google.maps.LatLng(location.lat, location.lng))
-        })
-        map.fitBounds(bounds)
-    }, [])
 
     useEffect(() => {
         if (userLocation && map && window.google) {
@@ -166,86 +167,35 @@ const Map: React.FC = () => {
         }
     }, [userLocation, map])
 
-    const logUserLocation = useCallback(() => {
-        console.log("Current user location:", userLocation)
-    }, [userLocation])
-
     if (loadError) return <div>Error loading maps</div>
     if (!isLoaded) return <div>Loading maps</div>
 
     return (
-        <>
-            {/* <div className='bg-black text-white p-2 text-center gap-2 flex flex-col items-center justify-center'>
-                {userLocation ? (
-                    <>
-                        <p className='mr-4'>
-                            Your location: Latitude {userLocation.lat.toFixed(4)}, Longitude{" "}
-                            {userLocation.lng.toFixed(4)}
-                            {nearbyLocation && <span> - You are at {nearbyLocation.name}!</span>}
-                        </p>
-                        <button
-                            onClick={logUserLocation}
-                            className='bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded'
-                        >
-                            Log Location
-                        </button>
-                    </>
-                ) : (
-                    <p>Waiting for your location...</p>
-                )}
-            </div> */}
-
-            <GoogleMap
-                mapContainerStyle={mapContainerStyle}
-                center={userLocation || center}
-                zoom={14}
-                onLoad={onMapLoad}
-                options={{
-                    mapTypeControl: false,
-                    fullscreenControl: false,
-                    styles: mapStyle,
-                    disableDefaultUI: true // Add this line to disable default UI
-                }}
-            >
-                {locations.map((location, index) => (
-                    <MarkerF
-                        key={index}
-                        position={{lat: location.lat, lng: location.lng}}
-                        onClick={() => setSelectedLocation(location)}
-                    />
-                ))}
-                {userLocation && (
-                    <OverlayView
-                        position={userLocation}
-                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                    >
-                        <LiveLocationPin />
-                    </OverlayView>
-                )}
-            </GoogleMap>
-            {selectedLocation && (
-                <div className='fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg'>
-                    <h2 className='text-xl font-bold'>{selectedLocation.name}</h2>
-                    <p className='text-lg text-green-600'>Points: {selectedLocation.points}</p>
-                    {nearbyLocation === selectedLocation ? (
-                        <p className='text-md text-blue-600'>You are here!</p>
-                    ) : (
-                        <p className='text-md text-blue-600'>
-                            Distance:{" "}
-                            {distances[selectedLocation.name] !== undefined
-                                ? `${distances[selectedLocation.name].toFixed(2)} meters`
-                                : "Calculating..."}
-                        </p>
-                    )}
-                    <button
-                        className='mt-2 bg-blue-500 text-white px-4 py-2 rounded'
-                        onClick={() => setSelectedLocation(null)}
-                    >
-                        Close
-                    </button>
-                </div>
+        <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={center}
+            zoom={14}
+            onLoad={onMapLoad}
+            options={{
+                mapTypeControl: false,
+                fullscreenControl: false,
+                styles: mapStyle,
+                disableDefaultUI: true // Add this line to disable default UI
+            }}
+        >
+            {locations.map((location, index) => (
+                <MarkerF
+                    key={index}
+                    position={{lat: location.lat, lng: location.lng}}
+                    onClick={() => setSelectedLocation(location)}
+                />
+            ))}
+            {userLocation && (
+                <OverlayView position={userLocation} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
+                    <LiveLocationPin />
+                </OverlayView>
             )}
-        </>
+        </GoogleMap>
     )
 }
 

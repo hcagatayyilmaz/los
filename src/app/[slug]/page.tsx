@@ -50,13 +50,17 @@ export default async function CityPage({params}: CityPageParams) {
     console.log(user)
 
     return (
-        <main className='h-screen w-screen flex flex-col relative'>
-            <Header user={user} name={city.name} />
-            <Navbar />
-            <div className='flex-grow'>
+        <main className='h-screen w-screen flex flex-col'>
+            <div className='absolute top-0 left-0 h-full w-full z-0'>
                 <Map />
             </div>
-            <ItemCard />
+            <div className='relative z-10'>
+                <Header user={user} name={city.name} />
+                <Navbar />
+            </div>
+            <div className='relative z-10 mt-auto'>
+                <ItemCard />
+            </div>
         </main>
     )
 }
