@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import {useLocation} from "../providers/LocationProvider"
+import {useLocation} from "../providers/useUserLocation"
 
 const LocationPermissionButton: React.FC = () => {
     const {setUserLocation} = useLocation()

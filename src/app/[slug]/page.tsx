@@ -1,10 +1,12 @@
 import prisma from "@/app/lib/db"
 import Header from "@/app/components/Header"
 import Navbar from "@/app/components/Navbar"
-import {RegisterLink, LoginLink, LogoutLink} from "@kinde-oss/kinde-auth-nextjs/components"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import Map from "@/app/components/Map"
-import ItemCard from "@/app/components/ItemCard"
+import ItemsSlider from "../components/ItemSlider"
+import {LocationProvider} from "../providers/useSelectedItem"
+import {mockLocations as locations} from "../lib/data"
+import {Location} from "../lib/types"
 
 type CityPageParams = {
     params: {
@@ -36,7 +38,7 @@ export default async function CityPage({params}: CityPageParams) {
             slug: params.slug
         }
     })
-    console.log(city)
+
     if (!city) {
         return (
             <main className='h-screen w-screen flex items-center justify-center'>
@@ -47,20 +49,21 @@ export default async function CityPage({params}: CityPageParams) {
 
     const {getUser} = getKindeServerSession()
     const user = await getUser()
-    console.log(user)
 
     return (
-        <main className='h-screen w-screen flex flex-col'>
-            <div className='absolute top-0 left-0 h-full w-full z-0'>
-                <Map />
-            </div>
-            <div className='relative z-10'>
-                <Header user={user} name={city.name} />
-                <Navbar />
-            </div>
-            <div className='relative z-10 mt-auto'>
-                <ItemCard />
-            </div>
-        </main>
+        <LocationProvider initialLocation={locations[0]}>
+            <main className='h-screen w-screen flex flex-col relative'>
+                <div className='absolute top-0 left-0 h-full w-full z-0'>
+                    <Map locations={locations} />
+                </div>
+                <div className='relative z-10 flex-grow'>
+                    <Header user={user} name={city.name} />
+                    <Navbar />
+                </div>
+                <div className='relative z-10'>
+                    <ItemsSlider locations={locations} />
+                </div>
+            </main>
+        </LocationProvider>
     )
 }
