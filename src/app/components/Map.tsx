@@ -1,6 +1,6 @@
 "use client"
 import React, {useState, useEffect, useMemo, useCallback} from "react"
-import {GoogleMap, useLoadScript, MarkerF, OverlayView, Libraries} from "@react-google-maps/api"
+import {GoogleMap, useLoadScript, OverlayView, Libraries} from "@react-google-maps/api"
 import {useUserLocation} from "../providers/useUserLocation"
 import mapStyle from "../lib/style"
 import {Location} from "../lib/types"
@@ -94,16 +94,20 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             options={{
                 mapTypeControl: false,
                 fullscreenControl: false,
-                styles: mapStyle,
-                disableDefaultUI: true // Add this line to disable default UI
+                styles: mapStyle
+                // disableDefaultUI: true // Add this line to disable default UI
             }}
         >
             {locations.map((location, index) => (
-                <MarkerF
+                <OverlayView
                     key={index}
                     position={{lat: location.lat, lng: location.lng}}
-                    onClick={() => setSelectedLocation(location)} // Update the context
-                />
+                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                >
+                    <div onClick={() => setSelectedLocation(location)}>
+                        <ItemPin location={location} />
+                    </div>
+                </OverlayView>
             ))}
             {userLocation && (
                 <OverlayView position={userLocation} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>

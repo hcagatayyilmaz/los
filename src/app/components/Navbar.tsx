@@ -5,6 +5,7 @@ import {MapIcon, QuestIcon, RewardsIcon} from "../lib/CustomIcons"
 import Link from "next/link"
 import {IoGiftOutline} from "react-icons/io5"
 import {usePathname} from "next/navigation"
+import {LoginLink} from "@kinde-oss/kinde-auth-nextjs"
 
 export default function Navbar() {
     const currentPath = usePathname() // Get the current path
@@ -29,12 +30,12 @@ export default function Navbar() {
                     <span>Rewards</span>
                 </div>
             </Link>
-            <Link href={"account"}>
+            <LoginLink>
                 <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
                     <RiAccountCircleLine className='w-8 h-8' />
                     <span>Login</span>
                 </div>
-            </Link>
+            </LoginLink>
         </div>
     )
 }
