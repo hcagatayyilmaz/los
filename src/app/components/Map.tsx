@@ -94,8 +94,13 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             options={{
                 mapTypeControl: false,
                 fullscreenControl: false,
-                styles: mapStyle
-                // disableDefaultUI: true // Add this line to disable default UI
+                styles: mapStyle,
+                zoomControl: true, // Enable zoom control
+                streetViewControl: false, // Optional: Disable street view control if not needed
+                gestureHandling: "auto", // Ensure that gestures like dragging and zooming work
+                zoomControlOptions: {
+                    position: window.google.maps.ControlPosition.RIGHT_CENTER // Change this to the desired position
+                }
             }}
         >
             {locations.map((location, index) => (
