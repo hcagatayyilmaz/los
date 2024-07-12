@@ -1,9 +1,9 @@
 "use client"
 import React from "react"
-import {useLocation} from "../providers/useUserLocation"
+import {useUserLocation} from "../providers/useUserLocation"
 
 const LocationPermissionButton: React.FC = () => {
-    const {setUserLocation} = useLocation()
+    const {setUserLocation} = useUserLocation()
 
     const requestLocationPermission = () => {
         if (navigator.geolocation) {
