@@ -10,7 +10,7 @@ type LocationContextType = {
 // Create the context with a default value
 const LocationContext = createContext<LocationContextType | undefined>(undefined)
 
-export const LocationProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+export const UserLocationProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     const [userLocation, setUserLocation] = useState<{lat: number; lng: number} | null>(null)
 
     useEffect(() => {
@@ -53,10 +53,10 @@ export const LocationProvider: React.FC<{children: React.ReactNode}> = ({childre
 }
 
 // Custom hook to use the location context
-export const useLocation = () => {
+export const useUserLocation = () => {
     const context = useContext(LocationContext)
     if (context === undefined) {
-        throw new Error("useLocation must be used within a LocationProvider")
+        throw new Error("useUserLocation must be used within a UserLocationProvider")
     }
     return context
 }

@@ -14,9 +14,7 @@ interface LogoProps {
 
 export default function Header({name, user}: LogoProps) {
     return (
-        <div
-            className={`px-2 mt-2 pb-4 flex items-center justify-center border-b-2 border-black bg-transparent`}
-        >
+        <div className={`px-2 mt-2 pb-4 flex items-center justify-center bg-transparent`}>
             <Link href={"/"}>
                 <div
                     className={`flex items-end bg-white px-4 py-1 rounded-3xl space-x-2 ${museumModerno.className}`}

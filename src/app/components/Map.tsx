@@ -1,90 +1,9 @@
 "use client"
 import React, {useState, useEffect, useMemo, useCallback} from "react"
 import {GoogleMap, useLoadScript, MarkerF, OverlayView, Libraries} from "@react-google-maps/api"
-import {useLocation} from "../providers/LocationProvider"
+import {useUserLocation} from "../providers/useUserLocation"
 import mapStyle from "../lib/style"
-
-type Location = {
-    lat: number
-    lng: number
-    name: string
-    points: number
-}
-
-const locations: Location[] = [
-    {
-        lat: 48.5253,
-        lng: 9.0629,
-        name: "Bibliothek (My Location)",
-        points: 0
-    },
-    {
-        lat: 48.519372574825454,
-        lng: 9.055539088469041,
-        name: "Hölderlinturm Museumscafé",
-        points: 1000
-    },
-    {
-        lat: 48.5216,
-        lng: 9.0576,
-        name: "Hohentübingen Castle",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.5201,
-        lng: 9.0556,
-        name: "Tübingen Market Square",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.5238,
-        lng: 9.0519,
-        name: "University of Tübingen",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.5187,
-        lng: 9.0589,
-        name: "Stiftskirche",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.5204,
-        lng: 9.0627,
-        name: "Botanical Garden",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.5231,
-        lng: 9.0552,
-        name: "Neckar Bridge",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.518,
-        lng: 9.0534,
-        name: "Hölderlin Tower",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.5309,
-        lng: 9.0503,
-        name: "Museum Alte Kulturen",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.5241,
-        lng: 9.0403,
-        name: "Anlagensee Park",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    },
-    {
-        lat: 48.5175,
-        lng: 9.0645,
-        name: "Neckar River",
-        points: Math.floor(Math.random() * 10) * 10 + 10
-    }
-]
+import {Location} from "../lib/types"
 
 const LiveLocationPin = () => (
     <div className='relative'>
@@ -94,13 +13,13 @@ const LiveLocationPin = () => (
 )
 const libraries: Libraries = ["places", "geometry"]
 
-const Map: React.FC = () => {
+const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
         libraries
     })
 
-    const {userLocation} = useLocation()
+    const {userLocation} = useUserLocation()
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
     const [nearbyLocation, setNearbyLocation] = useState<Location | null>(null)
     const [map, setMap] = useState<google.maps.Map | null>(null)
