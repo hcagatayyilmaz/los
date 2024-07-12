@@ -13,7 +13,7 @@ export default function Navbar() {
     return (
         <div className='flex justify-around items-center py-2 px-2 bg-transparent  '>
             <Link href={""}>
-                <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded '>
+                <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border-black border-2 '>
                     <CiMap className='w-8 h-8 font-bold ' />
                     <span>Map</span>
                 </div>

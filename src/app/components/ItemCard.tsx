@@ -1,21 +1,14 @@
 import {CoinIcon} from "../lib/CustomIcons"
 import Image from "next/image"
 import {Location} from "../lib/types"
-import {checkIn} from "../server/index"
-import {useUserLocation} from "../providers/useUserLocation"
-import ItemButtonGroup from "./ItemButtonGroup"
 
 type ItemCardProps = {
     location: Location
-    onSelect: (location: Location) => void
 }
 
-export const ItemCard = ({location, onSelect}: ItemCardProps) => {
+export const ItemCard = ({location}: ItemCardProps) => {
     return (
-        <div
-            className='h-48 w-full bg-white rounded-3xl shadow-lg p-2 flex gap-2 items-start justify-between border-4 border-customYellow cursor-pointer'
-            onClick={() => onSelect(location)}
-        >
+        <div className='h-48 w-full bg-white rounded-3xl shadow-lg p-2 flex gap-2 items-start justify-between border-4 border-customYellow cursor-pointer'>
             <div className='w-1/3 h-full relative'>
                 <Image
                     src='/tuebingen.jpg'
@@ -32,7 +25,15 @@ export const ItemCard = ({location, onSelect}: ItemCardProps) => {
                     </div>
                     <p className='text-gray-600 text-sm'>{location.description}</p>
                 </div>
-                <ItemButtonGroup location={location} />
+                <div className='flex items-center'>
+                    <div className='flex items-center bg-pink-100 text-pink-500 rounded-full px-4 py-2 mr-4'>
+                        <CoinIcon className='text-pink-500' />
+                        <span className='ml-2 text-sm'>{location.points}</span>
+                    </div>
+                    <button className='bg-green-800 text-white rounded-full px-4 py-2'>
+                        Check In
+                    </button>
+                </div>
             </div>
         </div>
     )
