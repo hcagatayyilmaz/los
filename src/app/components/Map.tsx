@@ -4,13 +4,9 @@ import {GoogleMap, useLoadScript, MarkerF, OverlayView, Libraries} from "@react-
 import {useUserLocation} from "../providers/useUserLocation"
 import mapStyle from "../lib/style"
 import {Location} from "../lib/types"
+import {useSelectedItem} from "@/app/providers/useSelectedItem"
+import {LiveLocationPin, ItemPin} from "./Pins"
 
-const LiveLocationPin = () => (
-    <div className='relative'>
-        <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full border-4 border-[#C71585] shadow-2xl shadow-[#FF1493]/50'></div>
-        <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75'></div>
-    </div>
-)
 const libraries: Libraries = ["places", "geometry"]
 
 const Map: React.FC<{locations: Location[]}> = ({locations}) => {
@@ -20,7 +16,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     })
 
     const {userLocation} = useUserLocation()
-    const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
+    const {setSelectedLocation} = useSelectedItem() // Use the context to set the selected location
     const [nearbyLocation, setNearbyLocation] = useState<Location | null>(null)
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [distances, setDistances] = useState<Record<string, number>>({})
@@ -33,7 +29,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         []
     )
 
-    const center = useMemo(() => userLocation || locations[0], [userLocation])
+    const center = useMemo(() => userLocation || locations[0], [userLocation, locations])
 
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
@@ -49,7 +45,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                 map.fitBounds(bounds)
             }
         },
-        [userLocation]
+        [userLocation, locations]
     )
 
     useEffect(() => {
@@ -84,7 +80,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                 setNearbyLocation(null)
             }
         }
-    }, [userLocation, map])
+    }, [userLocation, map, locations])
 
     if (loadError) return <div>Error loading maps</div>
     if (!isLoaded) return <div>Loading maps</div>
@@ -106,7 +102,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                 <MarkerF
                     key={index}
                     position={{lat: location.lat, lng: location.lng}}
-                    onClick={() => setSelectedLocation(location)}
+                    onClick={() => setSelectedLocation(location)} // Update the context
                 />
             ))}
             {userLocation && (

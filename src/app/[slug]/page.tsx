@@ -51,17 +51,19 @@ export default async function CityPage({params}: CityPageParams) {
     const user = await getUser()
 
     return (
-        <main className='h-screen w-screen flex flex-col relative'>
-            <div className='absolute top-0 left-0 h-full w-full z-0'>
-                <Map locations={locations} />
-            </div>
-            <div className='relative z-10 flex-grow'>
-                <Header user={user} name={city.name} />
-                <Navbar />
-            </div>
-            <div className='relative z-10'>
-                <ItemsSlider locations={locations} />
-            </div>
-        </main>
+        <LocationProvider initialLocation={locations[0]}>
+            <main className='h-screen w-screen flex flex-col relative'>
+                <div className='absolute top-0 left-0 h-full w-full z-0'>
+                    <Map locations={locations} />
+                </div>
+                <div className='relative z-10 flex-grow'>
+                    <Header user={user} name={city.name} />
+                    <Navbar />
+                </div>
+                <div className='relative z-10'>
+                    <ItemsSlider locations={locations} />
+                </div>
+            </main>
+        </LocationProvider>
     )
 }

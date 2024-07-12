@@ -4,11 +4,15 @@ import {Location} from "../lib/types"
 
 type ItemCardProps = {
     location: Location
+    onSelect: (location: Location) => void
 }
 
-export const ItemCard = ({location}: ItemCardProps) => {
+export const ItemCard = ({location, onSelect}: ItemCardProps) => {
     return (
-        <div className='h-48 w-[96vw] bg-white rounded-3xl shadow-lg p-2 flex gap-2 items-start justify-between border-4 border-customYellow cursor-pointer'>
+        <div
+            className='h-48 w-full bg-white rounded-3xl shadow-lg p-2 flex gap-2 items-start justify-between border-4 border-customYellow cursor-pointer'
+            onClick={() => onSelect(location)}
+        >
             <div className='w-1/3 h-full relative'>
                 <Image
                     src='/tuebingen.jpg'
@@ -18,7 +22,7 @@ export const ItemCard = ({location}: ItemCardProps) => {
                     alt='Tübingen, Germany'
                 />
             </div>
-            <div className='w-2/3 h-full flex flex-col justify-between'>
+            <div className='w-2/3 flex flex-col justify-between'>
                 <div>
                     <div className='flex justify-between items-center'>
                         <h2 className='text-lg font-bold'>{location.name}</h2>

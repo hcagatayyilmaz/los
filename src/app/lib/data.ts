@@ -5,8 +5,9 @@ export const mockLocations: Location[] = [
         lat: 48.5253,
         lng: 9.0629,
         name: "Bibliothek (My Location)",
-        points: 0,
-        description: "A local library in the city."
+        points: 100,
+        description: "A local library in the city.",
+        type: 1
     },
     {
         id: "2",
@@ -14,7 +15,8 @@ export const mockLocations: Location[] = [
         lng: 9.0555,
         name: "Hölderlinturm Museumscafé",
         points: 1000,
-        description: "A charming café in the museum."
+        description: "A charming café in the museum.",
+        type: 2
     },
     {
         id: "3",
@@ -22,7 +24,8 @@ export const mockLocations: Location[] = [
         lng: 9.0576,
         name: "Hohentübingen Castle",
         points: 150,
-        description: "A historic castle in Tübingen."
+        description: "A historic castle in Tübingen.",
+        type: 3
     },
     {
         id: "4",
@@ -30,7 +33,8 @@ export const mockLocations: Location[] = [
         lng: 9.0556,
         name: "Tübingen Market Square",
         points: 200,
-        description: "The bustling market square."
+        description: "The bustling market square.",
+        type: 4
     },
     {
         id: "5",
@@ -38,6 +42,7 @@ export const mockLocations: Location[] = [
         lng: 9.0519,
         name: "University of Tübingen",
         points: 250,
-        description: "A prestigious university in the city."
+        description: "A prestigious university in the city.",
+        type: 1
     }
 ]

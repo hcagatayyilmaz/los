@@ -5,4 +5,5 @@ export type Location = {
     name: string
     points: number
     description: string
+    type: number
 }
