@@ -52,15 +52,17 @@ export default async function CityPage({params}: CityPageParams) {
 
     return (
         <LocationProvider initialLocation={locations[0]}>
-            <main className='h-screen w-screen flex flex-col relative'>
-                <div className='absolute top-0 left-0 h-full w-full z-0'>
-                    <Map locations={locations} />
+            <main className='h-screen w-screen relative'>
+                <div className='absolute top-0 left-0 h-full w-full pointer-events-none'>
+                    <div className='h-full w-full pointer-events-auto'>
+                        <Map locations={locations} />
+                    </div>
                 </div>
-                <div className='relative z-10 flex-grow'>
+                <div className='absolute top-0 left-0 w-full z-20'>
                     <Header user={user} name={city.name} />
                     <Navbar />
                 </div>
-                <div className='relative z-10'>
+                <div className='absolute bottom-0 left-0 w-full z-20'>
                     <ItemsSlider locations={locations} />
                 </div>
             </main>
