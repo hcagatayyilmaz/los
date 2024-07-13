@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,14 +9,16 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  email        String        @unique
-  firstName    String
-  lastName     String
-  profileImage String?
-  points       Int           @default(0)
-  checkIns     CheckIn[]
-  transactions Transaction[]
+  id               String            @id @default(cuid())
+  email            String            @unique
+  firstName        String
+  lastName         String
+  profileImage     String?
+  points           Int               @default(0)
+  checkIns         CheckIn[]
+  transactions     Transaction[]
+  userBadges       UserBadge[]
+  userHideAndSeeks UserHideAndSeek[]
 }
 
 enum AttractionType {
@@ -32,15 +28,17 @@ enum AttractionType {
 }
 
 model Attraction {
-  id        String         @id @default(cuid())
-  type      AttractionType
-  name      String
-  latitude  Float
-  longitude Float
-  points    Int
-  cityId    String
-  city      City           @relation(fields: [cityId], references: [id])
-  checkIns  CheckIn[]
+  id               String            @id @default(cuid())
+  type             AttractionType
+  name             String
+  latitude         Float
+  longitude        Float
+  points           Int
+  cityId           String
+  city             City              @relation(fields: [cityId], references: [id])
+  checkIns         CheckIn[]
+  hideAndSeeks     HideAndSeek[]
+  userHideAndSeeks UserHideAndSeek[]
 }
 
 model CheckIn {
@@ -79,4 +77,55 @@ model Transaction {
   createdAt DateTime @default(now())
 
   @@unique([userId, rewardId])
+}
+
+model Badge {
+  id            String      @id @default(cuid())
+  name          String
+  description   Json
+  points        Int
+  attractionIds String[]
+  meta          Json
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  users         UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeId   String
+  user      User     @relation(fields: [userId], references: [id])
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+}
+
+model HideAndSeek {
+  id               String            @id @default(cuid())
+  name             String
+  description      String
+  startDate        DateTime
+  endDate          DateTime
+  points           Int
+  attractionId     String
+  attraction       Attraction        @relation(fields: [attractionId], references: [id])
+  meta             Json
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  userHideAndSeeks UserHideAndSeek[]
+}
+
+model UserHideAndSeek {
+  id            String      @id @default(cuid())
+  userId        String
+  hideAndSeekId String
+  user          User        @relation(fields: [userId], references: [id])
+  hideAndSeek   HideAndSeek @relation(fields: [hideAndSeekId], references: [id])
+  createdAt     DateTime    @default(now())
+  Attraction    Attraction? @relation(fields: [attractionId], references: [id])
+  attractionId  String?
+
+  @@unique([userId, hideAndSeekId])
 }

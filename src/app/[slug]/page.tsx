@@ -6,7 +6,6 @@ import Map from "@/app/components/Map"
 import ItemsSlider from "../components/ItemSlider"
 import {LocationProvider} from "../providers/useSelectedItem"
 import {mockLocations as locations} from "../lib/data"
-import {Location} from "../lib/types"
 
 type CityPageParams = {
     params: {
