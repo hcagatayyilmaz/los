@@ -14,25 +14,25 @@ export default function Navbar() {
         <div className='flex justify-around items-center py-2 px-2 bg-transparent  '>
             <Link href={""}>
                 <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border-black border-2 '>
-                    <CiMap className='w-8 h-8 font-bold ' />
+                    <CiMap className='w-6 h-6 font-bold ' />
                     <span>Map</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/quests`}>
                 <div className='flex  items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
-                    <MapIcon className='w-8 h-8' />
+                    <MapIcon className='w-6 h-6' />
                     <span>Quests</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/rewards`}>
                 <div className=' flex items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
-                    <IoGiftOutline className='w-8 h-8 font-xs' />
+                    <IoGiftOutline className='w-6 h-6 font-xs' />
                     <span>Rewards</span>
                 </div>
             </Link>
             <LoginLink>
                 <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
-                    <RiAccountCircleLine className='w-8 h-8' />
+                    <RiAccountCircleLine className='w-6 h-6' />
                     <span>Login</span>
                 </div>
             </LoginLink>
