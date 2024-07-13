@@ -21,7 +21,7 @@ export default function Header({name, user}: LogoProps) {
                 >
                     <h1 className='text-3xl font-medium'>
                         <span className='text-black '>Los</span>
-                        <span className='text-customYellow text-4xl'>.</span>
+                        <span className='text-customYellow text-4xl animate-ping opacity-7'>.</span>
                     </h1>
                     <div className='flex items-end justify-end'>
                         <h2 className='text-md font-semibold text-customYellow  top-3 -left-4'>
