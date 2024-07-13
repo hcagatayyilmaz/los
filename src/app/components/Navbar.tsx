@@ -11,28 +11,28 @@ export default function Navbar() {
     const currentPath = usePathname() // Get the current path
 
     return (
-        <div className='flex justify-around items-center py-2 px-2 bg-transparent  '>
+        <div className='flex justify-around items-center bg-transparent  '>
             <Link href={""}>
                 <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border-black border-2 '>
-                    <CiMap className='w-6 h-6 font-bold ' />
+                    <CiMap className='w-5 h-5 font-bold ' />
                     <span>Map</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/quests`}>
                 <div className='flex  items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
-                    <MapIcon className='w-6 h-6' />
+                    <MapIcon className='w-5 h-5' />
                     <span>Quests</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/rewards`}>
                 <div className=' flex items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
-                    <IoGiftOutline className='w-6 h-6 font-xs' />
+                    <IoGiftOutline className='w-5 h-5 font-xs' />
                     <span>Rewards</span>
                 </div>
             </Link>
             <LoginLink>
                 <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
-                    <RiAccountCircleLine className='w-6 h-6' />
+                    <RiAccountCircleLine className='w-5 h-5' />
                     <span>Login</span>
                 </div>
             </LoginLink>
