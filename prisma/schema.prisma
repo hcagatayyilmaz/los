@@ -41,6 +41,7 @@ model Attraction {
   cityId    String
   city      City           @relation(fields: [cityId], references: [id])
   checkIns  CheckIn[]
+  display   Boolean        @default(false)
 }
 
 model CheckIn {
@@ -77,6 +78,24 @@ model Transaction {
   user      User     @relation(fields: [userId], references: [id])
   reward    Reward   @relation(fields: [rewardId], references: [id])
   createdAt DateTime @default(now())
+  Quests    Quests?  @relation(fields: [questsId], references: [id])
+  questsId  String?
 
   @@unique([userId, rewardId])
+}
+
+enum QuestType {
+  POP_QUIZ
+  HIDE_AND_SEEK
+  GET_BADGES
+}
+
+model Quests {
+  id           String        @id @default(cuid())
+  name         String
+  description  Json
+  points       Int
+  endAt        DateTime?
+  available    Boolean       @default(true)
+  transactions Transaction[]
 }

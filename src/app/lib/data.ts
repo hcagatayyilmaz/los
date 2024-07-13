@@ -1,16 +1,16 @@
 import {Location} from "./types"
 export const mockLocations: Location[] = [
+    // {
+    //     id: "1",
+    //     lat: 48.5253,
+    //     lng: 9.0629,
+    //     name: "Bibliothek (My Location)",
+    //     points: 100,
+    //     description: "A local library in the city.",
+    //     type: 1
+    // },
     {
-        id: "1",
-        lat: 48.5253,
-        lng: 9.0629,
-        name: "Bibliothek (My Location)",
-        points: 100,
-        description: "A local library in the city.",
-        type: 1
-    },
-    {
-        id: "2",
+        id: "clyfpg9dt0001b7afms63k94w",
         lat: 48.5194,
         lng: 9.0555,
         name: "Hölderlinturm Museumscafé",
