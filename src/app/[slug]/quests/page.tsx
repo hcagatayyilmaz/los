@@ -88,8 +88,8 @@ function QuestsPage({params}: QuestsPageParams) {
                 {showHideAndSeek && (
                     <div className='p-4 rounded-md mt-2'>
                         <p className='text-gray-700 mb-4'>
-                            Find the dinasour in Tübingen and get points! Click "I Found" when you
-                            are at the correct location.
+                            Find the dinasour in T&uuml;bingen and get points! Click &quot;I
+                            Found&quot; when you are at the correct location.
                         </p>
                         <button
                             className='bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-900 transition duration-300'
