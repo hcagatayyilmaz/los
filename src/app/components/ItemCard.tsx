@@ -1,6 +1,7 @@
 import {CoinIcon} from "../lib/CustomIcons"
 import Image from "next/image"
 import {Location} from "../lib/types"
+import ItemButtonGroup from "./ItemButtonGroup"
 
 type ItemCardProps = {
     location: Location
@@ -21,19 +22,15 @@ export const ItemCard = ({location}: ItemCardProps) => {
             <div className='w-2/3 h-full flex flex-col justify-between'>
                 <div>
                     <div className='flex justify-between items-center'>
-                        <h2 className='text-lg font-bold'>{location.name}</h2>
+                        <h2 className='text-lg font-bold whitespace-normal break-words'>
+                            {location.name}
+                        </h2>
                     </div>
-                    <p className='text-gray-600 text-sm'>{location.description}</p>
+                    <p className='text-gray-600 text-sm whitespace-normal break-words'>
+                        {location.description}
+                    </p>
                 </div>
-                <div className='flex items-center'>
-                    <div className='flex items-center bg-pink-100 text-pink-500 rounded-full px-4 py-2 mr-4'>
-                        <CoinIcon className='text-pink-500' />
-                        <span className='ml-2 text-sm'>{location.points}</span>
-                    </div>
-                    <button className='bg-green-800 text-white rounded-full px-4 py-2'>
-                        Check In
-                    </button>
-                </div>
+                <ItemButtonGroup location={location} />
             </div>
         </div>
     )
