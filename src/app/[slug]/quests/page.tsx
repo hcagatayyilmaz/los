@@ -1,7 +1,7 @@
 "use client"
 
 import React, {useState} from "react"
-import {obtainBadge, foundHideAndSeek} from "@/app/server/index" // Adjust the import path as necessary
+import {obtainBadge, foundHideAndSeek, submitQuiz} from "@/app/server/index" // Adjust the import path as necessary
 import {useUserLocation} from "@/app/providers/useUserLocation" // Adjust the import path as necessary
 
 type QuestsPageParams = {
@@ -12,8 +12,11 @@ type QuestsPageParams = {
 
 function QuestsPage({params}: QuestsPageParams) {
     const [message, setMessage] = useState<string | null>(null)
+    const [quizMessage, setQuizMessage] = useState<string | null>(null)
+    const [showPopQuiz, setShowPopQuiz] = useState(false)
     const [showObtainBadge, setShowObtainBadge] = useState(false)
     const [showHideAndSeek, setShowHideAndSeek] = useState(false)
+    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
     const {userLocation} = useUserLocation()
 
     const handleObtainBadge = async () => {
@@ -47,6 +50,26 @@ function QuestsPage({params}: QuestsPageParams) {
                 setMessage(error.message)
             } else {
                 setMessage("An unknown error occurred.")
+            }
+        }
+    }
+
+    const handlePopQuiz = async () => {
+        if (!selectedAnswer) {
+            alert("Please select an answer.")
+            return
+        }
+        try {
+            const response = await submitQuiz({
+                quizId: "clylkf5ty000059kyi68merg8",
+                submitted_answer: selectedAnswer
+            })
+            setQuizMessage(response.message)
+        } catch (error) {
+            if (error instanceof Error) {
+                setQuizMessage(error.message)
+            } else {
+                setQuizMessage("An unknown error occurred.")
             }
         }
     }
@@ -88,7 +111,7 @@ function QuestsPage({params}: QuestsPageParams) {
                 {showHideAndSeek && (
                     <div className='p-4 rounded-md mt-2'>
                         <p className='text-gray-700 mb-4'>
-                            Find the dinasour in T&uuml;bingen and get points! Click &quot;I
+                            Find the dinosaur in T&uuml;bingen and get points! Click &quot;I
                             Found&quot; when you are at the correct location.
                         </p>
                         <button
@@ -98,6 +121,69 @@ function QuestsPage({params}: QuestsPageParams) {
                             I Found
                         </button>
                         {message && <p className='text-green-600 mt-4'>{message}</p>}
+                    </div>
+                )}
+            </div>
+            <hr className='border-gray-300 mb-6' />
+            <div>
+                <h2
+                    className='text-2xl font-semibold cursor-pointer flex justify-between items-center p-4 rounded-md hover:bg-gray-100 transition duration-300'
+                    onClick={() => setShowPopQuiz(!showPopQuiz)}
+                >
+                    Pop Quiz {showPopQuiz ? "▲" : "▼"}
+                </h2>
+                {showPopQuiz && (
+                    <div className='p-4 rounded-md mt-2'>
+                        <p className='text-gray-700 mb-4'>How old is the tree in Park Bota?</p>
+                        <div className='mb-4'>
+                            <label className='block'>
+                                <input
+                                    type='radio'
+                                    name='quiz'
+                                    value='50 years'
+                                    onChange={(e) => setSelectedAnswer(e.target.value)}
+                                    className='mr-2'
+                                />
+                                50 years
+                            </label>
+                            <label className='block'>
+                                <input
+                                    type='radio'
+                                    name='quiz'
+                                    value='100 years'
+                                    onChange={(e) => setSelectedAnswer(e.target.value)}
+                                    className='mr-2'
+                                />
+                                100 years
+                            </label>
+                            <label className='block'>
+                                <input
+                                    type='radio'
+                                    name='quiz'
+                                    value='150 years'
+                                    onChange={(e) => setSelectedAnswer(e.target.value)}
+                                    className='mr-2'
+                                />
+                                150 years
+                            </label>
+                            <label className='block'>
+                                <input
+                                    type='radio'
+                                    name='quiz'
+                                    value='250 years'
+                                    onChange={(e) => setSelectedAnswer(e.target.value)}
+                                    className='mr-2'
+                                />
+                                250 years
+                            </label>
+                        </div>
+                        <button
+                            className='bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-900 transition duration-300'
+                            onClick={handlePopQuiz}
+                        >
+                            Submit Answer
+                        </button>
+                        {quizMessage && <p className='text-green-600 mt-4'>{quizMessage}</p>}
                     </div>
                 )}
             </div>

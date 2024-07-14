@@ -187,3 +187,71 @@ export async function foundHideAndSeek({
         return {message: `You are ${distance} meters away from the correct location.`}
     }
 }
+
+export async function submitQuiz({
+    quizId,
+    submitted_answer
+}: {
+    quizId: string
+    submitted_answer: string
+}) {
+    "use server"
+    const {getUser} = getKindeServerSession()
+    const user = await getUser()
+
+    if (!user) {
+        throw new Error("User not authenticated")
+    }
+    const quiz = await prisma.quiz.findUnique({
+        where: {id: quizId}
+    })
+    if (!quiz) {
+        throw new Error("Quiz not found")
+    }
+
+    console.log(
+        "Submitted Answer:",
+        submitted_answer,
+        "Correct Answer:",
+        quiz.answer,
+        submitted_answer === quiz.answer
+    )
+
+    if (submitted_answer !== quiz.answer) {
+        await prisma.userQuiz.create({
+            data: {
+                userId: user.id,
+                quizId: quiz.id,
+                submitted_answer: submitted_answer
+            }
+        })
+
+        return {message: "Incorrect answer!"}
+    } else {
+        await prisma.userQuiz.create({
+            data: {
+                userId: user.id,
+                quizId: quiz.id,
+                submitted_answer: submitted_answer
+            }
+        })
+        await prisma.user.update({
+            where: {id: user.id},
+            data: {points: {increment: quiz.points}}
+        })
+        return {message: "Correct answer! Points earned!"}
+    }
+}
+
+export async function checkReward({rewardId}: {rewardId: string}) {
+    "use server"
+    const reward = await prisma.reward.findUnique({
+        where: {id: rewardId}
+    })
+
+    if (!reward) {
+        throw new Error("Reward not found")
+    }
+
+    return reward
+}

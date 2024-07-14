@@ -19,6 +19,7 @@ model User {
   transactions     Transaction[]
   userBadges       UserBadge[]
   userHideAndSeeks UserHideAndSeek[]
+  QuizAnswers      UserQuiz[]
 }
 
 enum AttractionType {
@@ -128,4 +129,25 @@ model UserHideAndSeek {
   attractionId  String?
 
   @@unique([userId, hideAndSeekId])
+}
+
+model Quiz {
+  id          String     @id @default(cuid())
+  question    Json
+  answer      String
+  points      Int
+  createdAt   DateTime   @default(now())
+  QuizAnswers UserQuiz[]
+}
+
+model UserQuiz {
+  id               String   @id @default(cuid())
+  userId           String
+  quizId           String
+  submitted_answer String
+  user             User     @relation(fields: [userId], references: [id])
+  quiz             Quiz     @relation(fields: [quizId], references: [id])
+  createdAt        DateTime @default(now())
+
+  @@unique([userId, quizId])
 }
