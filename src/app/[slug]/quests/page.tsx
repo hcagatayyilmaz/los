@@ -1,13 +1,25 @@
 "use client"
 
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import {obtainBadge, foundHideAndSeek, submitQuiz} from "@/app/server/index" // Adjust the import path as necessary
 import {useUserLocation} from "@/app/providers/useUserLocation" // Adjust the import path as necessary
+import MapWithRadius from "@/app/components/MapWithRadius" // Adjust the import path as necessary
+import {Location} from "@/app/lib/types"
 
 type QuestsPageParams = {
     params: {
         slug: string
     }
+}
+
+const hideAndSeekLocation: Location = {
+    id: "1",
+    lat: 48.52605,
+    lng: 9.05584,
+    name: "Tübingen Paleontology Museum",
+    points: 100,
+    description: "Find the dinosaur in Tübingen!",
+    type: 1
 }
 
 function QuestsPage({params}: QuestsPageParams) {
@@ -75,118 +87,195 @@ function QuestsPage({params}: QuestsPageParams) {
     }
 
     return (
-        <div className='max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md font-serif'>
-            <h1 className='text-3xl font-semibold mb-6 text-center'>Quests</h1>
-            <hr className='border-gray-300 mb-6' />
-            <div className='mb-6'>
-                <h2
-                    className='text-2xl font-semibold cursor-pointer flex justify-between items-center p-4 rounded-md hover:bg-gray-100 transition duration-300'
-                    onClick={() => setShowObtainBadge(!showObtainBadge)}
-                >
-                    Obtain Badge {showObtainBadge ? "▲" : "▼"}
-                </h2>
-                {showObtainBadge && (
-                    <div className='p-4 rounded-md mt-2'>
-                        <p className='text-gray-700 mb-4'>
-                            Coffee Addict - If you already checked in 3 cool kaffee places you can
-                            obtain this rewards and get points!
-                        </p>
-                        <button
-                            className='bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-900 transition duration-300'
-                            onClick={handleObtainBadge}
-                        >
-                            Click here to obtain the badge
-                        </button>
-                    </div>
-                )}
-            </div>
-            <hr className='border-gray-300 mb-6' />
-            <div>
-                <h2
-                    className='text-2xl font-semibold cursor-pointer flex justify-between items-center p-4 rounded-md hover:bg-gray-100 transition duration-300'
-                    onClick={() => setShowHideAndSeek(!showHideAndSeek)}
-                >
-                    Hide & Seek {showHideAndSeek ? "▲" : "▼"}
-                </h2>
-                {showHideAndSeek && (
-                    <div className='p-4 rounded-md mt-2'>
-                        <p className='text-gray-700 mb-4'>
-                            Find the dinosaur in T&uuml;bingen and get points! Click &quot;I
-                            Found&quot; when you are at the correct location.
-                        </p>
-                        <button
-                            className='bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-900 transition duration-300'
-                            onClick={handleHideAndSeek}
-                        >
-                            I Found
-                        </button>
-                        {message && <p className='text-green-600 mt-4'>{message}</p>}
-                    </div>
-                )}
-            </div>
-            <hr className='border-gray-300 mb-6' />
-            <div>
-                <h2
-                    className='text-2xl font-semibold cursor-pointer flex justify-between items-center p-4 rounded-md hover:bg-gray-100 transition duration-300'
-                    onClick={() => setShowPopQuiz(!showPopQuiz)}
-                >
-                    Pop Quiz {showPopQuiz ? "▲" : "▼"}
-                </h2>
-                {showPopQuiz && (
-                    <div className='p-4 rounded-md mt-2'>
-                        <p className='text-gray-700 mb-4'>How old is the tree in Park Bota?</p>
-                        <div className='mb-4'>
-                            <label className='block'>
-                                <input
-                                    type='radio'
-                                    name='quiz'
-                                    value='50 years'
-                                    onChange={(e) => setSelectedAnswer(e.target.value)}
-                                    className='mr-2'
-                                />
-                                50 years
-                            </label>
-                            <label className='block'>
-                                <input
-                                    type='radio'
-                                    name='quiz'
-                                    value='100 years'
-                                    onChange={(e) => setSelectedAnswer(e.target.value)}
-                                    className='mr-2'
-                                />
-                                100 years
-                            </label>
-                            <label className='block'>
-                                <input
-                                    type='radio'
-                                    name='quiz'
-                                    value='150 years'
-                                    onChange={(e) => setSelectedAnswer(e.target.value)}
-                                    className='mr-2'
-                                />
-                                150 years
-                            </label>
-                            <label className='block'>
-                                <input
-                                    type='radio'
-                                    name='quiz'
-                                    value='250 years'
-                                    onChange={(e) => setSelectedAnswer(e.target.value)}
-                                    className='mr-2'
-                                />
-                                250 years
-                            </label>
-                        </div>
-                        <button
-                            className='bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-900 transition duration-300'
-                            onClick={handlePopQuiz}
-                        >
-                            Submit Answer
-                        </button>
-                        {quizMessage && <p className='text-green-600 mt-4'>{quizMessage}</p>}
-                    </div>
-                )}
-            </div>
+        <div
+            style={{
+                maxWidth: "800px",
+                margin: "0 auto",
+                padding: "20px",
+                backgroundColor: "#FFF0F5",
+                fontFamily: "Verdana, Arial, sans-serif",
+                border: "1px solid #000",
+                borderRadius: "10px"
+            }}
+        >
+            <h1
+                style={{
+                    fontSize: "36px",
+                    color: "#0000FF",
+                    textAlign: "center",
+                    marginBottom: "20px"
+                }}
+            >
+                Quests
+            </h1>
+            <hr style={{borderColor: "#0000FF", marginBottom: "20px"}} />
+            <table width='100%' cellPadding='10' cellSpacing='0'>
+                <tbody>
+                    <tr>
+                        <td style={{backgroundColor: "#FFDEAD"}}>
+                            <h2
+                                style={{fontSize: "24px", cursor: "pointer"}}
+                                onClick={() => setShowObtainBadge(!showObtainBadge)}
+                            >
+                                Obtain Badge {showObtainBadge ? "▲" : "▼"}
+                            </h2>
+                            {showObtainBadge && (
+                                <div
+                                    style={{
+                                        padding: "10px",
+                                        backgroundColor: "#FFFACD",
+                                        borderRadius: "5px"
+                                    }}
+                                >
+                                    <p style={{color: "#000080"}}>
+                                        Coffee Addict - If you already checked in 3 cool kaffee
+                                        places you can obtain this rewards and get points!
+                                    </p>
+                                    <button
+                                        style={{
+                                            backgroundColor: "#FF4500",
+                                            color: "#FFF",
+                                            padding: "10px 20px",
+                                            border: "none",
+                                            borderRadius: "5px",
+                                            cursor: "pointer"
+                                        }}
+                                        onClick={handleObtainBadge}
+                                    >
+                                        Click here to obtain the badge
+                                    </button>
+                                </div>
+                            )}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{backgroundColor: "#FFDEAD"}}>
+                            <h2
+                                style={{fontSize: "24px", cursor: "pointer"}}
+                                onClick={() => setShowHideAndSeek(!showHideAndSeek)}
+                            >
+                                Hide & Seek {showHideAndSeek ? "▲" : "▼"}
+                            </h2>
+                            {showHideAndSeek && (
+                                <div
+                                    style={{
+                                        padding: "10px",
+                                        backgroundColor: "#FFFACD",
+                                        borderRadius: "5px"
+                                    }}
+                                >
+                                    <p style={{color: "#000080"}}>
+                                        Find the dinosaur in Tübingen and get points! Click &quot;I
+                                        Found&quot; when you are at the correct location.
+                                    </p>
+                                    <MapWithRadius location={hideAndSeekLocation} />
+                                    <button
+                                        style={{
+                                            backgroundColor: "#FF4500",
+                                            color: "#FFF",
+                                            padding: "10px 20px",
+                                            border: "none",
+                                            borderRadius: "5px",
+                                            cursor: "pointer"
+                                        }}
+                                        onClick={handleHideAndSeek}
+                                    >
+                                        I Found
+                                    </button>
+                                    {message && (
+                                        <p style={{color: "#32CD32", marginTop: "10px"}}>
+                                            {message}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{backgroundColor: "#FFDEAD"}}>
+                            <h2
+                                style={{fontSize: "24px", cursor: "pointer"}}
+                                onClick={() => setShowPopQuiz(!showPopQuiz)}
+                            >
+                                Pop Quiz {showPopQuiz ? "▲" : "▼"}
+                            </h2>
+                            {showPopQuiz && (
+                                <div
+                                    style={{
+                                        padding: "10px",
+                                        backgroundColor: "#FFFACD",
+                                        borderRadius: "5px"
+                                    }}
+                                >
+                                    <p style={{color: "#000080"}}>
+                                        How old is the tree in Park Bota?
+                                    </p>
+                                    <div style={{marginBottom: "10px"}}>
+                                        <label style={{display: "block"}}>
+                                            <input
+                                                type='radio'
+                                                name='quiz'
+                                                value='50 years'
+                                                onChange={(e) => setSelectedAnswer(e.target.value)}
+                                                style={{marginRight: "5px"}}
+                                            />
+                                            50 years
+                                        </label>
+                                        <label style={{display: "block"}}>
+                                            <input
+                                                type='radio'
+                                                name='quiz'
+                                                value='100 years'
+                                                onChange={(e) => setSelectedAnswer(e.target.value)}
+                                                style={{marginRight: "5px"}}
+                                            />
+                                            100 years
+                                        </label>
+                                        <label style={{display: "block"}}>
+                                            <input
+                                                type='radio'
+                                                name='quiz'
+                                                value='150 years'
+                                                onChange={(e) => setSelectedAnswer(e.target.value)}
+                                                style={{marginRight: "5px"}}
+                                            />
+                                            150 years
+                                        </label>
+                                        <label style={{display: "block"}}>
+                                            <input
+                                                type='radio'
+                                                name='quiz'
+                                                value='250 years'
+                                                onChange={(e) => setSelectedAnswer(e.target.value)}
+                                                style={{marginRight: "5px"}}
+                                            />
+                                            250 years
+                                        </label>
+                                    </div>
+                                    <button
+                                        style={{
+                                            backgroundColor: "#FF4500",
+                                            color: "#FFF",
+                                            padding: "10px 20px",
+                                            border: "none",
+                                            borderRadius: "5px",
+                                            cursor: "pointer"
+                                        }}
+                                        onClick={handlePopQuiz}
+                                    >
+                                        Submit Answer
+                                    </button>
+                                    {quizMessage && (
+                                        <p style={{color: "#32CD32", marginTop: "10px"}}>
+                                            {quizMessage}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     )
 }
