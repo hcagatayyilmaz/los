@@ -17,7 +17,6 @@ export async function checkIn({
 }) {
     "use server"
 
-    "Check In function"
     const {getUser} = getKindeServerSession()
     const user = await getUser()
 
@@ -34,10 +33,9 @@ export async function checkIn({
     }
 
     const distance = await calculateDistance(userLat, userLng, place.latitude, place.longitude)
-    console.log("Distance:", distance)
     if (distance <= 20) {
         // 20 meters threshold
-        await prisma.checkIn.create({
+        const checkIn = await prisma.checkIn.create({
             data: {
                 userId: user.id,
                 attractionId: placeId
@@ -47,6 +45,15 @@ export async function checkIn({
         await prisma.user.update({
             where: {id: user.id},
             data: {points: {increment: place.points}}
+        })
+
+        await prisma.transaction.create({
+            data: {
+                userId: user.id,
+                points: place.points,
+                details: `checkin_id:${checkIn.id}`,
+                type: "EARN_POINTS"
+            }
         })
 
         return {success: true, message: "Checked in successfully", points: place.points}
@@ -109,7 +116,7 @@ export async function obtainBadge({badgeId}: {badgeId: string}) {
     }
 
     // Add badge to user
-    await prisma.userBadge.create({
+    const userBadge = await prisma.userBadge.create({
         data: {
             userId: user.id,
             badgeId: badgeId
@@ -120,6 +127,15 @@ export async function obtainBadge({badgeId}: {badgeId: string}) {
     await prisma.user.update({
         where: {id: user.id},
         data: {points: {increment: badge.points}}
+    })
+
+    await prisma.transaction.create({
+        data: {
+            userId: user.id,
+            points: badge.points,
+            details: `badge_id:${userBadge.id}`,
+            type: "EARN_POINTS"
+        }
     })
 
     return {message: "Badge obtained successfully!"}
@@ -144,11 +160,6 @@ export async function foundHideAndSeek({
         throw new Error("User not authenticated")
     }
 
-    console.log("Hide & Seek ID:", hideAndSeekId)
-
-    // Log Prisma client to ensure it's initialized correctly
-    console.log("Prisma Client:", prisma)
-
     const hideAndSeek = await prisma.hideAndSeek.findUnique({
         where: {id: hideAndSeekId},
         include: {attraction: true}
@@ -159,9 +170,6 @@ export async function foundHideAndSeek({
         throw new Error("HideAndSeek not found")
     }
 
-    console.log("HideAndSeek Data:", hideAndSeek)
-
-    // Calculate distance using Google Maps API or similar service
     const distance = await calculateDistance(
         userLat,
         userLng,
@@ -170,7 +178,7 @@ export async function foundHideAndSeek({
     )
 
     if (distance <= 20) {
-        await prisma.userHideAndSeek.create({
+        const userHideAndSeek = await prisma.userHideAndSeek.create({
             data: {
                 userId: user.id,
                 hideAndSeekId: hideAndSeek.id
@@ -180,6 +188,15 @@ export async function foundHideAndSeek({
         await prisma.user.update({
             where: {id: user.id},
             data: {points: {increment: hideAndSeek.points}}
+        })
+
+        await prisma.transaction.create({
+            data: {
+                userId: user.id,
+                points: hideAndSeek.points,
+                details: `hide_and_seek_id:${userHideAndSeek.id}`,
+                type: "EARN_POINTS"
+            }
         })
 
         return {message: "Congratulations! You've found the location and earned points!"}
@@ -209,36 +226,45 @@ export async function submitQuiz({
         throw new Error("Quiz not found")
     }
 
-    console.log(
-        "Submitted Answer:",
-        submitted_answer,
-        "Correct Answer:",
-        quiz.answer,
-        submitted_answer === quiz.answer
-    )
+    // Check if the user has already submitted an answer for this quiz
+    const previousAnswer = await prisma.userQuiz.findUnique({
+        where: {
+            userId_quizId: {
+                userId: user.id,
+                quizId: quiz.id
+            }
+        }
+    })
+
+    if (previousAnswer) {
+        throw new Error("You have already submitted an answer for this quiz")
+    }
+
+    const userQuiz = await prisma.userQuiz.create({
+        data: {
+            userId: user.id,
+            quizId: quiz.id,
+            submitted_answer: submitted_answer
+        }
+    })
 
     if (submitted_answer !== quiz.answer) {
-        await prisma.userQuiz.create({
-            data: {
-                userId: user.id,
-                quizId: quiz.id,
-                submitted_answer: submitted_answer
-            }
-        })
-
         return {message: "Incorrect answer!"}
     } else {
-        await prisma.userQuiz.create({
-            data: {
-                userId: user.id,
-                quizId: quiz.id,
-                submitted_answer: submitted_answer
-            }
-        })
         await prisma.user.update({
             where: {id: user.id},
             data: {points: {increment: quiz.points}}
         })
+
+        await prisma.transaction.create({
+            data: {
+                userId: user.id,
+                points: quiz.points,
+                details: `quiz_id:${userQuiz.id}`,
+                type: "EARN_POINTS"
+            }
+        })
+
         return {message: "Correct answer! Points earned!"}
     }
 }

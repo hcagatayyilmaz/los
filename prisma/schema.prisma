@@ -63,19 +63,28 @@ model Reward {
   id           String        @id @default(cuid())
   name         String
   points       Int
-  description  Json
+  meta         Json
   available    Boolean       @default(true)
   transactions Transaction[]
+  startAt      DateTime?
   endAt        DateTime?
 }
 
+enum TransactionType {
+  EARN_POINTS
+  SPEND_POINTS
+}
+
 model Transaction {
-  id        String   @id @default(cuid())
+  id        String          @id @default(cuid())
   userId    String
-  rewardId  String
-  user      User     @relation(fields: [userId], references: [id])
-  reward    Reward   @relation(fields: [rewardId], references: [id])
-  createdAt DateTime @default(now())
+  rewardId  String? // Make this field nullable
+  points    Int
+  details   String
+  user      User            @relation(fields: [userId], references: [id])
+  reward    Reward?         @relation(fields: [rewardId], references: [id])
+  createdAt DateTime        @default(now())
+  type      TransactionType
 
   @@unique([userId, rewardId])
 }
