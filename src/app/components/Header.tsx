@@ -20,7 +20,7 @@ export default function Header({name, user}: LogoProps) {
                     className={`flex items-end bg-white px-4 py-1 rounded-3xl space-x-2 ${museumModerno.className}`}
                 >
                     <h1 className='text-3xl font-medium'>
-                        <span className='text-black '>Los</span>
+                        <span className='text-black '>los</span>
                         <span className='text-customYellow text-4xl animate-ping opacity-7'>.</span>
                     </h1>
                     <div className='flex items-end justify-end'>

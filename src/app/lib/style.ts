@@ -1,58 +1,25 @@
 const mapStyle = [
     {
-        featureType: "all",
-        elementType: "all",
+        featureType: "landscape.natural",
+        elementType: "geometry.fill",
         stylers: [
             {
-                saturation: "32"
+                visibility: "on"
             },
             {
-                lightness: "-3"
-            },
+                color: "#e0efef"
+            }
+        ]
+    },
+    {
+        featureType: "poi",
+        elementType: "geometry.fill",
+        stylers: [
             {
                 visibility: "on"
             },
             {
-                weight: "1.18"
-            }
-        ]
-    },
-    {
-        featureType: "administrative",
-        elementType: "labels",
-        stylers: [
-            {
-                visibility: "off"
-            }
-        ]
-    },
-    {
-        featureType: "administrative.locality",
-        elementType: "labels.text",
-        stylers: [
-            {
-                visibility: "on"
-            }
-        ]
-    },
-    {
-        featureType: "landscape",
-        elementType: "labels",
-        stylers: [
-            {
-                visibility: "off"
-            }
-        ]
-    },
-    {
-        featureType: "landscape.man_made",
-        elementType: "all",
-        stylers: [
-            {
-                saturation: "-70"
-            },
-            {
-                lightness: "14"
+                color: "#c0e8e8"
             }
         ]
     },
@@ -67,16 +34,19 @@ const mapStyle = [
     },
     {
         featureType: "road",
-        elementType: "labels",
+        elementType: "geometry",
         stylers: [
             {
-                visibility: "off"
+                lightness: 100
+            },
+            {
+                visibility: "simplified"
             }
         ]
     },
     {
-        featureType: "road.local",
-        elementType: "labels.text",
+        featureType: "road",
+        elementType: "labels",
         stylers: [
             {
                 visibility: "on"
@@ -84,11 +54,14 @@ const mapStyle = [
         ]
     },
     {
-        featureType: "transit",
-        elementType: "labels",
+        featureType: "transit.line",
+        elementType: "geometry",
         stylers: [
             {
-                visibility: "off"
+                visibility: "on"
+            },
+            {
+                lightness: 700
             }
         ]
     },
@@ -97,22 +70,7 @@ const mapStyle = [
         elementType: "all",
         stylers: [
             {
-                saturation: "100"
-            },
-            {
-                lightness: "-14"
-            }
-        ]
-    },
-    {
-        featureType: "water",
-        elementType: "labels",
-        stylers: [
-            {
-                visibility: "off"
-            },
-            {
-                lightness: "12"
+                color: "#7dcdcd"
             }
         ]
     }
