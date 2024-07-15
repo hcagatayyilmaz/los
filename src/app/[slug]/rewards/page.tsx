@@ -1,12 +1,19 @@
 "use client"
-// src/app/rewards/page.tsx
+
 import React from "react"
-import {getAllRewards} from "@/app/server/data"
 import QRCode from "react-qr-code"
 
-export default async function RewardsPage() {
-    const rewards = await getAllRewards()
+type Reward = {
+    id: string
+    name: string
+    meta: {description: string}
+}
 
+type RewardsPageClientProps = {
+    rewards: Reward[]
+}
+
+const RewardsPageClient: React.FC<RewardsPageClientProps> = ({rewards}) => {
     return (
         <div className='max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md font-serif'>
             <h1 className='text-3xl font-semibold mb-6 text-center'>All Rewards</h1>
@@ -32,3 +39,5 @@ export default async function RewardsPage() {
         </div>
     )
 }
+
+export default RewardsPageClient
