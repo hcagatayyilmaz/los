@@ -28,11 +28,11 @@ function PopQuiz() {
     }
 
     return (
-        <div className='bg-yellow-200 p-4 rounded-md'>
+        <div className='bg-pink-100 p-4 rounded-md flex flex-col items-center'>
             <h2 className='text-2xl cursor-pointer'>Question of the day!</h2>
-            <div className='bg-yellow-100 p-4 rounded-md'>
-                <p className='text-blue-800'>How old is the tree in Park Bota?</p>
-                <div className='mb-4'>
+            <div className='bg-pink-100 p-4 rounded-md '>
+                <p className='text-black text-center'>How old is the tree in Park Bota?</p>
+                <div className='my-2'>
                     <label className='block'>
                         <input
                             type='radio'
@@ -75,7 +75,7 @@ function PopQuiz() {
                     </label>
                 </div>
                 <button
-                    className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200'
+                    className='bg-customYellow text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200'
                     onClick={handlePopQuiz}
                 >
                     Submit Answer
