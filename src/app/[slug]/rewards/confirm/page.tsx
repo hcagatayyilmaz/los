@@ -3,7 +3,7 @@
 import React from "react"
 import {useSearchParams} from "next/navigation"
 
-function page() {
+function ConfirmRewards() {
     const searchParams = useSearchParams()
     const rewardIdQuery = searchParams.get("rewardId")
 
@@ -15,4 +15,4 @@ function page() {
     )
 }
 
-export default page
+export default ConfirmRewards
