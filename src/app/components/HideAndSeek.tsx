@@ -47,7 +47,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({userLocation, setMessage, mess
             <section className='mb-6'>
                 <div className='p-4 rounded-lg bg-pink-100'>
                     <h2 className='text-lg font-semibold'>Find Secret Location</h2>
-                    <p className='text-gray-800'>
+                    <p className='text-gray-800 text-xs'>
                         Find the dinosaur in Tübingen and get points! Click &quot;I Found&quot; when
                         you are at the correct location.
                     </p>

@@ -9,7 +9,7 @@ type ItemCardProps = {
 
 export const ItemCard = ({location}: ItemCardProps) => {
     return (
-        <div className='h-48 w-full bg-white rounded-3xl shadow-lg p-2 flex gap-2 items-start justify-between border-4 border-customYellow cursor-pointer'>
+        <div className='h-48 w-full bg-white rounded-3xl shadow-lg p-2 flex gap-2 items-start justify-between border-2 border-customYellow cursor-pointer'>
             <div className='w-1/3 h-full relative'>
                 <Image
                     src='/tuebingen.jpg'

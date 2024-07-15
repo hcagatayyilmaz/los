@@ -9,7 +9,7 @@ type MapWithRadiusProps = {
 
 const mapContainerStyle = {
     width: "100%",
-    height: "400px"
+    height: "200px"
 }
 
 const MapWithRadius: React.FC<MapWithRadiusProps> = ({location}) => {
@@ -46,9 +46,9 @@ const MapWithRadius: React.FC<MapWithRadiusProps> = ({location}) => {
                 center={{lat: location.lat, lng: location.lng}}
                 radius={100}
                 options={{
-                    fillColor: "#FF0000",
+                    fillColor: "#FF1493",
                     fillOpacity: 0.2,
-                    strokeColor: "#FF0000",
+                    strokeColor: "#FF1493",
                     strokeOpacity: 1,
                     strokeWeight: 1
                 }}

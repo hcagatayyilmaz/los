@@ -19,19 +19,19 @@ export default function Navbar() {
                 </div>
             </Link>
             <Link href={`${currentPath}/quests`}>
-                <div className='flex  items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
+                <div className='flex  items-center text-muted-foreground bg-white px-2 py-1 rounded border border-black hover:text-neonGreen'>
                     <MapIcon className='w-5 h-5' />
                     <span>Quests</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/rewards`}>
-                <div className=' flex items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
+                <div className=' flex items-center text-muted-foreground bg-white px-2 py-1 rounded border border-black hover:text-neonGreen'>
                     <IoGiftOutline className='w-5 h-5 font-xs' />
                     <span>Rewards</span>
                 </div>
             </Link>
             <LoginLink>
-                <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded hover:text-neonGreen'>
+                <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border border-black hover:text-neonGreen'>
                     <RiAccountCircleLine className='w-5 h-5' />
                     <span>Login</span>
                 </div>
