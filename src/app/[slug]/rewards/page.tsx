@@ -2,6 +2,7 @@
 
 import React from "react"
 import QRCode from "react-qr-code"
+import Mock from "../../components/Mock"
 
 type Reward = {
     id: string
@@ -36,6 +37,7 @@ const RewardsPageClient: React.FC<RewardsPageClientProps> = ({rewards}) => {
                     )
                 })}
             </div>
+            <Mock />
         </div>
     )
 }
