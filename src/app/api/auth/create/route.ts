@@ -8,7 +8,7 @@ export async function GET() {
     const {getUser} = getKindeServerSession()
     const user = await getUser()
 
-    if (!user || user === null || !user.id) {
+    if (!user || !user.id) {
         throw new Error("Something went wrong!")
     }
 
@@ -21,15 +21,19 @@ export async function GET() {
     if (!dbUser) {
         dbUser = await prisma.user.create({
             data: {
-                email: (user.email as string) ?? "",
-                firstName: (user.given_name as string) ?? "",
-                lastName: (user.family_name as string) ?? "",
+                email: user.email ?? "",
+                firstName: user.given_name ?? "",
+                lastName: user.family_name ?? "",
                 id: user.id,
-                profileImage:
-                    (user.picture as string) ?? `https://avatar.vercel.sh/${user.given_name}`
+                profileImage: user.picture ?? `https://avatar.vercel.sh/${user.given_name}`
             }
         })
     }
 
-    return NextResponse.redirect("http://localhost:3000")
+    const redirectUrl = process.env.KINDE_POST_LOGOUT_REDIRECT_URL
+    if (!redirectUrl) {
+        throw new Error("KINDE_POST_LOGOUT_REDIRECT_URL is not defined")
+    }
+
+    return NextResponse.redirect(redirectUrl)
 }
