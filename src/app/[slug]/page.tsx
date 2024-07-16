@@ -6,6 +6,7 @@ import Map from "@/app/components/Map"
 import ItemsSlider from "../components/ItemSlider"
 import {LocationProvider} from "../providers/useSelectedItem"
 import {mockLocations as locations} from "../lib/data"
+import {getAttractions} from "../server/data"
 
 type CityPageParams = {
     params: {
@@ -32,11 +33,14 @@ export async function generateMetadata({params}: CityPageParams) {
 }
 
 export default async function CityPage({params}: CityPageParams) {
+    console.log(params)
     const city = await prisma.city.findUnique({
         where: {
             slug: params.slug
         }
     })
+
+    console.log(city)
 
     if (!city) {
         return (
@@ -46,6 +50,8 @@ export default async function CityPage({params}: CityPageParams) {
         )
     }
 
+    const attractions = await getAttractions(city.id)
+    console.log("Attractions", attractions)
     const {getUser} = getKindeServerSession()
     const user = await getUser()
 

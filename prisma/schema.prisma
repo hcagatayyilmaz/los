@@ -29,17 +29,21 @@ enum AttractionType {
 }
 
 model Attraction {
-  id               String            @id @default(cuid())
-  type             AttractionType
-  name             String
-  latitude         Float
-  longitude        Float
-  points           Int
-  cityId           String
-  city             City              @relation(fields: [cityId], references: [id])
-  checkIns         CheckIn[]
-  hideAndSeeks     HideAndSeek[]
-  userHideAndSeeks UserHideAndSeek[]
+  id           String         @id @default(cuid())
+  type         AttractionType
+  name         String
+  latitude     Float
+  longitude    Float
+  points       Int
+  cityId       String
+  imageUrl     String?
+  meta         Json?
+  isActive     Boolean        @default(true)
+  endDate      DateTime?
+  startDate    DateTime?
+  city         City           @relation(fields: [cityId], references: [id])
+  checkIns     CheckIn[]
+  hideAndSeeks HideAndSeek[]
 }
 
 model CheckIn {
@@ -55,7 +59,7 @@ model City {
   id          String       @id @default(cuid())
   name        String       @unique
   slug        String       @unique
-  info        Json?
+  meta        Json?
   attractions Attraction[]
 }
 
@@ -134,7 +138,6 @@ model UserHideAndSeek {
   user          User        @relation(fields: [userId], references: [id])
   hideAndSeek   HideAndSeek @relation(fields: [hideAndSeekId], references: [id])
   createdAt     DateTime    @default(now())
-  Attraction    Attraction? @relation(fields: [attractionId], references: [id])
   attractionId  String?
 
   @@unique([userId, hideAndSeekId])
