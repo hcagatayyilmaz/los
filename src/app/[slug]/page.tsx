@@ -16,25 +16,25 @@ type CityPageParams = {
     }
 }
 
-export async function generateStaticParams() {
-    unstable_noStore()
-    const cities = await prisma.city.findMany()
-    return cities.map((city) => ({
-        slug: city.slug
-    }))
-}
+// export async function generateStaticParams() {
+//     unstable_noStore()
+//     const cities = await prisma.city.findMany()
+//     return cities.map((city) => ({
+//         slug: city.slug
+//     }))
+// }
 
-export async function generateMetadata({params}: CityPageParams) {
-    unstable_noStore()
-    const city = await prisma.city.findUnique({
-        where: {
-            slug: params.slug
-        }
-    })
-    return {
-        title: city ? `Los - ${city.name}` : "City not found"
-    }
-}
+// export async function generateMetadata({params}: CityPageParams) {
+//     unstable_noStore()
+//     const city = await prisma.city.findUnique({
+//         where: {
+//             slug: params.slug
+//         }
+//     })
+//     return {
+//         title: city ? `Los - ${city.name}` : "City not found"
+//     }
+// }
 
 const CityPage = async ({params}: CityPageParams) => {
     try {
