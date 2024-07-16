@@ -17,24 +17,17 @@ export default function Header({name, user}: LogoProps) {
         <div className={`px-2 mt-2 pb-4 flex items-center justify-center bg-transparent`}>
             <Link href={"/"}>
                 <div
-                    className={`flex items-end bg-white px-4 py-1 rounded-3xl text-center space-x-2 ${museumModerno.className}`}
+                    className={`flex items-center bg-white px-4 py-1 rounded-3xl text-center space-x-2 ${museumModerno.className}`}
                 >
-                    <h1 className='text-3xl font-medium text-center'>
+                    <h1 className='text-3xl flex items-end font-medium text-center'>
                         <span className='text-black '>los</span>
-                        <span className='text-customYellow text-4xl  opacity-7'>.</span>
+                        <div className='w-[10px] h-[10px] bg-customYellow border-2 border-black rounded-full ml-[2px] mb-2'></div>
                     </h1>
-                    <div className='flex items-end justify-end'>
-                        <h2 className='text-md font-semibold text-customYellow  top-3 -left-4'>
-                            {name}
-                        </h2>
+                    <div className='flex items-center justify-end'>
+                        <h2 className='text-md font-semibold text-customYellow'>{name}</h2>
                     </div>
                 </div>
             </Link>
-
-            {/* <div className='flex items-center justify-center bg-pink-100 text-customYellow rounded-full px-4'>
-                <CoinIcon className={"text-customYellow"} />
-                <span className='text-sm'>+40</span>
-            </div> */}
         </div>
     )
 }

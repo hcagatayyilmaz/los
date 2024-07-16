@@ -5,7 +5,7 @@ const CustomToast = ({message, type}: {message: string; type: "success" | "error
     return (
         <div
             className={`${
-                type === "success" ? "bg-green-500" : "bg-red-500"
+                type === "success" ? "bg-customYellow" : "bg-customYellow"
             } text-white px-6 py-4 rounded-lg shadow-lg flex items-center justify-center space-x-2 text-xs`}
         >
             <span>
