@@ -1,13 +1,13 @@
-// app/[slug]/page.tsx
+// src/app/[slug]/page.tsx
 import prisma from "@/app/lib/db"
 import Header from "@/app/components/Header"
 import Navbar from "@/app/components/Navbar"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import Map from "@/app/components/Map"
-import ItemsSlider from "../components/ItemSlider"
-import {LocationProvider} from "../providers/useSelectedItem"
+import ItemsSlider from "@/app/components/ItemSlider"
+import {LocationProvider} from "@/app/providers/useSelectedItem"
 import {getAttractions} from "@/app/server/data"
-import {Location} from "@/app/lib/types"
+import toast from "react-hot-toast"
 
 type CityPageParams = {
     params: {
@@ -33,42 +33,53 @@ export async function generateMetadata({params}: CityPageParams) {
     }
 }
 
-export default async function CityPage({params}: CityPageParams) {
-    const city = await prisma.city.findUnique({
-        where: {
-            slug: params.slug
-        }
-    })
+const CityPage = async ({params}: CityPageParams) => {
+    try {
+        const city = await prisma.city.findUnique({
+            where: {
+                slug: params.slug
+            }
+        })
 
-    if (!city) {
+        if (!city) {
+            return (
+                <main className='h-dvh w-screen flex items-center justify-center'>
+                    <h1 className='text-4xl'>City not found</h1>
+                </main>
+            )
+        }
+
+        const attractions = await getAttractions(city.id)
+        const {getUser} = getKindeServerSession()
+        const user = await getUser()
+
+        return (
+            <LocationProvider initialLocation={attractions[0]}>
+                <main className='h-dvh w-screen relative'>
+                    <div className='absolute top-0 left-0 h-full w-full pointer-events-none'>
+                        <div className='h-full w-full pointer-events-auto'>
+                            <Map locations={attractions} />
+                        </div>
+                    </div>
+                    <div className='absolute top-0 left-0 w-full z-20'>
+                        <Header user={user} name={city.name} />
+                        <Navbar />
+                    </div>
+                    <div className='absolute bottom-0 left-0 w-full z-20'>
+                        <ItemsSlider locations={attractions} />
+                    </div>
+                </main>
+            </LocationProvider>
+        )
+    } catch (error) {
+        toast.error("An error occurred. Please try again.")
+        console.error(error)
         return (
             <main className='h-screen w-screen flex items-center justify-center'>
-                <h1 className='text-4xl'>City not found</h1>
+                <h1 className='text-4xl'>An error occurred</h1>
             </main>
         )
     }
-
-    const attractions = await getAttractions(city.id)
-
-    const {getUser} = getKindeServerSession()
-    const user = await getUser()
-
-    return (
-        <LocationProvider initialLocation={attractions[0]}>
-            <main className='h-screen w-screen relative'>
-                <div className='absolute top-0 left-0 h-full w-full pointer-events-none'>
-                    <div className='h-full w-full pointer-events-auto'>
-                        <Map locations={attractions} />
-                    </div>
-                </div>
-                <div className='absolute top-0 left-0 w-full z-20'>
-                    <Header user={user} name={city.name} />
-                    <Navbar />
-                </div>
-                <div className='absolute bottom-0 left-0 w-full z-20'>
-                    <ItemsSlider locations={attractions} />
-                </div>
-            </main>
-        </LocationProvider>
-    )
 }
+
+export default CityPage
