@@ -8,6 +8,7 @@ import ItemsSlider from "@/app/components/ItemSlider"
 import {LocationProvider} from "@/app/providers/useSelectedItem"
 import {getAttractions} from "@/app/server/data"
 import toast from "react-hot-toast"
+import {unstable_noStore} from "next/cache"
 
 type CityPageParams = {
     params: {
@@ -16,6 +17,7 @@ type CityPageParams = {
 }
 
 export async function generateStaticParams() {
+    unstable_noStore()
     const cities = await prisma.city.findMany()
     return cities.map((city) => ({
         slug: city.slug
@@ -23,6 +25,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({params}: CityPageParams) {
+    unstable_noStore()
     const city = await prisma.city.findUnique({
         where: {
             slug: params.slug

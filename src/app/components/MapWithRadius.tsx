@@ -38,12 +38,12 @@ const MapWithRadius: React.FC<MapWithRadiusProps> = ({location}) => {
     return (
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            center={{lat: location.lat, lng: location.lng}}
+            center={{lat: location.latitude, lng: location.longitude}}
             zoom={15}
             options={options}
         >
             <Circle
-                center={{lat: location.lat, lng: location.lng}}
+                center={{lat: location.latitude, lng: location.longitude}}
                 radius={100}
                 options={{
                     fillColor: "#FF1493",

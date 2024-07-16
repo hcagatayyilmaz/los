@@ -5,12 +5,25 @@ import MapWithRadius from "./MapWithRadius"
 
 const hideAndSeekLocation: Location = {
     id: "1",
-    lat: 48.52605,
-    lng: 9.05584,
+    latitude: 48.52605,
+    longitude: 9.05584,
     name: "Tübingen Paleontology Museum",
     points: 100,
-    description: "Find the dinosaur in Tübingen!",
-    type: 1
+    type: "MAIN_ATTRACTION",
+    imageUrl: null,
+    meta: {
+        title: {
+            en: "Find the dinosaur in Tübingen!",
+            de: "Finde den Dinosaurier in Tübingen!"
+        },
+        description: {
+            en: "Search for the dinosaur hidden in the Tübingen Paleontology Museum.",
+            de: "Suche nach dem Dinosaurier, der im Paläontologischen Museum Tübingen versteckt ist."
+        }
+    },
+    isActive: true,
+    endDate: null,
+    startDate: null
 }
 
 type HideAndSeekProps = {
