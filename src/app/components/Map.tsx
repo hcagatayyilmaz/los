@@ -29,7 +29,14 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         []
     )
 
-    const center = useMemo(() => userLocation || locations[0], [userLocation, locations])
+    const center = useMemo(() => {
+        if (userLocation) {
+            return {lat: userLocation.lat, lng: userLocation.lng}
+        } else {
+            const firstLocation = locations[0]
+            return {lat: firstLocation.latitude, lng: firstLocation.longitude}
+        }
+    }, [userLocation, locations])
 
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
