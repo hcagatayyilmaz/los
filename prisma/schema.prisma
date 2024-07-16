@@ -28,9 +28,17 @@ enum AttractionType {
   POINT
 }
 
+enum AttractionTaxonomy {
+  MAIN_ATTRACTION
+  HIDDEN_WONDER
+  EXPERINCE
+  LIMITED_TIME
+}
+
 model Attraction {
-  id           String         @id @default(cuid())
+  id           String              @id @default(cuid())
   type         AttractionType
+  taxonomy     AttractionTaxonomy?
   name         String
   latitude     Float
   longitude    Float
@@ -38,10 +46,10 @@ model Attraction {
   cityId       String
   imageUrl     String?
   meta         Json?
-  isActive     Boolean        @default(true)
+  isActive     Boolean             @default(true)
   endDate      DateTime?
   startDate    DateTime?
-  city         City           @relation(fields: [cityId], references: [id])
+  city         City                @relation(fields: [cityId], references: [id])
   checkIns     CheckIn[]
   hideAndSeeks HideAndSeek[]
 }

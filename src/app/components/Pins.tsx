@@ -11,20 +11,20 @@ export const ItemPin: React.FC<{location: Location}> = ({location}) => {
     let bgColor = ""
 
     switch (location.type) {
-        case 1:
+        case "MAIN_ATTRACTION":
             bgColor = "#FFE888"
             break
-        case 2:
+        case "HIDDEN_WONDERS":
             bgColor = "#FFBBDD"
             break
-        case 3:
+        case "EXPERINCE":
             bgColor = "#C0EFFF"
             break
-        case 4:
+        case "LIMITED_TIME":
             bgColor = "#C9FFCE"
             break
         default:
-            bgColor = "#FF1493" // default color if type is not recognized
+            bgColor = "#FFFFFF" // default color if type is not recognized
     }
 
     return (

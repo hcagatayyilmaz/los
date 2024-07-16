@@ -1,9 +1,13 @@
 export type Location = {
     id: string
-    lat: number
-    lng: number
+    latitude: number
+    longitude: number
     name: string
     points: number
-    description: string
-    type: number
+    type: string
+    imageUrl: string | null
+    meta: any
+    isActive: boolean
+    endDate: Date | null
+    startDate: Date | null
 }

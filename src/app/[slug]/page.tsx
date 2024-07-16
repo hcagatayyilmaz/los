@@ -1,3 +1,4 @@
+// app/[slug]/page.tsx
 import prisma from "@/app/lib/db"
 import Header from "@/app/components/Header"
 import Navbar from "@/app/components/Navbar"
@@ -5,8 +6,8 @@ import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import Map from "@/app/components/Map"
 import ItemsSlider from "../components/ItemSlider"
 import {LocationProvider} from "../providers/useSelectedItem"
-import {mockLocations as locations} from "../lib/data"
-import {getAttractions} from "../server/data"
+import {getAttractions} from "@/app/server/data"
+import {Location} from "@/app/lib/types"
 
 type CityPageParams = {
     params: {
@@ -33,14 +34,11 @@ export async function generateMetadata({params}: CityPageParams) {
 }
 
 export default async function CityPage({params}: CityPageParams) {
-    console.log(params)
     const city = await prisma.city.findUnique({
         where: {
             slug: params.slug
         }
     })
-
-    console.log(city)
 
     if (!city) {
         return (
@@ -51,16 +49,16 @@ export default async function CityPage({params}: CityPageParams) {
     }
 
     const attractions = await getAttractions(city.id)
-    console.log("Attractions", attractions)
+
     const {getUser} = getKindeServerSession()
     const user = await getUser()
 
     return (
-        <LocationProvider initialLocation={locations[0]}>
+        <LocationProvider initialLocation={attractions[0]}>
             <main className='h-screen w-screen relative'>
                 <div className='absolute top-0 left-0 h-full w-full pointer-events-none'>
                     <div className='h-full w-full pointer-events-auto'>
-                        <Map locations={locations} />
+                        <Map locations={attractions} />
                     </div>
                 </div>
                 <div className='absolute top-0 left-0 w-full z-20'>
@@ -68,7 +66,7 @@ export default async function CityPage({params}: CityPageParams) {
                     <Navbar />
                 </div>
                 <div className='absolute bottom-0 left-0 w-full z-20'>
-                    <ItemsSlider locations={locations} />
+                    <ItemsSlider locations={attractions} />
                 </div>
             </main>
         </LocationProvider>

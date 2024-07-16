@@ -40,7 +40,9 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             } else {
                 const bounds = new window.google.maps.LatLngBounds()
                 locations.forEach((location) => {
-                    bounds.extend(new window.google.maps.LatLng(location.lat, location.lng))
+                    bounds.extend(
+                        new window.google.maps.LatLng(location.latitude, location.longitude)
+                    )
                 })
                 map.fitBounds(bounds)
             }
@@ -57,7 +59,10 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             let closestDistance = Infinity
 
             locations.forEach((location) => {
-                const locationLatLng = new window.google.maps.LatLng(location.lat, location.lng)
+                const locationLatLng = new window.google.maps.LatLng(
+                    location.latitude,
+                    location.longitude
+                )
                 const distance = window.google.maps.geometry.spherical.computeDistanceBetween(
                     userLatLng,
                     locationLatLng
@@ -106,7 +111,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             {locations.map((location, index) => (
                 <OverlayView
                     key={index}
-                    position={{lat: location.lat, lng: location.lng}}
+                    position={{lat: location.latitude, lng: location.longitude}}
                     mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                 >
                     <div onClick={() => setSelectedLocation(location)}>
