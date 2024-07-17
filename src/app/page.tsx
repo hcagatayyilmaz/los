@@ -1,6 +1,7 @@
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {MuseoModerno} from "next/font/google"
 import ImageSlider from "./components/ImageSlider"
+import Link from "next/link"
 
 const museumModerno = MuseoModerno({
     subsets: ["latin"]
@@ -65,9 +66,11 @@ export default async function Home() {
                     <ImageSlider />
                 </div>
                 <div className=' flex flex-wrap px-2 p-2 gap-x-4'>
-                    <div className='border-2 bg-white rounded-full border-black text-customYellow font-medium py-1 text-sm px-4 inline-block mb-2'>
-                        TÜBINGEN
-                    </div>
+                    <Link href={"/tuebingen"}>
+                        <div className='border-2 bg-white rounded-full border-black text-customYellow font-medium py-1 text-sm px-4 inline-block mb-2'>
+                            TÜBINGEN
+                        </div>
+                    </Link>
                     <div className='border-2 bg-white rounded-full border-black text-green-500 font-medium py-1 px-4 text-sm inline-block mb-2'>
                         STUTTGART
                     </div>
