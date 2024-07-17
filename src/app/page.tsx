@@ -15,11 +15,11 @@ export default async function Home() {
 
     return (
         <main className='h-dvh w-dvw flex flex-col'>
-            <div className='px-4 bg-white h-10 flex justify-between border-b border-black'>
+            <div className='px-4 bg-white flex justify-between border-b border-black'>
                 <div
                     className={`flex items-center bg-white py-1 rounded-3xl text-center space-x-2  ${museumModerno.className}`}
                 >
-                    <h1 className='text-3xl flex items-end font-normal text-center'>
+                    <h1 className='text-4xl flex items-end font-normal text-center'>
                         <span className={`text-black ${museumModerno.className} font-bold`}>
                             Los
                         </span>
