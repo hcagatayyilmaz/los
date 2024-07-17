@@ -9,6 +9,7 @@ import {LocationProvider} from "@/app/providers/useSelectedItem"
 import {getAttractions} from "@/app/server/data"
 import toast from "react-hot-toast"
 import {unstable_noStore} from "next/cache"
+import LocationPermissionButton from "../components/LocationPermissionButton"
 
 type CityPageParams = {
     params: {
@@ -16,25 +17,25 @@ type CityPageParams = {
     }
 }
 
-// export async function generateStaticParams() {
-//     unstable_noStore()
-//     const cities = await prisma.city.findMany()
-//     return cities.map((city) => ({
-//         slug: city.slug
-//     }))
-// }
+export async function generateStaticParams() {
+    unstable_noStore()
+    const cities = await prisma.city.findMany()
+    return cities.map((city) => ({
+        slug: city.slug
+    }))
+}
 
-// export async function generateMetadata({params}: CityPageParams) {
-//     unstable_noStore()
-//     const city = await prisma.city.findUnique({
-//         where: {
-//             slug: params.slug
-//         }
-//     })
-//     return {
-//         title: city ? `Los - ${city.name}` : "City not found"
-//     }
-// }
+export async function generateMetadata({params}: CityPageParams) {
+    unstable_noStore()
+    const city = await prisma.city.findUnique({
+        where: {
+            slug: params.slug
+        }
+    })
+    return {
+        title: city ? `Los - ${city.name}` : "City not found"
+    }
+}
 
 const CityPage = async ({params}: CityPageParams) => {
     try {
@@ -60,7 +61,7 @@ const CityPage = async ({params}: CityPageParams) => {
             <LocationProvider initialLocation={attractions[0]}>
                 <main className='h-dvh w-screen relative'>
                     <div className='absolute top-0 left-0 h-full w-full pointer-events-none'>
-                        <div className='h-full w-full pointer-events-auto'>
+                        <div className='h-full w-full pointer-events-auto '>
                             <Map locations={attractions} />
                         </div>
                     </div>
@@ -69,6 +70,9 @@ const CityPage = async ({params}: CityPageParams) => {
                         <Navbar />
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
+                        <div className='flex mr-4 justify-end '>
+                            <LocationPermissionButton />
+                        </div>
                         <ItemsSlider locations={attractions} />
                     </div>
                 </main>
