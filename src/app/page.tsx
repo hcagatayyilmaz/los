@@ -58,18 +58,18 @@ export default async function Home() {
                     </p>
                 </div>
                 <h2 className='mt-4 overflow-hidden md:overflow-auto md:whitespace-nowrap text-16 whitespace-normal xl:text-28'>
-                    Since life in cities can be both exciting and overwhelming
-                    <span className='hidden md:contents'></span> we publish the world’s most
-                    engaging guides to city life.
+                    Experience cities like never before
+                    <span className='hidden md:contents'></span> with hyperlocal, gamified guides
+                    offering exciting rewards.
                 </h2>
                 <div className='h-[30vh] w-full my-6 rounded-lg'>
                     <ImageSlider />
                 </div>
                 <div className=' flex flex-wrap px-2 p-2 gap-x-4'>
                     <Link href={"/tuebingen"}>
-                        <div className='border-2 bg-white rounded-full border-black text-customYellow font-medium py-1 text-sm px-4 inline-block mb-2'>
+                        <button className='border-2 bg-white rounded-full border-black text-customYellow font-medium py-1 text-sm px-4 inline-block mb-2 '>
                             TÜBINGEN
-                        </div>
+                        </button>
                     </Link>
                     <div className='border-2 bg-white rounded-full border-black text-green-500 font-medium py-1 px-4 text-sm inline-block mb-2'>
                         STUTTGART
