@@ -50,3 +50,7 @@ export default function Navbar() {
         </div>
     )
 }
+
+export function Navbar2() {
+    return <p>Navbar</p>
+}
