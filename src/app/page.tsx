@@ -76,7 +76,7 @@ export default async function Home() {
                     </div>
                 </div>
             </div>
-            <div className='h-[12vh] py-1 bg-white border-t border-black px-2 flex justify-end gap-x-2 items-center'>
+            <div className='h-[10vh] py-1 bg-white border-t border-black px-2 flex justify-end gap-x-2 items-center'>
                 <div className='border-2 rounded border-black px-2'>Privacy</div>
                 <div className='border-2 rounded border-black px-2'>Contact</div>
             </div>
