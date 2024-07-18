@@ -65,7 +65,7 @@ const CityPage = async ({params}: CityPageParams) => {
                             <Map locations={attractions} />
                         </div>
                     </div>
-                    <div className='absolute top-0 left-0 w-full z-20'>
+                    <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
                         <Header user={user} name={city.name} />
                         <Navbar />
                     </div>

@@ -14,10 +14,10 @@ interface LogoProps {
 
 export default function Header({name, user}: LogoProps) {
     return (
-        <div className={`px-2 py-1 flex items-center justify-center bg-white`}>
+        <div className={`px-2 py-1 flex items-center justify-center bg-white rounded-b-full `}>
             <Link href={"/"}>
                 <div
-                    className={`flex items-center bg-white px-4 py-1 rounded-3xl text-center space-x-2 ${museumModerno.className}`}
+                    className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
                     style={{border: "1px dashed white"}}
                 >
                     <h1 className='text-3xl flex items-end font-medium text-center'>
