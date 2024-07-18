@@ -15,7 +15,7 @@ interface LogoProps {
 export default function Header({name, user}: LogoProps) {
     return (
         <div
-            className={`px-2 py-1 flex items-center justify-center bg-white rounded-b-full border border-gray-400 `}
+            className={`px-2 py-1 flex items-center justify-center bg-white rounded-b-full border border-gray-400 shadow-xl`}
         >
             <Link href={"/"}>
                 <div

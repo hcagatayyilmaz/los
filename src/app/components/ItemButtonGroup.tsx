@@ -70,7 +70,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
                     Check In!
                 </div>
                 <span className='inline-block'>
-                    <div className='flex items-center justify-center bg-customYellow rounded-md px-2'>
+                    <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                         <CoinIcon className='w-4 h-4 text-white' />
                         <span className='mt-1 text-xs text-white'>+30</span>
                     </div>
