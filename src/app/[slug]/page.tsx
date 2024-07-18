@@ -74,7 +74,7 @@ const CityPage = async ({params}: CityPageParams) => {
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
                         <div className='flex mx-4 justify-between '>
-                            {user ? <TotalPoints points={user.points} /> : <div></div>}
+                            {user ? <TotalPoints /> : <div></div>}
                             <div className='flex gap-1'>
                                 <ClosestPlace />
                                 <LocationPermissionButton />
