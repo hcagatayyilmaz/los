@@ -68,7 +68,7 @@ export default async function Home() {
                 <div className=' flex flex-wrap px-2 p-2 gap-x-4'>
                     <Link href={"/tuebingen"}>
                         <button
-                            className={`border-2 bg-white rounded-full border-black text-customYellow font-medium py-1 text-sm px-4 inline-block mb-2 ${museumModerno.className}`}
+                            className={`border-2 bg-white rounded-full border-black text-customYellow font-medium py-1 text-sm px-4 inline-block mb-2 `}
                         >
                             TÜBINGEN
                         </button>
