@@ -7,6 +7,7 @@ import {useUserLocation} from "../providers/useUserLocation"
 import toast from "react-hot-toast"
 import {useKindeBrowserClient} from "@kinde-oss/kinde-auth-nextjs"
 import CustomToast from "./CustomToast"
+import {FaLock} from "react-icons/fa"
 
 const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
     const {userLocation} = useUserLocation()
@@ -61,14 +62,17 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
     return (
         <div className='w-full'>
             <button
-                className='w-full border-2 border-customYellow text-customYellow rounded-2xl py-1'
+                className='w-full border-2 border-customYellow text-customYellow rounded-2xl py-1 flex items-center justify-center gap-2'
                 onClick={handleCheckIn}
             >
-                Check In{" "}
+                <div className='flex items-center'>
+                    <FaLock className='w-3 h-3 text-customYellow  mr-1' />
+                    Check In!
+                </div>
                 <span className='inline-block'>
-                    <div className='flex items-center justify-center bg-customYellow rounded-md px-2 py-1'>
-                        <CoinIcon className='w-4 h-4 text-white' />{" "}
-                        <span className='mt-1 text-xs text-white '>30</span>
+                    <div className='flex items-center justify-center bg-customYellow rounded-md px-2'>
+                        <CoinIcon className='w-4 h-4 text-white' />
+                        <span className='mt-1 text-xs text-white'>+30</span>
                     </div>
                 </span>
             </button>
