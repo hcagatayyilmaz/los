@@ -73,7 +73,7 @@ const CityPage = async ({params}: CityPageParams) => {
                         <Navbar />
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
-                        <div className='flex mx-4 justify-between '>
+                        <div className='flex mx-4 mb-1 justify-between '>
                             {user ? <TotalPoints /> : <div></div>}
                             <div className='flex gap-1'>
                                 <ClosestPlace />
