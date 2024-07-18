@@ -13,9 +13,9 @@ export default function Navbar() {
     const {isAuthenticated} = useKindeBrowserClient()
 
     return (
-        <div className='flex justify-around items-center bg-transparent  '>
+        <div className='flex justify-around items-center bg-transparent mt-1 '>
             <Link href={""}>
-                <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border-black border-2 '>
+                <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border-black border '>
                     <CiMap className='w-5 h-5 font-bold ' />
                     <span>Map</span>
                 </div>

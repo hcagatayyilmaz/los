@@ -9,29 +9,31 @@ type ItemCardProps = {
 
 export const ItemCard = ({location}: ItemCardProps) => {
     return (
-        <div className='h-48 w-full bg-white rounded-3xl shadow-lg p-2 flex gap-2 items-start justify-between border-2 border-customYellow cursor-pointer'>
-            <div className='w-1/3 h-full relative'>
-                {location.imageUrl && (
-                    <Image
-                        src={location.imageUrl}
-                        layout='fill'
-                        objectFit='cover'
-                        className='rounded-lg'
-                        alt='Tübingen, Germany'
-                    />
-                )}
-            </div>
-            <div className='w-2/3 h-full flex flex-col justify-between'>
-                <div>
-                    <div className='flex justify-between items-center'>
-                        <h2 className='text-md font-bold whitespace-normal break-words'>
-                            {location.name}
-                        </h2>
-                    </div>
-                    <p className='text-gray-600 text-xs whitespace-normal break-words'>
+        <div className='w-full max-w-md bg-white rounded-xl shadow-md p-4 flex flex-col border border-gray-200'>
+            <div className='flex'>
+                <div className='w-1/3 h-24 relative'>
+                    {location.imageUrl && (
+                        <Image
+                            src={location.imageUrl}
+                            layout='fill'
+                            objectFit='cover'
+                            className='rounded-lg'
+                            alt='Tübingen, Germany'
+                        />
+                    )}
+                </div>
+                <div className='w-2/3 pl-4'>
+                    <h2 className='text-md font-bold text-wrap'>{location.name}</h2>
+                    {/* <div className='flex items-center text-pink-500 my-2'>
+                        <CoinIcon className='w-5 h-5 mr-1' />
+                        <span className='font-semibold'>{location.points}</span>
+                    </div> */}
+                    <p className='text-gray-500 text-xs text-wrap'>
                         {location.meta.description.de}
                     </p>
                 </div>
+            </div>
+            <div className='w-full mt-4'>
                 <ItemButtonGroup location={location} />
             </div>
         </div>

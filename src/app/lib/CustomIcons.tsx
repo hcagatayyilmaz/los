@@ -107,7 +107,7 @@ export function RewardsIcon(props: any) {
 
 export const CoinIcon = (props: any) => {
     return (
-        <i className='mr-2 text-blue-300'>
+        <i className='mr-2 text-customYellow'>
             <svg
                 width='22'
                 height='18'

@@ -1,7 +1,8 @@
 "use client"
 import React, {useState} from "react"
 import {useUserLocation} from "../providers/useUserLocation"
-import {FaMapMarkerAlt} from "react-icons/fa"
+import {MdGpsFixed} from "react-icons/md"
+
 import toast from "react-hot-toast"
 
 const LocationPermissionButton: React.FC = () => {
@@ -38,9 +39,9 @@ const LocationPermissionButton: React.FC = () => {
     return (
         <div
             onClick={requestLocationPermission}
-            className='bg-white p-2 rounded-full shadow-md cursor-pointer border-2 border-customYellow'
+            className='bg-white p-[6px] rounded-full shadow-md cursor-pointer border-2 border-customYellow'
         >
-            <FaMapMarkerAlt className='text-black text-2xl' />
+            <MdGpsFixed className='text-black text-2xl' />
         </div>
     )
 }

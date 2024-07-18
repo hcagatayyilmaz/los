@@ -70,7 +70,7 @@ export default async function Home() {
                         <button
                             className={`border-2 bg-white rounded-full border-black text-customYellow font-medium py-1 text-sm px-4 inline-block mb-2 ${museumModerno.className}`}
                         >
-                            Tübingen
+                            TÜBINGEN
                         </button>
                     </Link>
                     <div className='border-2 bg-white rounded-full border-black text-green-500 font-medium py-1 px-4 text-sm inline-block mb-2'>

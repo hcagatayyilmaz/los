@@ -61,6 +61,8 @@ model CheckIn {
   user         User       @relation(fields: [userId], references: [id])
   attraction   Attraction @relation(fields: [attractionId], references: [id])
   createdAt    DateTime   @default(now())
+
+  @@unique([userId, attractionId])
 }
 
 model City {

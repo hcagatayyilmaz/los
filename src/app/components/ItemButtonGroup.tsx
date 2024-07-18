@@ -59,16 +59,18 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
     }
 
     return (
-        <div className='flex items-center w-full'>
-            <div className='flex items-center justify-between bg-pink-100 text-pink-500 rounded-full px-4 py-2 mr-4'>
-                <CoinIcon className='text-pink-500' />
-                <span className='ml-2 text-sm'>{location.points}</span>
-            </div>
+        <div className='w-full'>
             <button
-                className='bg-green-500 text-white rounded-full px-4 py-2'
+                className='w-full border-2 border-customYellow text-customYellow rounded-2xl py-1'
                 onClick={handleCheckIn}
             >
-                Check In
+                Check In{" "}
+                <span className='inline-block'>
+                    <div className='flex items-center justify-center bg-customYellow rounded-md px-2 py-1'>
+                        <CoinIcon className='w-4 h-4 text-white' />{" "}
+                        <span className='mt-1 text-xs text-white '>30</span>
+                    </div>
+                </span>
             </button>
         </div>
     )

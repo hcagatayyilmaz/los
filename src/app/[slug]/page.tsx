@@ -10,6 +10,8 @@ import {getAttractions} from "@/app/server/data"
 import toast from "react-hot-toast"
 import {unstable_noStore} from "next/cache"
 import LocationPermissionButton from "../components/LocationPermissionButton"
+import TotalPoints from "../components/TotalPoints"
+import ClosestPlace from "../components/ClosestPlace"
 
 type CityPageParams = {
     params: {
@@ -56,6 +58,7 @@ const CityPage = async ({params}: CityPageParams) => {
         const attractions = await getAttractions(city.id)
         const {getUser} = getKindeServerSession()
         const user = await getUser()
+        console.log(user)
 
         return (
             <LocationProvider initialLocation={attractions[0]}>
@@ -70,8 +73,12 @@ const CityPage = async ({params}: CityPageParams) => {
                         <Navbar />
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
-                        <div className='flex mr-4 justify-end '>
-                            <LocationPermissionButton />
+                        <div className='flex mx-4 justify-between '>
+                            {user ? <TotalPoints points={user.points} /> : <div></div>}
+                            <div className='flex gap-1'>
+                                <ClosestPlace />
+                                <LocationPermissionButton />
+                            </div>
                         </div>
                         <ItemsSlider locations={attractions} />
                     </div>
