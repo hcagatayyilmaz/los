@@ -24,7 +24,6 @@ export default function Header({name, user}: LogoProps) {
                 >
                     <h1 className='text-3xl flex items-end font-medium text-center'>
                         <span className={`text-black ${museumModerno.className}`}>Los</span>
-
                         <div className='w-[12px] h-[12px] bg-customYellow border border-white border-dashed rounded-full ml-[2px] mb-2'></div>
                     </h1>
                     <div className='flex items-end justify-end mt-2'>

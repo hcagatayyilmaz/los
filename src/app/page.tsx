@@ -24,7 +24,7 @@ export default async function Home() {
                         <span className={`text-black ${museumModerno.className} font-bold`}>
                             Los
                         </span>
-                        <div className='w-3 h-3 border-2 border-customYellow rounded-full ml-1 mb-2'></div>
+                        <div className='w-[12px] h-[12px] bg-customYellow border border-white border-dashed rounded-full ml-[2px] mb-2'></div>
                     </h1>
                     <div className='flex items-end justify-end mt-2'></div>
                 </div>

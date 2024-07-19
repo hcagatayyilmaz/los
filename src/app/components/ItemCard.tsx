@@ -9,7 +9,7 @@ type ItemCardProps = {
 
 export const ItemCard = ({location}: ItemCardProps) => {
     return (
-        <div className='w-full max-w-md bg-white rounded-xl shadow-md p-4 flex flex-col border border-gray-200'>
+        <div className='w-full max-w-md bg-white rounded-xl shadow-xl p-4 flex flex-col border border-gray-300'>
             <div className='flex'>
                 <div className='w-1/3 h-24 relative'>
                     {location.imageUrl && (

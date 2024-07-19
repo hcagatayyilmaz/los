@@ -38,7 +38,7 @@ export default function Navbar() {
                 <LogoutLink>
                     <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
                         <RiAccountCircleLine className='w-5 h-5' />
-                        <span className='text-xs'>Logout</span>
+                        <span>Logout</span>
                     </div>
                 </LogoutLink>
             ) : (
