@@ -30,9 +30,7 @@ enum AttractionType {
 
 enum AttractionTaxonomy {
   MAIN_ATTRACTION
-  HIDDEN_WONDER
-  EXPERINCE
-  LIMITED_TIME
+  EVENT
 }
 
 model Attraction {

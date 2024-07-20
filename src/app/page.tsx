@@ -2,8 +2,9 @@ import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {MuseoModerno} from "next/font/google"
 import ImageSlider from "./components/ImageSlider"
 import Link from "next/link"
+import Image from "next/image"
 
-const museumModerno = MuseoModerno({
+const museoModerno = MuseoModerno({
     subsets: ["latin"]
 })
 
@@ -15,47 +16,51 @@ export default async function Home() {
     const language = "EN"
 
     return (
-        <main className='h-dvh w-dvw flex flex-col'>
-            <div className='px-4 bg-white flex justify-between border-b border-black'>
+        <main className='h-screen w-screen flex flex-col items-center'>
+            <div className='w-full max-w-md px-4 bg-white flex justify-between border-b border-black'>
                 <div
-                    className={`flex items-center bg-white py-1 rounded-3xl text-center space-x-2  ${museumModerno.className}`}
+                    className={`flex items-center bg-white py-1 rounded-3xl text-center space-x-2 ${museoModerno.className}`}
                 >
                     <h1 className='text-4xl flex items-end font-normal text-center'>
-                        <span className={`text-black ${museumModerno.className} font-bold`}>
+                        <span className={`text-black ${museoModerno.className} font-bold`}>
                             Los
                         </span>
-                        <div className='w-[12px] h-[12px] bg-customYellow border border-white border-dashed rounded-full ml-[2px] mb-2'></div>
+                        <div className='ml-[2px] mb-2'>
+                            <Image src='/logo.png' alt='Logo' width={12} height={12} />
+                        </div>
                     </h1>
                     <div className='flex items-end justify-end mt-2'></div>
                 </div>
-                <div className='flex items-center'>
+                <div className='flex items-center gap-2'>
+                    <Link href={"/"}>
+                        <button className='bg-black text-white px-2 rounded'>Partnership</button>
+                    </Link>
                     <button className='text-sm font-medium text-gray-700 focus:outline-none'>
                         {language === "EN" ? "EN | DE" : "DE | EN"}
                     </button>
                 </div>
             </div>
-            <div className='px-4 pt-8 h-full '>
-                <div className=' text-4xl flex flex-col gap-4 font-light'>
-                    <p>
-                        <span className={`${museumModerno.className} text-4xl font-bold `}>
+            <div className='w-full max-w-md px-4 pt-8 h-full'>
+                <div className='text-4xl flex flex-col gap-4 font-light'>
+                    <div>
+                        <span className={`${museoModerno.className} text-4xl font-bold`}>
                             Explore
                         </span>
-                        <span> </span>the city<span className='text-customYellow text-10xl'>.</span>
-                    </p>
-                    <p>
-                        <span className={`${museumModerno.className} text-4xl font-bold `}>
+                        <span> the city</span>
+                        <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow'></span>
+                    </div>
+                    <div>
+                        <span className={`${museoModerno.className} text-4xl font-bold`}>
                             Collect
                         </span>
-                        <span> </span>the points
-                        <span className='text-customYellow text-10xl'>.</span>
-                    </p>
-                    <p>
-                        <span className={`${museumModerno.className} text-4xl font-bold `}>
-                            Win
-                        </span>
-                        <span></span> the rewards
-                        <span className='text-customYellow text-10xl'>.</span>
-                    </p>
+                        <span> the points</span>
+                        <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow'></span>
+                    </div>
+                    <div>
+                        <span className={`${museoModerno.className} text-4xl font-bold`}>Win</span>
+                        <span> the rewards</span>
+                        <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow border'></span>
+                    </div>
                 </div>
                 <h2 className='mt-4 overflow-hidden md:overflow-auto md:whitespace-nowrap text-16 whitespace-normal xl:text-28'>
                     Experience cities like never before
@@ -65,19 +70,23 @@ export default async function Home() {
                 <div className='h-[30vh] w-full my-6 rounded-lg'>
                     <ImageSlider />
                 </div>
-                <div className=' flex flex-wrap px-2 p-2 gap-x-4'>
+                <div className='flex flex-wrap px-2 p-2 gap-x-4'>
                     <Link href={"/tuebingen"}>
                         <button
-                            className={`border-2 bg-white rounded-full border-black text-customYellow font-medium py-1 text-sm px-4 inline-block mb-2 `}
+                            className={`${museoModerno.className} bg-customYellow rounded-full  text-white font-medium py-1 text-sm px-4 inline-block mb-2 border`}
                         >
-                            TÜBINGEN
+                            Tübingen
                         </button>
                     </Link>
-                    <div className='border-2 bg-white rounded-full border-black text-green-500 font-medium py-1 px-4 text-sm inline-block mb-2'>
-                        STUTTGART
+                    <div
+                        className={`${museoModerno.className} bg-[#39FF14] rounded-full  text-black font-medium py-1 px-4 text-sm inline-block mb-2 border`}
+                    >
+                        Berlin
                     </div>
-                    <div className='border-2 bg-white rounded-full border-black text-yellow-500 font-medium py-1 px-4 text-sm inline-block mb-2'>
-                        MÜNCHEN
+                    <div
+                        className={`${museoModerno.className} bg-[#001eff] rounded-full  text-white font-medium py-1 px-4 text-sm inline-block mb-2 border`}
+                    >
+                        München
                     </div>
                 </div>
             </div>

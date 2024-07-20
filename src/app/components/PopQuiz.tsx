@@ -1,85 +1,43 @@
-"use client"
-
 import React, {useState} from "react"
-import {submitQuiz} from "@/app/server/index"
 
-function PopQuiz() {
-    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
+const PopQuiz = () => {
     const [quizMessage, setQuizMessage] = useState<string | null>(null)
 
-    const handlePopQuiz = async () => {
-        if (!selectedAnswer) {
-            alert("Please select an answer.")
-            return
-        }
-        try {
-            const response = await submitQuiz({
-                quizId: "clylkf5ty000059kyi68merg8",
-                submitted_answer: selectedAnswer
-            })
-            setQuizMessage(response.message)
-        } catch (error) {
-            if (error instanceof Error) {
-                setQuizMessage(error.message)
-            } else {
-                setQuizMessage("An unknown error occurred.")
-            }
-        }
+    const handlePopQuiz = (answer: string) => {
+        // Handle the answer submission logic
+        setQuizMessage(`Your answer "${answer}" has been submitted!`)
     }
 
     return (
-        <div className='bg-pink-100 p-4 rounded-md flex flex-col items-center'>
-            <h2 className='text-2xl cursor-pointer'>Question of the day!</h2>
-            <div className='bg-pink-100 p-4 rounded-md '>
-                <p className='text-black text-center'>How old is the tree in Park Bota?</p>
-                <div className='my-2'>
-                    <label className='block'>
-                        <input
-                            type='radio'
-                            name='quiz'
-                            value='50 years'
-                            onChange={(e) => setSelectedAnswer(e.target.value)}
-                            className='mr-2'
-                        />
+        <div className='bg-pink-100 p-4 rounded-md flex flex-col items-center shadow-lg'>
+            <div className='bg-pink-100 px-10 rounded-md w-full max-w-md'>
+                <p className='text-black text-center mb-4'>How old is the tree in Park Bota?</p>
+                <div className='grid grid-cols-2 gap-4 mb-2'>
+                    <button
+                        className='py-1 px-2 rounded-full bg-customYellow text-white font-semibold border'
+                        onClick={() => handlePopQuiz("50 years")}
+                    >
                         50 years
-                    </label>
-                    <label className='block'>
-                        <input
-                            type='radio'
-                            name='quiz'
-                            value='100 years'
-                            onChange={(e) => setSelectedAnswer(e.target.value)}
-                            className='mr-2'
-                        />
+                    </button>
+                    <button
+                        className='py-2 px-4 rounded-full bg-customYellow text-white font-semibold border'
+                        onClick={() => handlePopQuiz("100 years")}
+                    >
                         100 years
-                    </label>
-                    <label className='block'>
-                        <input
-                            type='radio'
-                            name='quiz'
-                            value='150 years'
-                            onChange={(e) => setSelectedAnswer(e.target.value)}
-                            className='mr-2'
-                        />
+                    </button>
+                    <button
+                        className='py-2 px-4 rounded-full bg-customYellow text-white font-semibold border'
+                        onClick={() => handlePopQuiz("150 years")}
+                    >
                         150 years
-                    </label>
-                    <label className='block'>
-                        <input
-                            type='radio'
-                            name='quiz'
-                            value='250 years'
-                            onChange={(e) => setSelectedAnswer(e.target.value)}
-                            className='mr-2'
-                        />
+                    </button>
+                    <button
+                        className='py-2 px-4 rounded-full bg-customYellow text-white font-semibold border'
+                        onClick={() => handlePopQuiz("250 years")}
+                    >
                         250 years
-                    </label>
+                    </button>
                 </div>
-                <button
-                    className='bg-customYellow text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200'
-                    onClick={handlePopQuiz}
-                >
-                    Submit Answer
-                </button>
                 {quizMessage && <p className='text-green-600 mt-4'>{quizMessage}</p>}
             </div>
         </div>
