@@ -2,7 +2,7 @@
 import React, {useState, useEffect} from "react"
 import Image from "next/image"
 
-const images = ["/image1.webp", "/image2.webp", "/image3.webp"]
+const images = ["/image1.webp", "/image2.webp"]
 
 const ImageSlider = () => {
     const [currentIndex, setCurrentIndex] = useState(0)

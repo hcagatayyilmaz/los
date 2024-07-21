@@ -8,8 +8,6 @@ const museoModerno = MuseoModerno({
     subsets: ["latin"]
 })
 
-const images = ["/image1.jpg"]
-
 export default async function Home() {
     const {getUser} = getKindeServerSession()
     const user = await getUser()

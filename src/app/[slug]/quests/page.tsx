@@ -63,6 +63,7 @@ function QuestsPage({params}: QuestsPageParams) {
                     </div>
                 </Link>
             </div>
+
             <div>
                 <div className='px-6'>
                     <div className='flex justify-between items-center mt-4'>

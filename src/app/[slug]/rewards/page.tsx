@@ -33,6 +33,7 @@ const RewardsPage = async () => {
             <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
                 Rewards
             </h1>
+            <p className='px-6 mb-2'>Use your points to get free experiences in your city!</p>
             <div className='px-4'>
                 {rewards.map((reward) => (
                     <RewardCard key={reward.id} reward={reward} />
