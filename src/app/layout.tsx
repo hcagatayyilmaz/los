@@ -1,10 +1,13 @@
 import type {Metadata} from "next"
-import {Inter} from "next/font/google"
+import {Roboto} from "next/font/google"
 import "./globals.css"
 import {UserLocationProvider} from "./providers/useUserLocation"
 import ToastProvider from "./providers/ToastProvider"
 
-const inter = Inter({subsets: ["latin"]})
+const roboto = Roboto({
+    subsets: ["latin"],
+    weight: ["400", "500", "700"]
+})
 
 export const metadata: Metadata = {
     title: "Los - Gamified Travel with Rewards!",
@@ -18,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={inter.className}>
+            <body className={roboto.className}>
                 <ToastProvider>
                     <UserLocationProvider>{children}</UserLocationProvider>
                 </ToastProvider>

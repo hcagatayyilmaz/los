@@ -1,30 +1,45 @@
 // src/app/rewards/page.tsx
 import React from "react"
 import {getAllRewards} from "../../server/data"
-import QRCodeComponent from "../../components/QRCode"
-import Mock from "../../components/Mock"
+import RewardCard from "../../components/RewardCard"
+import {MuseoModerno} from "next/font/google"
+import Link from "next/link"
 
-const RewardsPageServer = async () => {
+const museumModerno = MuseoModerno({
+    subsets: ["latin"]
+})
+
+const RewardsPage = async () => {
     const rewards = await getAllRewards()
 
     return (
-        <div className='max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md font-serif'>
-            <h1 className='text-3xl font-semibold mb-6 text-center'>All Rewards</h1>
-            <div>
-                {rewards.map((reward) => {
-                    const meta = reward.meta as {description: string}
-                    return (
-                        <div key={reward.id} className='mb-6 p-4 bg-gray-100 rounded-lg'>
-                            <h2 className='text-2xl font-semibold'>{reward.name}</h2>
-                            <p>{meta.description}</p>
-                            <QRCodeComponent id={reward.id} />
+        <div className='max-w-2xl mx-auto bg-white rounded-lg flex flex-col gap-2'>
+            <div className={`flex items-center justify-center bg-white border-b `}>
+                <Link href={"/"}>
+                    <div
+                        className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
+                        style={{border: "1px dashed white"}}
+                    >
+                        <h1 className='text-3xl flex items-end font-medium text-center'>
+                            <span className={`text-black ${museumModerno.className}`}>Los</span>
+                            <div className='w-[12px] h-[12px] bg-customYellow border border-white border-dashed rounded-full ml-[2px] mb-2'></div>
+                        </h1>
+                        <div className='flex items-end justify-end mt-2'>
+                            <h2 className='text-md font-semibold text-customYellow'>Tübingen</h2>
                         </div>
-                    )
-                })}
+                    </div>
+                </Link>
             </div>
-            <Mock />
+            <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
+                Rewards
+            </h1>
+            <div className='px-4'>
+                {rewards.map((reward) => (
+                    <RewardCard key={reward.id} reward={reward} />
+                ))}
+            </div>
         </div>
     )
 }
 
-export default RewardsPageServer
+export default RewardsPage

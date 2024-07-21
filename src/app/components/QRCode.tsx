@@ -8,7 +8,7 @@ interface QRCodeComponentProps {
 function QRCodeComponent({id}: QRCodeComponentProps) {
     return (
         <div className='mt-4' style={{display: "flex", justifyContent: "center"}}>
-            <QRCode value={`https://localhost:3000/rewards/confirm?rewardId=${id}`} />
+            <QRCode value={`${process.env.NEXT_PUBLIC_LOS_URL}/rewards/confirm?rewardId=${id}`} />
         </div>
     )
 }
