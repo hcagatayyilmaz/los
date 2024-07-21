@@ -12,6 +12,7 @@ import {unstable_noStore} from "next/cache"
 import LocationPermissionButton from "../components/LocationPermissionButton"
 import TotalPoints from "../components/TotalPoints"
 import ClosestPlace from "../components/ClosestPlace"
+import ActionsButtons from "../components/ActionsButtons"
 
 type CityPageParams = {
     params: {
@@ -46,6 +47,7 @@ const CityPage = async ({params}: CityPageParams) => {
                 slug: params.slug
             }
         })
+        console.log("City:", city)
 
         if (!city) {
             return (
@@ -71,6 +73,7 @@ const CityPage = async ({params}: CityPageParams) => {
                     <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
                         <Header user={user} name={city.name} />
                         <Navbar />
+                        <ActionsButtons slug={city.slug} />
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
                         <div className='flex mx-4 mb-1 justify-between '>

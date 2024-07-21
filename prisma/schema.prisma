@@ -29,8 +29,9 @@ enum AttractionType {
 }
 
 enum AttractionTaxonomy {
-  MAIN_ATTRACTION
+  ATTRACTION
   EVENT
+  EXPERIENCE
 }
 
 model Attraction {
