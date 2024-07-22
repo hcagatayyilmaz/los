@@ -2,14 +2,14 @@
 import {createContext, useContext, useState, ReactNode} from "react"
 import {Location} from "../lib/types"
 
-type LocationContextType = {
+type SelectedItemContextType = {
     selectedLocation: Location | null
     setSelectedLocation: (location: Location | null) => void
 }
 
-const LocationContext = createContext<LocationContextType | undefined>(undefined)
+const SelectedItemContext = createContext<SelectedItemContextType | undefined>(undefined)
 
-export const LocationProvider = ({
+export const SelectedItemProvider = ({
     children,
     initialLocation
 }: {
@@ -19,16 +19,16 @@ export const LocationProvider = ({
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(initialLocation)
 
     return (
-        <LocationContext.Provider value={{selectedLocation, setSelectedLocation}}>
+        <SelectedItemContext.Provider value={{selectedLocation, setSelectedLocation}}>
             {children}
-        </LocationContext.Provider>
+        </SelectedItemContext.Provider>
     )
 }
 
 export const useSelectedItem = () => {
-    const context = useContext(LocationContext)
+    const context = useContext(SelectedItemContext)
     if (context === undefined) {
-        throw new Error("useSelectedItem must be used within a LocationProvider")
+        throw new Error("useSelectedItem must be used within a SelectedItemProvider")
     }
     return context
 }

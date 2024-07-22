@@ -5,7 +5,7 @@ import Navbar from "@/app/components/Navbar"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import Map from "@/app/components/Map"
 import ItemsSlider from "@/app/components/ItemSlider"
-import {LocationProvider} from "@/app/providers/useSelectedItem"
+import {SelectedItemProvider} from "@/app/providers/useSelectedItem"
 import {getAttractions, getDBUser} from "@/app/server/data"
 import toast from "react-hot-toast"
 import {unstable_noStore} from "next/cache"
@@ -68,11 +68,11 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
         const attractions = await getAttractions(city.id, filter)
         const {getUser} = getKindeServerSession()
         const kindeUser = await getUser()
-        const user = kindeUser && (await getDBUser(kindeUser.id))
-        console.log("DB User:", user)
+        const user = kindeUser ? await getDBUser(kindeUser.id) : null
+        console.log(user)
 
         return (
-            <LocationProvider initialLocation={attractions[0]}>
+            <SelectedItemProvider initialLocation={attractions[0]}>
                 <main className='h-dvh w-screen relative'>
                     <div className='absolute top-0 left-0 h-full w-full pointer-events-none'>
                         <div className='h-full w-full pointer-events-auto '>
@@ -99,7 +99,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                         <ItemsSlider locations={attractions} />
                     </div>
                 </main>
-            </LocationProvider>
+            </SelectedItemProvider>
         )
     } catch (error) {
         console.error(error)

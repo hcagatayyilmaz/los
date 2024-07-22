@@ -16,7 +16,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     })
 
     const {userLocation} = useUserLocation()
-    const {setSelectedLocation} = useSelectedItem() // Use the context to set the selected location
+    const {setSelectedLocation} = useSelectedItem()
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [distances, setDistances] = useState<Record<string, number>>({})
 
