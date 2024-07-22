@@ -84,4 +84,5 @@ export async function getMyRewards(id: string) {
             reward: true
         }
     })
+    return myRewards
 }

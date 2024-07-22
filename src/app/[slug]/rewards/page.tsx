@@ -4,6 +4,7 @@ import {getAllRewards} from "../../server/data"
 import RewardCard from "../../components/RewardCard"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
+import MyRewards from "../../components/MyRewards"
 
 const museumModerno = MuseoModerno({
     subsets: ["latin"]
@@ -43,6 +44,9 @@ const RewardsPage = async () => {
             <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
                 My Rewards
             </h1>
+            <div className='px-4'>
+                <MyRewards />
+            </div>
         </div>
     )
 }
