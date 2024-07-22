@@ -6,7 +6,7 @@ import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import Map from "@/app/components/Map"
 import ItemsSlider from "@/app/components/ItemSlider"
 import {LocationProvider} from "@/app/providers/useSelectedItem"
-import {getAttractions} from "@/app/server/data"
+import {getAttractions, getDBUser} from "@/app/server/data"
 import toast from "react-hot-toast"
 import {unstable_noStore} from "next/cache"
 import LocationPermissionButton from "../components/LocationPermissionButton"
@@ -67,8 +67,9 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
 
         const attractions = await getAttractions(city.id, filter)
         const {getUser} = getKindeServerSession()
-        const user = await getUser()
-        console.log(user)
+        const kindeUser = await getUser()
+        const user = kindeUser && (await getDBUser(kindeUser.id))
+        console.log("DB User:", user)
 
         return (
             <LocationProvider initialLocation={attractions[0]}>

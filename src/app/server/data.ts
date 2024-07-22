@@ -31,7 +31,7 @@ export async function getAttractions(cityId: string, filter: any) {
     }
 
     if (filter.taxonomy) {
-        whereClause.taxonomy = filter.taxonomy.toUpperCase() // Ensure taxonomy matches the enum
+        whereClause.taxonomy = filter.taxonomy.toUpperCase()
     } else if (filter.date) {
         const date = new Date(filter.date)
         whereClause.OR = [
@@ -57,4 +57,15 @@ export async function getAttractions(cityId: string, filter: any) {
     console.log("Attractions:", attractions)
 
     return attractions
+}
+
+export async function getDBUser(userId: string) {
+    "use server"
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId
+        }
+    })
+
+    return user
 }

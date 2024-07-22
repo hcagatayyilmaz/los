@@ -17,7 +17,6 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
 
     const {userLocation} = useUserLocation()
     const {setSelectedLocation} = useSelectedItem() // Use the context to set the selected location
-    const [nearbyLocation, setNearbyLocation] = useState<Location | null>(null)
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [distances, setDistances] = useState<Record<string, number>>({})
 
@@ -29,7 +28,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         []
     )
 
-    const center = useMemo(() => {
+    const initialCenter = useMemo(() => {
         if (userLocation) {
             return {lat: userLocation.lat, lng: userLocation.lng}
         } else {
@@ -37,6 +36,8 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             return {lat: firstLocation.latitude, lng: firstLocation.longitude}
         }
     }, [userLocation, locations])
+
+    const [center, setCenter] = useState(initialCenter)
 
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
@@ -84,13 +85,6 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             })
 
             setDistances(newDistances)
-
-            if (closest && closestDistance <= 50) {
-                // Within 50 meters
-                setNearbyLocation(closest)
-            } else {
-                setNearbyLocation(null)
-            }
         }
     }, [userLocation, map, locations])
 
@@ -107,11 +101,11 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                 mapTypeControl: false,
                 fullscreenControl: false,
                 styles: mapStyle,
-                zoomControl: true, // Enable zoom control
-                streetViewControl: false, // Optional: Disable street view control if not needed
-                gestureHandling: "auto", // Ensure that gestures like dragging and zooming work
+                zoomControl: true,
+                streetViewControl: false,
+                gestureHandling: "auto",
                 zoomControlOptions: {
-                    position: window.google.maps.ControlPosition.RIGHT_CENTER // Change this to the desired position
+                    position: window.google.maps.ControlPosition.RIGHT_CENTER
                 }
             }}
         >
