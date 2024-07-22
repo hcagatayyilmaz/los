@@ -1,3 +1,4 @@
+"use server"
 import {KindeUser} from "@kinde-oss/kinde-auth-nextjs/types"
 import {PrismaClient} from "@prisma/client"
 
@@ -85,4 +86,10 @@ export async function getMyRewards(id: string) {
         }
     })
     return myRewards
+}
+
+export async function getPopQuiz() {
+    const quiz = await prisma.quiz.findMany()
+
+    return quiz
 }

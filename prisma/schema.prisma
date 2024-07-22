@@ -161,10 +161,11 @@ model UserHideAndSeek {
 
 model Quiz {
   id          String     @id @default(cuid())
-  question    Json
+  meta        Json
   answer      String
   points      Int
   createdAt   DateTime   @default(now())
+  endDate     DateTime?
   QuizAnswers UserQuiz[]
 }
 
