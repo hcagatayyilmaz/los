@@ -9,7 +9,7 @@ const hideAndSeekLocation: Location = {
     longitude: 9.05584,
     name: "Tübingen Paleontology Museum",
     points: 100,
-    type: "MAIN_ATTRACTION",
+    taxonomy: "ATTRACTION",
     imageUrl: null,
     meta: {
         title: {

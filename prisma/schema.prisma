@@ -20,6 +20,7 @@ model User {
   userBadges       UserBadge[]
   userHideAndSeeks UserHideAndSeek[]
   QuizAnswers      UserQuiz[]
+  UserRewards      UserReward[]
 }
 
 enum AttractionTaxonomy {
@@ -74,6 +75,18 @@ model Reward {
   transactions Transaction[]
   startAt      DateTime?
   endAt        DateTime?
+  userRewards  UserReward[]
+}
+
+model UserReward {
+  id        String   @id @default(cuid())
+  userId    String
+  rewardId  String
+  user      User     @relation(fields: [userId], references: [id])
+  reward    Reward   @relation(fields: [rewardId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, rewardId])
 }
 
 enum TransactionType {

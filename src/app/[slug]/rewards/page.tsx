@@ -11,6 +11,7 @@ const museumModerno = MuseoModerno({
 
 const RewardsPage = async () => {
     const rewards = await getAllRewards()
+    console.log("Rewards:", rewards)
 
     return (
         <div className='max-w-2xl mx-auto bg-white rounded-lg flex flex-col gap-2'>

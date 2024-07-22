@@ -281,3 +281,54 @@ export async function checkReward({rewardId}: {rewardId: string}) {
 
     return reward
 }
+
+export async function redeemReward(rewardId: {rewardId: string}) {
+    "use server"
+    const {getUser} = getKindeServerSession()
+    const kindeUser = await getUser()
+    const user = kindeUser ? await prisma.user.findUnique({where: {id: kindeUser.id}}) : null
+    console.log("Reward ID:", rewardId)
+    if (!user) {
+        throw new Error("Please login to redeem rewards")
+    }
+
+    const reward = await prisma.reward.findUnique({
+        where: {id: rewardId}
+    })
+
+    if (!reward) {
+        throw new Error("Reward not found")
+    }
+
+    if (user.points < reward.points) {
+        throw new Error("Insufficient points")
+    }
+
+    await prisma.user.update({
+        where: {id: user.id},
+        data: {points: {decrement: reward.points}}
+    })
+
+    await prisma.transaction.create({
+        data: {
+            userId: user.id,
+            points: -reward.points,
+            details: `reward_id:${reward.id}`,
+            type: "SPEND_POINTS"
+        }
+    })
+
+    await prisma.userReward.create({
+        data: {
+            userId: user.id,
+            rewardId: reward.id
+        }
+    })
+
+    await prisma.reward.update({
+        where: {id: reward.id},
+        data: {available: false}
+    })
+
+    return {success: true, message: "Reward redeemed successfully!"}
+}
