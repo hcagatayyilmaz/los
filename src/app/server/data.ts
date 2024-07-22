@@ -1,9 +1,14 @@
+import {KindeUser} from "@kinde-oss/kinde-auth-nextjs/types"
 import {PrismaClient} from "@prisma/client"
 
 const prisma = new PrismaClient()
 
 export async function getAllRewards() {
-    const rewards = await prisma.reward.findMany()
+    const rewards = await prisma.reward.findMany({
+        where: {
+            available: true
+        }
+    })
     return rewards
 }
 
@@ -68,4 +73,15 @@ export async function getDBUser(userId: string) {
     })
 
     return user
+}
+
+export async function getMyRewards(id: string) {
+    const myRewards = await prisma.userReward.findMany({
+        where: {
+            userId: id
+        },
+        include: {
+            reward: true
+        }
+    })
 }

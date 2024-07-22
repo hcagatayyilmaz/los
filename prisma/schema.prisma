@@ -85,6 +85,7 @@ model UserReward {
   user      User     @relation(fields: [userId], references: [id])
   reward    Reward   @relation(fields: [rewardId], references: [id])
   createdAt DateTime @default(now())
+  isUsed    Boolean  @default(false)
 
   @@unique([userId, rewardId])
 }

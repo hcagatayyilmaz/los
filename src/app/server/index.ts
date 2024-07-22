@@ -282,7 +282,7 @@ export async function checkReward({rewardId}: {rewardId: string}) {
     return reward
 }
 
-export async function redeemReward(rewardId: {rewardId: string}) {
+export async function redeemReward(rewardId: string) {
     "use server"
     const {getUser} = getKindeServerSession()
     const kindeUser = await getUser()

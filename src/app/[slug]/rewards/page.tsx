@@ -40,6 +40,9 @@ const RewardsPage = async () => {
                     <RewardCard key={reward.id} reward={reward} />
                 ))}
             </div>
+            <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
+                My Rewards
+            </h1>
         </div>
     )
 }
