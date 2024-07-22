@@ -12,7 +12,7 @@ export const LiveLocationPin = () => (
 export const ItemPin: React.FC<{location: Location}> = ({location}) => {
     let bgColor = ""
 
-    switch (location.type) {
+    switch (location.taxonomy) {
         case "MAIN_ATTRACTION":
             bgColor = "#FFE888"
             break
