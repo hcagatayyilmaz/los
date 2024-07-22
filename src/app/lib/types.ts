@@ -4,7 +4,7 @@ export type Location = {
     longitude: number
     name: string
     points: number
-    type: string
+    taxonomy?: string | null
     imageUrl: string | null
     meta: any
     isActive: boolean

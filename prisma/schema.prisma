@@ -22,12 +22,6 @@ model User {
   QuizAnswers      UserQuiz[]
 }
 
-enum AttractionType {
-  PLACE
-  EVENT
-  POINT
-}
-
 enum AttractionTaxonomy {
   ATTRACTION
   EVENT
@@ -36,7 +30,6 @@ enum AttractionTaxonomy {
 
 model Attraction {
   id           String              @id @default(cuid())
-  type         AttractionType
   taxonomy     AttractionTaxonomy?
   name         String
   latitude     Float

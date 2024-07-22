@@ -15,7 +15,7 @@ export const ItemCard = ({location}: ItemCardProps) => {
                     {location.imageUrl && (
                         <Image
                             src={location.imageUrl}
-                            layout='fill'
+                            fill
                             objectFit='cover'
                             className='rounded-lg'
                             alt='Tübingen, Germany'

@@ -151,15 +151,15 @@ export const FilterIcon = (props: any) => {
             width={props.width}
             height={props.width}
         >
-            <g id='SVGRepo_bgCarrier' stroke-width='0' />
+            <g id='SVGRepo_bgCarrier' strokeWidth='0' />
 
-            <g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round' />
+            <g id='SVGRepo_tracerCarrier' strokeLinecap='round' strokeLinejoin='round' />
 
             <g id='SVGRepo_iconCarrier'>
                 {" "}
                 <path
-                    fill-rule='evenodd'
-                    clip-rule='evenodd'
+                    fillRule='evenodd'
+                    clipRule='evenodd'
                     d='M5 3H19L8.81562 13.1844C8.65593 12.7689 8.39992 12.4122 8.03751 12.0976C7.80967 11.8998 7.49146 11.7206 6.85504 11.3624L3.94202 9.72255C2.99347 9.18858 2.5192 8.9216 2.2596 8.49142C2 8.06124 2 7.54232 2 6.50448V5.81466C2 4.48782 2 3.8244 2.43934 3.4122C2.87868 3 3.58579 3 5 3Z'
                     fill='#FF1493'
                 />{" "}

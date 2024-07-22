@@ -18,6 +18,7 @@ type CityPageParams = {
     params: {
         slug: string
     }
+    searchParams?: {[key: string]: string | string[] | undefined} | undefined
 }
 
 export async function generateStaticParams() {
@@ -40,7 +41,7 @@ export async function generateMetadata({params}: CityPageParams) {
     }
 }
 
-const CityPage = async ({params}: CityPageParams) => {
+const CityPage = async ({params, searchParams}: CityPageParams) => {
     try {
         const city = await prisma.city.findUnique({
             where: {
@@ -57,7 +58,14 @@ const CityPage = async ({params}: CityPageParams) => {
             )
         }
 
-        const attractions = await getAttractions(city.id)
+        const filter = searchParams && {
+            date: searchParams.date,
+            taxonomy: searchParams.taxonomy
+        }
+
+        console.log("Filter:", filter)
+
+        const attractions = await getAttractions(city.id, filter)
         const {getUser} = getKindeServerSession()
         const user = await getUser()
         console.log(user)
@@ -77,7 +85,11 @@ const CityPage = async ({params}: CityPageParams) => {
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
                         <div className='flex mx-4 mb-1 justify-between '>
-                            {user ? <TotalPoints /> : <div></div>}
+                            {user ? (
+                                <TotalPoints points={user.points} />
+                            ) : (
+                                <TotalPoints points={0} />
+                            )}
                             <div className='flex gap-1'>
                                 <ClosestPlace />
                                 <LocationPermissionButton />
@@ -89,7 +101,6 @@ const CityPage = async ({params}: CityPageParams) => {
             </LocationProvider>
         )
     } catch (error) {
-        toast.error("An error occurred. Please try again.")
         console.error(error)
         return (
             <main className='h-screen w-screen flex items-center justify-center'>

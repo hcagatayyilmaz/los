@@ -7,29 +7,54 @@ export async function getAllRewards() {
     return rewards
 }
 
-export async function getAttractions(cityId: string) {
+export async function getAttractions(cityId: string, filter: any) {
     "use server"
     const now = new Date()
 
-    const attractions = await prisma.attraction.findMany({
-        where: {
-            cityId,
-            isActive: true,
-            OR: [
-                {
-                    startDate: {
-                        lte: now
-                    },
-                    endDate: {
-                        gte: now
-                    }
+    const whereClause: any = {
+        cityId,
+        isActive: true,
+        OR: [
+            {
+                startDate: {
+                    lte: now
                 },
-                {
-                    startDate: null,
-                    endDate: null
+                endDate: {
+                    gte: now
                 }
-            ]
-        }
+            },
+            {
+                startDate: null,
+                endDate: null
+            }
+        ]
+    }
+
+    if (filter.taxonomy) {
+        whereClause.taxonomy = filter.taxonomy.toUpperCase() // Ensure taxonomy matches the enum
+    } else if (filter.date) {
+        const date = new Date(filter.date)
+        whereClause.OR = [
+            {
+                startDate: {
+                    lte: date
+                },
+                endDate: {
+                    gte: date
+                }
+            },
+            {
+                startDate: null,
+                endDate: null
+            }
+        ]
+    }
+
+    const attractions = await prisma.attraction.findMany({
+        where: whereClause
     })
+
+    console.log("Attractions:", attractions)
+
     return attractions
 }

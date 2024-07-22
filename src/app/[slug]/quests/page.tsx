@@ -72,10 +72,12 @@ function QuestsPage({params}: QuestsPageParams) {
                         >
                             Question of the day
                         </h1>
-                        <div className='inline-block'>
-                            <div className='flex items-center justify-center bg-customYellow rounded-full px-2 py-2 border '>
-                                <CoinIcon className='w-4 h-4 text-white' />
-                                <span className='mt-1 text-xs text-white'>+30</span>
+                        <div className='flex items-center'>
+                            <div className='relative flex items-center justify-center  text-customYellow text-md font-bold py-1 px-2 rounded-full'>
+                                <span className='flex items-center justify-center  w-7 h-7 rounded-full text-customYellow'>
+                                    30
+                                </span>
+                                <CoinIcon className='w-4 h-4 text-customYellow absolute right-0 bottom-3 transform translate-x-1/2 -translate-y-1/2' />
                             </div>
                         </div>
                     </div>

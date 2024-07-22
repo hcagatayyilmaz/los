@@ -15,7 +15,9 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
     const router = useRouter()
 
     const handleFilterClick = (filter: string) => {
-        router.push(`/${slug}?filter=${filter}`)
+        if (filter === "") router.push(`/${slug}`)
+
+        router.push(`/${slug}?taxonomy=${filter}`)
         setIsOpen(false)
         setIsTypeOpen(false)
         setIsDateOpen(false)
@@ -53,14 +55,14 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
         <div className='w-full flex mt-2 items-center justify-between'>
             <div className='relative inline-block text-left'>
                 <div
-                    className='flex gap-2 bg-white px-2 py-1 items-center rounded-full cursor-pointer border shadow-lg'
+                    className='flex gap-2 bg-white px-2 py-1 items-center rounded-full cursor-pointer border shadow-lg ml-1'
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <FilterIcon width={20} height={20} />
                     <span>Filter</span>
                 </div>
                 {isOpen && (
-                    <div className='origin-top-left absolute left-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none text-black'>
+                    <div className='origin-top-left absolute left-2 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none text-black'>
                         <div
                             className='py-1'
                             role='menu'
@@ -79,34 +81,34 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
                                     <button
                                         className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left'
                                         role='menuitem'
-                                        onClick={() => handleFilterClick("all")}
+                                        onClick={() => handleFilterClick("")}
                                     >
                                         All
                                     </button>
                                     <button
                                         className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left'
                                         role='menuitem'
-                                        onClick={() => handleFilterClick("attractions")}
+                                        onClick={() => handleFilterClick("attraction")}
                                     >
                                         Attractions
                                     </button>
                                     <button
                                         className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left'
                                         role='menuitem'
-                                        onClick={() => handleFilterClick("events")}
+                                        onClick={() => handleFilterClick("event")}
                                     >
                                         Events
                                     </button>
                                     <button
                                         className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left'
                                         role='menuitem'
-                                        onClick={() => handleFilterClick("experiences")}
+                                        onClick={() => handleFilterClick("experience")}
                                     >
                                         Experiences
                                     </button>
                                 </div>
                             )}
-                            <button
+                            {/* <button
                                 className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left'
                                 role='menuitem'
                                 onClick={() => setIsDateOpen(!isDateOpen)}
@@ -126,13 +128,13 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
                                         </button>
                                     ))}
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 )}
             </div>
             <div
-                className=' bg-white px-2 py-1 rounded-full flex items-center border shadow-md cursor-pointer'
+                className=' bg-white px-2 py-1 rounded-full flex items-center border shadow-md cursor-pointer mr-1'
                 onClick={handleAddPlaceClick}
             >
                 <Image src={"/logo.png"} width={24} height={24} alt='Logo Icon' />

@@ -27,7 +27,7 @@ const ImageSlider = () => {
                     <Image
                         src={image}
                         alt={`Slide ${index}`}
-                        layout='fill'
+                        fill
                         objectFit='cover'
                         className='w-full h-full rounded-lg'
                     />
