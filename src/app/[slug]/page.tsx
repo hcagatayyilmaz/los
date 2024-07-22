@@ -11,8 +11,8 @@ import toast from "react-hot-toast"
 import {unstable_noStore} from "next/cache"
 import LocationPermissionButton from "../components/LocationPermissionButton"
 import TotalPoints from "../components/TotalPoints"
-import ClosestPlace from "../components/ClosestPlace"
 import ActionsButtons from "../components/ActionsButtons"
+import ClosestPlace from "../components/ClosestPlace"
 
 type CityPageParams = {
     params: {
@@ -92,7 +92,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                                 <TotalPoints points={0} />
                             )}
                             <div className='flex gap-1'>
-                                <ClosestPlace />
+                                <ClosestPlace locations={attractions} />
                                 <LocationPermissionButton />
                             </div>
                         </div>

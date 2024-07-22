@@ -72,14 +72,12 @@ function QuestsPage({params}: QuestsPageParams) {
                         >
                             Question of the day
                         </h1>
-                        <div className='flex items-center'>
-                            <div className='relative flex items-center justify-center  text-customYellow text-md font-bold py-1 px-2 rounded-full'>
-                                <span className='flex items-center justify-center  w-7 h-7 rounded-full text-customYellow'>
-                                    30
-                                </span>
-                                <CoinIcon className='w-4 h-4 text-customYellow absolute right-0 bottom-3 transform translate-x-1/2 -translate-y-1/2' />
+                        <span className='inline-block'>
+                            <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
+                                <CoinIcon className='w-4 h-4 text-white' />
+                                <span className='mt-1 ml-1 text-xs text-white'>+ {40}</span>
                             </div>
-                        </div>
+                        </span>
                     </div>
 
                     <p className='my-2'>Learn more about your city with daily quizzes.</p>
@@ -92,12 +90,12 @@ function QuestsPage({params}: QuestsPageParams) {
                         >
                             Hide & Seek
                         </h1>
-                        <div className='inline-block'>
-                            <div className='flex items-center justify-center bg-customYellow rounded-full px-2 py-2 border'>
+                        <span className='inline-block'>
+                            <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                                 <CoinIcon className='w-4 h-4 text-white' />
-                                <span className='mt-1 text-xs text-white'>+30</span>
+                                <span className='mt-1 ml-1 text-xs text-white'>+ {80}</span>
                             </div>
-                        </div>
+                        </span>
                     </div>
                     <p className='mt-2 mb-6 text-sm'>
                         Go and find what is hidden for today. In 20 meters radius. Follow the hint!
@@ -116,12 +114,12 @@ function QuestsPage({params}: QuestsPageParams) {
                         >
                             Badges
                         </h1>
-                        <div className='inline-block'>
-                            <div className='flex items-center justify-center bg-customYellow rounded-full px-2 py-1 border'>
+                        <span className='inline-block'>
+                            <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                                 <CoinIcon className='w-4 h-4 text-white' />
-                                <span className='mt-1 text-xs text-white'>+30</span>
+                                <span className='mt-1 ml-1 text-xs text-white'>+ {60}</span>
                             </div>
-                        </div>
+                        </span>
                     </div>
                     <div className='grid grid-cols-3 gap-4 justify-center mt-4'>
                         {mockBadges.map((badge) => (

@@ -2,7 +2,7 @@
 
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {PrismaClient} from "@prisma/client"
-import {calculateDistance} from "@/app/lib/utils"
+import {calculateDistance, calculateDistance2, calculateDistance3} from "@/app/lib/utils"
 
 const prisma = new PrismaClient()
 
@@ -32,8 +32,8 @@ export async function checkIn({
         throw new Error("Place not found")
     }
 
-    const distance = await calculateDistance(userLat, userLng, place.latitude, place.longitude)
-    if (distance <= 20) {
+    const distance = await calculateDistance3(userLat, userLng, place.latitude, place.longitude)
+    if (distance <= 10) {
         // 20 meters threshold
         const checkIn = await prisma.checkIn.create({
             data: {
@@ -170,7 +170,7 @@ export async function foundHideAndSeek({
         throw new Error("HideAndSeek not found")
     }
 
-    const distance = await calculateDistance(
+    const distance = await calculateDistance3(
         userLat,
         userLng,
         hideAndSeek.attraction.latitude,

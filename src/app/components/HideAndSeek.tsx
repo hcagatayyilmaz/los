@@ -68,7 +68,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({userLocation, setMessage, mess
                         <MapWithRadius location={hideAndSeekLocation} />
                     </div>
                     <button
-                        className='bg-customYellow text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200 w-full'
+                        className='bg-customYellow text-white py-2 px-4 rounded hover:bg-black transition duration-200 w-full'
                         onClick={handleHideAndSeek}
                     >
                         I Found
