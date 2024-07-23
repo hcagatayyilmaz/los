@@ -99,7 +99,6 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={center}
-            zoom={14} // Set the initial zoom level
             onLoad={onMapLoad}
             options={{
                 mapTypeControl: false,

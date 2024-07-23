@@ -1,11 +1,12 @@
 "use client"
 import React, {useState} from "react"
-import {GoogleMap, LoadScript, Marker} from "@react-google-maps/api"
+import {GoogleMap, LoadScript, OverlayView} from "@react-google-maps/api"
 import {MuseoModerno} from "next/font/google"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import Select from "react-select"
 import {addLocation} from "@/app/server" // Adjust the import path as necessary
 import mapStyle from "../lib/style"
+import {LiveLocationPin} from "./Pins"
 
 const museumModerno = MuseoModerno({
     subsets: ["latin"]
@@ -80,7 +81,7 @@ const AddLocation: React.FC = () => {
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                        className={`'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs ${museumModerno.className}`}
                     />
                 </div>
                 <div className='mb-2'>
@@ -96,19 +97,29 @@ const AddLocation: React.FC = () => {
                         }
                         options={options}
                         styles={{
-                            control: (provided) => ({
+                            control: (provided, state) => ({
                                 ...provided,
                                 backgroundColor: "white",
-                                borderColor: "#d1d5db", // Tailwind's gray-300
-                                boxShadow: "none",
+
                                 zIndex: 1000, // Ensure dropdown is above the map
                                 "&:hover": {
-                                    borderColor: "#6b7280" // Tailwind's gray-500
+                                    borderColor: state.isFocused ? "#FF1493" : "#6b7280" // Tailwind's gray-500
                                 }
                             }),
                             menu: (provided) => ({
                                 ...provided,
                                 zIndex: 1000 // Ensure dropdown menu is above the map
+                            }),
+                            singleValue: (provided) => ({
+                                ...provided,
+
+                                fontSize: "12px" // smaller text
+                            }),
+                            option: (provided, state) => ({
+                                ...provided,
+                                backgroundColor: state.isSelected ? "#FF1493" : "white",
+                                color: state.isSelected ? "white" : "black",
+                                fontSize: "12px" // smaller text
                             })
                         }}
                     />
@@ -126,21 +137,12 @@ const AddLocation: React.FC = () => {
                             onClick={handleMapClick}
                         >
                             {selectedLocation && (
-                                <Marker
+                                <OverlayView
                                     position={selectedLocation}
-                                    icon={{
-                                        url:
-                                            "data:image/svg+xml;charset=utf-8," +
-                                            encodeURIComponent(`
-                                            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="12" cy="12" r="10" fill="#FF1493" stroke="white" stroke-width="4"/>
-                                                <circle cx="12" cy="12" r="6" fill="#FF1493" fill-opacity="0.75"/>
-                                            </svg>
-                                        `),
-                                        scaledSize: new google.maps.Size(24, 24),
-                                        anchor: new google.maps.Point(12, 12)
-                                    }}
-                                />
+                                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                                >
+                                    <LiveLocationPin />
+                                </OverlayView>
                             )}
                         </GoogleMap>
                     </LoadScript>

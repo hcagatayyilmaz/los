@@ -129,7 +129,7 @@ async function QuestsPage({params}: QuestsPageParams) {
                     </div>
                 </div> */}
 
-                <div className='px-6'>
+                <div className='px-4'>
                     <AddLocation />
                 </div>
             </div>
