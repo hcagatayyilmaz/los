@@ -6,7 +6,7 @@ import PopQuiz from "@/app/components/PopQuiz"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
-import {getPopQuiz} from "../../server/data"
+import {getPopQuiz, getHideAndSeek} from "../../server/data"
 
 type QuestsPageParams = {
     params: {
@@ -42,7 +42,7 @@ const museumModerno = MuseoModerno({
 
 async function QuestsPage({params}: QuestsPageParams) {
     const quiz = await getPopQuiz()
-    console.log("Quest page -- Quiz:", quiz)
+    const quest = await getHideAndSeek()
 
     return (
         <div className='max-w-xl mx-auto py-2  font-sans border rounded-lg'>
@@ -100,11 +100,7 @@ async function QuestsPage({params}: QuestsPageParams) {
                         Go and find what is hidden for today. In 20 meters radius. Follow the hint!
                     </p>
                 </div>
-                {/* <HideAndSeek
-                    userLocation={userLocation}
-                    setMessage={setMessage}
-                    message={message}
-                /> */}
+                <HideAndSeek quest={quest} />
 
                 <div className='px-6'>
                     <div className='flex justify-between items-center mt-4'>

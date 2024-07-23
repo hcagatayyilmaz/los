@@ -108,3 +108,27 @@ export async function getPopQuiz() {
 
     return quiz
 }
+
+export async function getHideAndSeek() {
+    const currentDate = new Date()
+
+    const hideAndSeek = await prisma.hideAndSeek.findFirst({
+        where: {
+            AND: [
+                {
+                    endDate: {
+                        gt: currentDate
+                    }
+                },
+                {
+                    active: true
+                }
+            ]
+        },
+        include: {
+            attraction: true
+        }
+    })
+
+    return hideAndSeek
+}

@@ -1,38 +1,18 @@
-import React from "react"
-import {Location} from "../lib/types"
+"use client"
+import React, {useState} from "react"
 import {foundHideAndSeek} from "../server"
 import MapWithRadius from "./MapWithRadius"
-
-const hideAndSeekLocation: Location = {
-    id: "1",
-    latitude: 48.52605,
-    longitude: 9.05584,
-    name: "Tübingen Paleontology Museum",
-    points: 100,
-    taxonomy: "ATTRACTION",
-    imageUrl: null,
-    meta: {
-        title: {
-            en: "Find the dinosaur in Tübingen!",
-            de: "Finde den Dinosaurier in Tübingen!"
-        },
-        description: {
-            en: "Search for the dinosaur hidden in the Tübingen Paleontology Museum.",
-            de: "Suche nach dem Dinosaurier, der im Paläontologischen Museum Tübingen versteckt ist."
-        }
-    },
-    isActive: true,
-    endDate: null,
-    startDate: null
-}
+import {useUserLocation} from "../providers/useUserLocation"
 
 type HideAndSeekProps = {
-    userLocation: any | null
-    setMessage: (message: string) => void
-    message: string | null
+    quest: any | null
 }
 
-const HideAndSeek: React.FC<HideAndSeekProps> = ({userLocation, setMessage, message}) => {
+const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
+    console.log("Quest:", quest)
+    const [message, setMessage] = useState<string | null>(null)
+    const {userLocation} = useUserLocation()
+
     const handleHideAndSeek = async () => {
         if (!userLocation) {
             alert("Unable to get your location.")
@@ -41,7 +21,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({userLocation, setMessage, mess
 
         try {
             const response = await foundHideAndSeek({
-                hideAndSeekId: "clyk6c7m10001kcld3ozbeuda",
+                hideAndSeekId: quest.id,
                 userLat: userLocation.lat,
                 userLng: userLocation.lng
             })
@@ -55,17 +35,21 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({userLocation, setMessage, mess
         }
     }
 
+    if (!quest) {
+        return <p>Loading...</p>
+    }
+
     return (
-        <div className='max-w-lg mx-auto '>
+        <div className='max-w-lg mx-auto'>
             <section className='mb-6'>
                 <div className='p-4 rounded-lg bg-pink-100'>
                     <h2 className='text-lg font-semibold px-2'>Hint</h2>
-                    <p className='text-gray-800 text-sm px-2'>
-                        Find the dinosaur in Tübingen and get points! Click &quot;I Found&quot; when
-                        you are at the correct location.
-                    </p>
+                    <p className='text-gray-800 text-sm px-2'>{quest.meta.description.en}</p>
                     <div className='my-4'>
-                        <MapWithRadius location={hideAndSeekLocation} />
+                        <MapWithRadius
+                            latitude={quest.attraction.latitude}
+                            longitude={quest.attraction.longitude}
+                        />
                     </div>
                     <button
                         className='bg-customYellow text-white py-2 px-4 rounded hover:bg-black transition duration-200 w-full'

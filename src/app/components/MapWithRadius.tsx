@@ -1,10 +1,10 @@
 import React from "react"
-import {GoogleMap, useLoadScript, Circle, MarkerF} from "@react-google-maps/api"
-import {Location} from "@/app/lib/types"
+import {GoogleMap, useLoadScript, Circle} from "@react-google-maps/api"
 import mapStyle from "../lib/style"
 
 type MapWithRadiusProps = {
-    location: Location
+    latitude: number
+    longitude: number
 }
 
 const mapContainerStyle = {
@@ -12,7 +12,7 @@ const mapContainerStyle = {
     height: "200px"
 }
 
-const MapWithRadius: React.FC<MapWithRadiusProps> = ({location}) => {
+const MapWithRadius: React.FC<MapWithRadiusProps> = ({latitude, longitude}) => {
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
         libraries: ["geometry", "places"]
@@ -38,12 +38,12 @@ const MapWithRadius: React.FC<MapWithRadiusProps> = ({location}) => {
     return (
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            center={{lat: location.latitude, lng: location.longitude}}
+            center={{lat: latitude, lng: longitude}}
             zoom={15}
             options={options}
         >
             <Circle
-                center={{lat: location.latitude, lng: location.longitude}}
+                center={{lat: latitude, lng: longitude}}
                 radius={100}
                 options={{
                     fillColor: "#FF1493",

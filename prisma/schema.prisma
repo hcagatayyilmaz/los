@@ -134,12 +134,12 @@ model UserBadge {
 
 model HideAndSeek {
   id               String            @id @default(cuid())
-  name             String
-  description      String
-  startDate        DateTime
+  name             String?
+  description      String?
   endDate          DateTime
   points           Int
   attractionId     String
+  active           Boolean           @default(true)
   attraction       Attraction        @relation(fields: [attractionId], references: [id])
   meta             Json
   createdAt        DateTime          @default(now())
