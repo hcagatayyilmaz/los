@@ -4,6 +4,12 @@ import {useKindeBrowserClient} from "@kinde-oss/kinde-auth-nextjs"
 import {useUserLocation} from "../providers/useUserLocation"
 import {useRouter} from "next/navigation"
 import {LoginLink} from "@kinde-oss/kinde-auth-nextjs"
+import {IoIosCloseCircleOutline} from "react-icons/io"
+import {MuseoModerno} from "next/font/google"
+
+const museoModerno = MuseoModerno({
+    subsets: ["latin"]
+})
 
 function Banner() {
     const {isAuthenticated} = useKindeBrowserClient()
@@ -30,18 +36,29 @@ function Banner() {
     if (!showBanner) return null
 
     return (
-        <div className='fixed mt-2 w-full bg-customYellow text-white p-4 flex flex-col items-center md:flex-row md:justify-between'>
+        <div className='relative mt-2 w-full bg-customYellow text-white p-4 flex flex-col items-center md:flex-row md:justify-between'>
             <div className='flex justify-between w-full mb-2 md:mb-0'>
-                <span className='text-sm'>Please sign up and enable location permissions.</span>
-                <button className='text-white ml-4' onClick={() => setShowBanner(false)}>
-                    X
+                <span className='text-sm text-center w-full'>
+                    Please sign up and enable location permissions.
+                </span>
+                <button
+                    className='absolute top-2 right-2 text-white ml-4'
+                    onClick={() => setShowBanner(false)}
+                >
+                    <IoIosCloseCircleOutline className='text-white text-xl' />
                 </button>
             </div>
             <div className='flex gap-2'>
-                {!isAuthenticated && <LoginLink>Login</LoginLink>}
+                {!isAuthenticated && (
+                    <div
+                        className={`bg-white rounded-xl px-2 py-1 text-xs text-black ${museoModerno.className}`}
+                    >
+                        <LoginLink>Login</LoginLink>
+                    </div>
+                )}
                 {!userLocation && (
                     <button
-                        className='bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded'
+                        className={`bg-white rounded-xl px-2 py-1 text-xs text-black ${museoModerno.className}`}
                         onClick={handleLocationPermission}
                     >
                         Enable Location
