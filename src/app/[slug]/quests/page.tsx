@@ -1,13 +1,12 @@
-"use client"
+import React from "react"
 
-import React, {useState} from "react"
-import {useUserLocation} from "@/app/providers/useUserLocation"
 import HideAndSeek from "@/app/components/HideAndSeek"
 import ObtainBadge from "@/app/components/ObtainBadge"
 import PopQuiz from "@/app/components/PopQuiz"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
+import {getPopQuiz} from "../../server/data"
 
 type QuestsPageParams = {
     params: {
@@ -41,9 +40,9 @@ const museumModerno = MuseoModerno({
     subsets: ["latin"]
 })
 
-function QuestsPage({params}: QuestsPageParams) {
-    const [message, setMessage] = useState<string | null>(null)
-    const {userLocation} = useUserLocation()
+async function QuestsPage({params}: QuestsPageParams) {
+    const quiz = await getPopQuiz()
+    console.log("Quest page -- Quiz:", quiz)
 
     return (
         <div className='max-w-xl mx-auto py-2  font-sans border rounded-lg'>
@@ -82,7 +81,7 @@ function QuestsPage({params}: QuestsPageParams) {
 
                     <p className='my-2'>Learn more about your city with daily quizzes.</p>
                 </div>
-                <PopQuiz />
+                <PopQuiz quiz={quiz} />
                 <div className='px-6 mt-6'>
                     <div className='flex justify-between items-center mt-4'>
                         <h1
@@ -101,11 +100,11 @@ function QuestsPage({params}: QuestsPageParams) {
                         Go and find what is hidden for today. In 20 meters radius. Follow the hint!
                     </p>
                 </div>
-                <HideAndSeek
+                {/* <HideAndSeek
                     userLocation={userLocation}
                     setMessage={setMessage}
                     message={message}
-                />
+                /> */}
 
                 <div className='px-6'>
                     <div className='flex justify-between items-center mt-4'>

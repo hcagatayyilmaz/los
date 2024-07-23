@@ -89,7 +89,22 @@ export async function getMyRewards(id: string) {
 }
 
 export async function getPopQuiz() {
-    const quiz = await prisma.quiz.findMany()
+    const currentDate = new Date()
+
+    const quiz = await prisma.quiz.findFirst({
+        where: {
+            AND: [
+                {
+                    endDate: {
+                        gt: currentDate
+                    }
+                },
+                {
+                    active: true
+                }
+            ]
+        }
+    })
 
     return quiz
 }

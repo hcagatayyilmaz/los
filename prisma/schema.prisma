@@ -164,6 +164,7 @@ model Quiz {
   meta        Json
   answer      String
   points      Int
+  active      Boolean    @default(true)
   createdAt   DateTime   @default(now())
   endDate     DateTime?
   QuizAnswers UserQuiz[]
