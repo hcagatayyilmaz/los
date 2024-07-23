@@ -13,6 +13,7 @@ import LocationPermissionButton from "../components/LocationPermissionButton"
 import TotalPoints from "../components/TotalPoints"
 import ActionsButtons from "../components/ActionsButtons"
 import ClosestPlace from "../components/ClosestPlace"
+import Banner from "../components/Banner"
 
 type CityPageParams = {
     params: {
@@ -83,6 +84,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                         <Header user={user} name={city.name} />
                         <Navbar />
                         <ActionsButtons slug={city.slug} />
+                        <Banner />
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
                         <div className='flex mx-4 mb-1 justify-between '>

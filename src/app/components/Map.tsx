@@ -38,13 +38,15 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     }, [userLocation, locations])
 
     const [center, setCenter] = useState(initialCenter)
+    const [isCentered, setIsCentered] = useState(false)
 
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
             setMap(map)
 
-            if (userLocation) {
+            if (userLocation && !isCentered) {
                 map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
+                setIsCentered(true)
             } else {
                 const bounds = new window.google.maps.LatLngBounds()
                 locations.forEach((location) => {
@@ -55,11 +57,11 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                 map.fitBounds(bounds)
             }
         },
-        [userLocation, locations]
+        [userLocation, locations, isCentered]
     )
 
     useEffect(() => {
-        if (userLocation && map && window.google) {
+        if (userLocation && map && window.google && !isCentered) {
             const userLatLng = new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
 
             const newDistances: Record<string, number> = {}
@@ -86,7 +88,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
 
             setDistances(newDistances)
         }
-    }, [userLocation, map, locations])
+    }, [userLocation, map, locations, isCentered])
 
     if (loadError) return <div>Error loading maps</div>
     if (!isLoaded) return <div>Loading maps</div>
