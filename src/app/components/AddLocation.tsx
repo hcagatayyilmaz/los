@@ -6,16 +6,26 @@ import {MuseoModerno} from "next/font/google"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import {LiveLocationPin} from "./Pins"
 import L from "leaflet"
+import Select from "react-select"
+import {addLocation} from "@/app/server" // Adjust the import path as necessary
 
 const museumModerno = MuseoModerno({
     subsets: ["latin"]
 })
+
+const options = [
+    {value: "ATTRACTION", label: "Attraction"},
+    {value: "EVENT", label: "Event"},
+    {value: "EXPERIENCE", label: "Experience"}
+]
 
 const AddLocation: React.FC = () => {
     const [selectedLocation, setSelectedLocation] = useState<{lat: number; lng: number} | null>(
         null
     )
     const [description, setDescription] = useState("")
+    const [taxonomy, setTaxonomy] = useState<"ATTRACTION" | "EVENT" | "EXPERIENCE">("ATTRACTION")
+    const [message, setMessage] = useState<string | null>(null)
 
     const LocationMarker = () => {
         useMapEvents({
@@ -30,7 +40,7 @@ const AddLocation: React.FC = () => {
                 icon={L.divIcon({
                     className: "custom-div-icon",
                     html: `<div class="relative">
-                              <div class="absolute w-6 h-6 bg-[#FF1493] border-dashed rounded-full border-4 border-white  shadow-[#FF1493]/50"></div>
+                              <div class="absolute w-6 h-6 bg-[#FF1493] border-dashed rounded-full border-4 border-white shadow-[#FF1493]/50"></div>
                               <div class="absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75"></div>
                            </div>`,
                     iconSize: [24, 24],
@@ -40,10 +50,25 @@ const AddLocation: React.FC = () => {
         ) : null
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // Handle form submission logic here
-        console.log("Submitted:", {selectedLocation, description})
+        setMessage(null)
+        if (!selectedLocation || !description) {
+            setMessage("Please describe the place and select its location on the map.")
+            return
+        }
+        try {
+            const res = await addLocation({
+                description,
+                taxonomy,
+                latitude: selectedLocation.lat,
+                longitude: selectedLocation.lng
+            })
+            setMessage(res.message)
+        } catch (error: any) {
+            setMessage(error.message)
+            console.error("Error submitting location:", error)
+        }
     }
 
     return (
@@ -57,13 +82,13 @@ const AddLocation: React.FC = () => {
                 <span className='inline-block'>
                     <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                         <CoinIcon className='w-4 h-4 text-white' />
-                        <span className='mt-1 ml-1 text-xs text-white'>+ {120}</span>
+                        <span className='mt-1 ml-1 text-xs text-white'>+ {80}</span>
                     </div>
                 </span>
             </div>
             <form
                 onSubmit={handleSubmit}
-                className='w-full max-w-md bg-white rounded-xl  flex flex-col mt-6'
+                className='w-full max-w-md bg-white rounded-xl flex flex-col mt-6'
             >
                 <div className='mb-4'>
                     <label className='block text-sm font-medium text-gray-700'>Description</label>
@@ -74,11 +99,37 @@ const AddLocation: React.FC = () => {
                     />
                 </div>
                 <div className='mb-4'>
+                    <label className='block text-sm font-medium text-gray-700'>Type</label>
+                    <Select
+                        value={options.find((option) => option.value === taxonomy)}
+                        onChange={(option) =>
+                            setTaxonomy(option?.value as "ATTRACTION" | "EVENT" | "EXPERIENCE")
+                        }
+                        options={options}
+                        styles={{
+                            control: (provided) => ({
+                                ...provided,
+                                backgroundColor: "white",
+                                borderColor: "#d1d5db", // Tailwind's gray-300
+                                boxShadow: "none",
+                                zIndex: 1000, // Ensure dropdown is above the map
+                                "&:hover": {
+                                    borderColor: "#6b7280" // Tailwind's gray-500
+                                }
+                            }),
+                            menu: (provided) => ({
+                                ...provided,
+                                zIndex: 1000 // Ensure dropdown menu is above the map
+                            })
+                        }}
+                    />
+                </div>
+                <div className='mb-4'>
                     <label className='block text-sm font-medium text-gray-700'>Location</label>
                     <MapContainer
                         center={[48.519446747786135, 9.057645] as any}
                         zoom={13}
-                        style={{height: "300px", width: "100%"}}
+                        style={{height: "300px", width: "100%", zIndex: 0}} // Ensure map is below the dropdown
                     >
                         <TileLayer
                             url={`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}`}
@@ -88,12 +139,15 @@ const AddLocation: React.FC = () => {
                         <LocationMarker />
                     </MapContainer>
                     {selectedLocation && (
-                        <div className='mt-2 text-sm text-black text-center'>
+                        <div className='mt-2 text-sm text-black font-bold text-center'>
                             Location <br />
                             {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
                         </div>
                     )}
                 </div>
+                {message && (
+                    <div className='mb-2 text-center text-sm text-customYellow'>{message}</div>
+                )}
                 <button
                     type='submit'
                     className='bg-customYellow text-white py-2 px-4 rounded-xl hover:bg-black transition duration-200'

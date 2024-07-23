@@ -21,6 +21,7 @@ model User {
   userHideAndSeeks UserHideAndSeek[]
   QuizAnswers      UserQuiz[]
   UserRewards      UserReward[]
+  Location         Attraction[]
 }
 
 enum AttractionTaxonomy {
@@ -46,6 +47,8 @@ model Attraction {
   city         City                @relation(fields: [cityId], references: [id])
   checkIns     CheckIn[]
   hideAndSeeks HideAndSeek[]
+  userId       String?
+  user         User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 
 model CheckIn {

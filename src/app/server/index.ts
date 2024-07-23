@@ -332,3 +332,39 @@ export async function redeemReward(rewardId: string) {
 
     return {success: true, message: "Reward redeemed successfully!"}
 }
+
+export async function addLocation({
+    description,
+    taxonomy,
+    latitude,
+    longitude
+}: {
+    description: string
+    taxonomy: "ATTRACTION" | "EVENT" | "EXPERIENCE"
+    latitude: number
+    longitude: number
+}) {
+    "use server"
+    const {getUser} = getKindeServerSession()
+    const user = await getUser()
+
+    if (!user) {
+        throw new Error("User not authenticated")
+    }
+    console.log("User_id:", user.id)
+
+    const location = await prisma.attraction.create({
+        data: {
+            name: description,
+            latitude,
+            longitude,
+            taxonomy,
+            userId: user.id,
+            isActive: false,
+            points: 0,
+            cityId: "clyxbvyuf0000tilmjxuheabw"
+        }
+    })
+
+    return {success: true, message: "Location added successfully", location}
+}
