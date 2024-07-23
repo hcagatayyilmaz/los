@@ -63,6 +63,8 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     useEffect(() => {
         if (userLocation && map && window.google && !isCentered) {
             const userLatLng = new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
+            map.setCenter(userLatLng)
+            setIsCentered(true)
 
             const newDistances: Record<string, number> = {}
             let closest: Location | null = null
@@ -97,7 +99,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={center}
-            zoom={14}
+            zoom={14} // Set the initial zoom level
             onLoad={onMapLoad}
             options={{
                 mapTypeControl: false,
