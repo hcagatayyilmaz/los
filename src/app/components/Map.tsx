@@ -38,15 +38,13 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     }, [userLocation, locations])
 
     const [center, setCenter] = useState(initialCenter)
-    const [isCentered, setIsCentered] = useState(false)
 
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
             setMap(map)
 
-            if (userLocation && !isCentered) {
+            if (userLocation) {
                 map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
-                setIsCentered(true)
             } else {
                 const bounds = new window.google.maps.LatLngBounds()
                 locations.forEach((location) => {
@@ -57,14 +55,12 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                 map.fitBounds(bounds)
             }
         },
-        [userLocation, locations, isCentered]
+        [userLocation, locations]
     )
 
     useEffect(() => {
-        if (userLocation && map && window.google && !isCentered) {
+        if (userLocation && map && window.google) {
             const userLatLng = new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
-            map.setCenter(userLatLng)
-            setIsCentered(true)
 
             const newDistances: Record<string, number> = {}
             let closest: Location | null = null
@@ -90,7 +86,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
 
             setDistances(newDistances)
         }
-    }, [userLocation, map, locations, isCentered])
+    }, [userLocation, map, locations])
 
     if (loadError) return <div>Error loading maps</div>
     if (!isLoaded) return <div>Loading maps</div>
@@ -99,6 +95,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={center}
+            zoom={14}
             onLoad={onMapLoad}
             options={{
                 mapTypeControl: false,
