@@ -7,6 +7,7 @@ import {CoinIcon} from "@/app/lib/CustomIcons"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
 import {getPopQuiz, getHideAndSeek} from "../../server/data"
+import AddLocation from "../../components/AddLocation"
 
 type QuestsPageParams = {
     params: {
@@ -102,7 +103,7 @@ async function QuestsPage({params}: QuestsPageParams) {
                 </div>
                 <HideAndSeek quest={quest} />
 
-                <div className='px-6'>
+                {/* <div className='px-6'>
                     <div className='flex justify-between items-center mt-4'>
                         <h1
                             className={`font-bold text-2xl ${museumModerno.className} break-words whitespace-normal`}
@@ -126,6 +127,10 @@ async function QuestsPage({params}: QuestsPageParams) {
                             />
                         ))}
                     </div>
+                </div> */}
+
+                <div className='px-6'>
+                    <AddLocation />
                 </div>
             </div>
         </div>
