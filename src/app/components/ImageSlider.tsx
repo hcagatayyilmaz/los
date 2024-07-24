@@ -28,7 +28,7 @@ const ImageSlider = () => {
                         src={image}
                         alt={`Slide ${index}`}
                         fill
-                        objectFit='cover'
+                        style={{objectFit: "cover"}} // Updated
                         className='w-full h-full rounded-lg'
                     />
                 </div>

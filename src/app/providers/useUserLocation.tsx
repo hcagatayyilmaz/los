@@ -14,15 +14,21 @@ const LocationContext = createContext<LocationContextType | undefined>(undefined
 export const UserLocationProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     const [userLocation, setUserLocation] = useState<{lat: number; lng: number} | null>(null)
 
+    const logLocationChange = (location: {lat: number; lng: number}) => {
+        console.log("User location updated:", location)
+    }
+
     const requestLocationPermission = async () => {
         if (navigator.geolocation) {
             return new Promise<void>((resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        setUserLocation({
+                        const newLocation = {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
-                        })
+                        }
+                        setUserLocation(newLocation)
+                        logLocationChange(newLocation)
                         resolve()
                     },
                     (error) => {
@@ -43,6 +49,29 @@ export const UserLocationProvider: React.FC<{children: React.ReactNode}> = ({chi
 
     useEffect(() => {
         requestLocationPermission().catch(console.error)
+
+        const watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                const newLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                }
+                setUserLocation(newLocation)
+                logLocationChange(newLocation)
+            },
+            (error) => {
+                console.error("Error watching location:", error)
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            }
+        )
+
+        return () => {
+            navigator.geolocation.clearWatch(watchId)
+        }
     }, [])
 
     return (
