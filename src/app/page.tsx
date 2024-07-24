@@ -30,7 +30,7 @@ export default async function Home() {
                     <div className='flex items-end justify-end mt-2'></div>
                 </div>
                 <div className='flex items-center gap-2'>
-                    <Link href={"/"}>
+                    <Link href={"/partnership"}>
                         <button className='bg-black text-white px-2 rounded'>Partnership</button>
                     </Link>
                     <button className='text-sm font-medium text-gray-700 focus:outline-none'>
@@ -61,9 +61,9 @@ export default async function Home() {
                     </div>
                 </div>
                 <h2 className='mt-4 overflow-hidden md:overflow-auto md:whitespace-nowrap text-16 whitespace-normal xl:text-28'>
-                    Experience cities like never before
-                    <span className='hidden md:contents'></span> with hyperlocal, gamified guides
-                    offering exciting rewards.
+                    Experience city you live like never before
+                    <span className='hidden md:contents'></span> with span, gamified guides offering
+                    exciting rewards.
                 </h2>
                 <div className='h-[30vh] w-full my-6 rounded-lg'>
                     <ImageSlider />

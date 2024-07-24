@@ -368,3 +368,29 @@ export async function addLocation({
 
     return {success: true, message: "Location added successfully", location}
 }
+
+export async function applyForPartnership({
+    name,
+    description,
+    amount,
+    price
+}: {
+    name: string
+    description: string
+    amount: string
+    price: string
+}) {
+    "use server"
+
+    console.log("Applying for partnership:", name, description, amount, price)
+
+    const partnership = await prisma.partnership.create({
+        data: {
+            name,
+            description,
+            amount: amount,
+            price: price
+        }
+    })
+    return partnership
+}

@@ -17,7 +17,7 @@ const RewardsPage = async () => {
     return (
         <div className='max-w-2xl mx-auto bg-white rounded-lg flex flex-col gap-2'>
             <div className={`flex items-center justify-center bg-white border-b `}>
-                <Link href={"/"}>
+                <Link href={"/tuebingen"}>
                     <div
                         className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
                         style={{border: "1px dashed white"}}
