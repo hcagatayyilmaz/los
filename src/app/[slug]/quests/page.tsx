@@ -80,7 +80,7 @@ async function QuestsPage({params}: QuestsPageParams) {
                         </span>
                     </div>
 
-                    <p className='my-2'>Learn more about your city with daily quizzes.</p>
+                    <p className='my-1 text-sm'>Learn more about your city with daily quizzes.</p>
                 </div>
                 <PopQuiz quiz={quiz} />
                 <div className='px-6 mt-6'>
@@ -93,45 +93,44 @@ async function QuestsPage({params}: QuestsPageParams) {
                         <span className='inline-block'>
                             <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                                 <CoinIcon className='w-4 h-4 text-white' />
-                                <span className='mt-1 ml-1 text-xs text-white'>+ {80}</span>
+                                <span className='mt-1 ml-1 text-xs text-white'>+ {100}</span>
                             </div>
                         </span>
                     </div>
-                    <p className='mt-2 mb-6 text-sm'>
-                        Go and find what is hidden for today. In 20 meters radius. Follow the hint!
+                    <p className='mt-2 mb-3 text-sm'>
+                        Go and find what is hidden for this week. In 20 meters radius. Follow the
+                        hint!
                     </p>
                 </div>
                 <HideAndSeek quest={quest} />
 
                 {/* <div className='px-6'>
-                    <div className='flex justify-between items-center mt-4'>
-                        <h1
-                            className={`font-bold text-2xl ${museumModerno.className} break-words whitespace-normal`}
-                        >
-                            Badges
-                        </h1>
-                        <span className='inline-block'>
-                            <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
-                                <CoinIcon className='w-4 h-4 text-white' />
-                                <span className='mt-1 ml-1 text-xs text-white'>+ {60}</span>
-                            </div>
-                        </span>
-                    </div>
-                    <div className='grid grid-cols-3 gap-4 justify-center mt-4'>
-                        {mockBadges.map((badge) => (
-                            <ObtainBadge
-                                key={badge.id}
-                                name={badge.name}
-                                description={badge.description}
-                                image={badge.image}
-                            />
-                        ))}
-                    </div>
-                </div> */}
+                        <div className='flex justify-between items-center mt-4'>
+                            <h1
+                                className={`font-bold text-2xl ${museumModerno.className} break-words whitespace-normal`}
+                            >
+                                Badges
+                            </h1>
+                            <span className='inline-block'>
+                                <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
+                                    <CoinIcon className='w-4 h-4 text-white' />
+                                    <span className='mt-1 ml-1 text-xs text-white'>+ {60}</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div className='grid grid-cols-3 gap-4 justify-center mt-4'>
+                            {mockBadges.map((badge) => (
+                                <ObtainBadge
+                                    key={badge.id}
+                                    name={badge.name}
+                                    description={badge.description}
+                                    image={badge.image}
+                                />
+                            ))}
+                        </div>
+                    </div> */}
 
-                <div className='px-4'>
-                    <AddLocation />
-                </div>
+                <div className='px-4'>{/* <AddLocation /> */}</div>
             </div>
         </div>
     )

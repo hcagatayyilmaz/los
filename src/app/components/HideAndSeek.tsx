@@ -3,6 +3,11 @@ import React, {useState} from "react"
 import {foundHideAndSeek} from "../server"
 import MapWithRadius from "./MapWithRadius"
 import {useUserLocation} from "../providers/useUserLocation"
+import {MuseoModerno} from "next/font/google"
+
+const museumModerno = MuseoModerno({
+    subsets: ["latin"]
+})
 
 type HideAndSeekProps = {
     quest: any | null
@@ -43,7 +48,9 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
         <div className='max-w-lg mx-auto'>
             <section className='mb-6'>
                 <div className='p-4 rounded-lg bg-pink-100'>
-                    <h2 className='text-lg font-semibold px-2'>Hint</h2>
+                    <h2 className={`text-lg font-semibold px-2 ${museumModerno.className} `}>
+                        Hint
+                    </h2>
                     <p className='text-gray-800 text-sm px-2'>{quest.meta.description.en}</p>
                     <div className='my-4'>
                         <MapWithRadius
@@ -57,7 +64,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
                     >
                         I Found
                     </button>
-                    {message && <p className='text-green-600 mt-4'>{message}</p>}
+                    {message && <p className='text-customYellow mt-4 text-center'>{message}</p>}
                 </div>
             </section>
         </div>

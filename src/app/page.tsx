@@ -68,23 +68,37 @@ export default async function Home() {
                 <div className='h-[30vh] w-full my-6 rounded-lg'>
                     <ImageSlider />
                 </div>
-                <div className='flex flex-wrap px-2 p-2 gap-x-4'>
+                <div className='grid grid-cols-2 gap-4 px-2 p-2'>
                     <Link href={"/tuebingen"}>
                         <button
-                            className={`${museoModerno.className} bg-customYellow rounded-full  text-white font-medium py-1 text-sm px-4 inline-block mb-2 border`}
+                            className={`${museoModerno.className} bg-customYellow rounded-full text-white font-medium py-1 text-sm px-4 mb-2 border w-full`}
                         >
                             Tübingen
                         </button>
                     </Link>
                     <div
-                        className={`${museoModerno.className} bg-[#39FF14] rounded-full  text-black font-medium py-1 px-4 text-sm inline-block mb-2 border`}
+                        className={`${museoModerno.className} bg-[#39FF14] rounded-full text-black font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
                     >
                         Berlin
+                        <span className='absolute -top-2 right-0 text-xs bg-white text-[#39FF14] px-2 py-0.5 rounded-full border border-[#39FF14]'>
+                            soon
+                        </span>
                     </div>
                     <div
-                        className={`${museoModerno.className} bg-[#001eff] rounded-full  text-white font-medium py-1 px-4 text-sm inline-block mb-2 border`}
+                        className={`${museoModerno.className} bg-[#FF9900] rounded-full text-white font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
                     >
                         München
+                        <span className='absolute -top-2 right-0 text-xs bg-white text-[#FF9900] px-2 py-0.5 rounded-full border border-[#FF9900]'>
+                            soon
+                        </span>
+                    </div>
+                    <div
+                        className={`${museoModerno.className} bg-[#D600FF] rounded-full text-white font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
+                    >
+                        Stuttgart
+                        <span className='absolute -top-2 right-0 text-xs bg-white text-[#D600FF] px-2 py-0.5 rounded-full border border-[#D600FF]'>
+                            soon
+                        </span>
                     </div>
                 </div>
             </div>
