@@ -1,4 +1,5 @@
 import {Location} from "../lib/types"
+import Image from "next/image"
 
 // border-white or border-black for live location pin
 
@@ -10,19 +11,36 @@ export const LiveLocationPin = () => (
 )
 
 export const ItemPin: React.FC<{location: Location}> = ({location}) => {
+    if (location.isTheme) {
+        return (
+            <div className='relative w-8 h-8'>
+                <Image
+                    src='/holderlin.png'
+                    alt='Theme Pin'
+                    fill
+                    objectFit='contain' // This maintains the aspect ratio
+                    className='absolute'
+                />
+            </div>
+        )
+    }
+
     let bgColor = ""
 
     switch (location.taxonomy) {
-        case "MAIN_ATTRACTION":
-            bgColor = "#FFE888"
+        case "ATTRACTION":
+            bgColor = "#FFFFFF"
             break
-        case "HIDDEN_WONDERS":
-            bgColor = "#FFBBDD"
+        case "EVENT":
+            bgColor = "#39FF14"
             break
-        case "EXPERINCE":
-            bgColor = "#C0EFFF"
+        case "EXPERIENCE":
+            bgColor = "#FF474C"
             break
         case "LIMITED_TIME":
+            bgColor = "#C9FFCE"
+            break
+        case "REWARD":
             bgColor = "#C9FFCE"
             break
         default:

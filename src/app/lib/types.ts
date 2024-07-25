@@ -10,4 +10,5 @@ export type Location = {
     isActive: boolean
     endDate: Date | null
     startDate: Date | null
+    isTheme: boolean | null
 }

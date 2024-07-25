@@ -42,6 +42,7 @@ model Attraction {
   imageUrl     String?
   meta         Json?
   isActive     Boolean             @default(true)
+  isTheme      Boolean?
   endDate      DateTime?
   startDate    DateTime?
   city         City                @relation(fields: [cityId], references: [id])
