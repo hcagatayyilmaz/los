@@ -36,7 +36,7 @@ export default function useClosestLocation(locations: Location[]): number | null
 
         updateClosestLocation() // Initial call to set the distance
 
-        const intervalId = setInterval(updateClosestLocation, 10000) // Update every 5 seconds
+        const intervalId = setInterval(updateClosestLocation, 5000) // Update every 5 seconds
 
         return () => clearInterval(intervalId) // Clean up interval on unmount
     }, [userLocation, locations])

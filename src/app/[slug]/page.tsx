@@ -49,7 +49,6 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                 slug: params.slug
             }
         })
-        console.log("City:", city)
 
         if (!city) {
             return (
@@ -64,13 +63,10 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
             taxonomy: searchParams.taxonomy
         }
 
-        console.log("Filter:", filter)
-
         const attractions = await getAttractions(city.id, filter)
         const {getUser} = getKindeServerSession()
         const kindeUser = await getUser()
         const user = kindeUser ? await getDBUser(kindeUser.id) : null
-        console.log(user)
 
         return (
             <SelectedItemProvider initialLocation={attractions[0]}>
@@ -104,7 +100,6 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
             </SelectedItemProvider>
         )
     } catch (error) {
-        console.error(error)
         return (
             <main className='h-screen w-screen flex items-center justify-center'>
                 <h1 className='text-4xl'>An error occurred</h1>

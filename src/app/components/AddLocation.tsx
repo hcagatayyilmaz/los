@@ -1,6 +1,6 @@
 "use client"
 import React, {useState} from "react"
-import {GoogleMap, LoadScript, OverlayView} from "@react-google-maps/api"
+import {GoogleMap, LoadScript, LoadScriptNext, OverlayView} from "@react-google-maps/api"
 import {MuseoModerno} from "next/font/google"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import Select from "react-select"
@@ -25,6 +25,7 @@ const AddLocation: React.FC = () => {
     const [description, setDescription] = useState("")
     const [taxonomy, setTaxonomy] = useState<"ATTRACTION" | "EVENT" | "EXPERIENCE">("ATTRACTION")
     const [message, setMessage] = useState<string | null>(null)
+    const [isMapVisible, setIsMapVisible] = useState(false) // New state for map visibility
 
     const handleMapClick = (e: google.maps.MapMouseEvent) => {
         if (e.latLng) {
@@ -54,8 +55,8 @@ const AddLocation: React.FC = () => {
     }
 
     return (
-        <>
-            <div className='flex justify-between items-center mt-4'>
+        <div className='px-4 w-full' id='add-new-place'>
+            <div className='flex justify-between items-center mt-4 w-full'>
                 <h1
                     className={`font-bold text-2xl ${museumModerno.className} break-words whitespace-normal`}
                 >
@@ -70,7 +71,7 @@ const AddLocation: React.FC = () => {
             </div>
             <form
                 onSubmit={handleSubmit}
-                className='w-full max-w-md bg-white rounded-xl flex flex-col mt-6'
+                className='w-full  bg-white rounded-xl flex flex-col mt-6'
             >
                 <div className='mb-4'>
                     <label
@@ -100,7 +101,6 @@ const AddLocation: React.FC = () => {
                             control: (provided, state) => ({
                                 ...provided,
                                 backgroundColor: "white",
-
                                 zIndex: 1000, // Ensure dropdown is above the map
                                 "&:hover": {
                                     borderColor: state.isFocused ? "#FF1493" : "#6b7280" // Tailwind's gray-500
@@ -112,7 +112,6 @@ const AddLocation: React.FC = () => {
                             }),
                             singleValue: (provided) => ({
                                 ...provided,
-
                                 fontSize: "12px" // smaller text
                             }),
                             option: (provided, state) => ({
@@ -125,27 +124,35 @@ const AddLocation: React.FC = () => {
                     />
                 </div>
                 <div className='mb-4'>
-                    <label className='block text-sm font-medium text-gray-700'>Location</label>
-                    <LoadScript
-                        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+                    <button
+                        className={`block text-sm font-medium text-black text-center w-full ${museumModerno.className} mt-1`}
+                        onClick={() => setIsMapVisible(true)}
                     >
-                        <GoogleMap
-                            mapContainerStyle={{height: "300px", width: "100%", zIndex: 0}}
-                            center={{lat: 48.519446747786135, lng: 9.057645}}
-                            zoom={13}
-                            options={{styles: mapStyle, disableDefaultUI: true}}
-                            onClick={handleMapClick}
+                        Choose on Map
+                    </button>
+
+                    {isMapVisible && (
+                        <LoadScriptNext
+                            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
                         >
-                            {selectedLocation && (
-                                <OverlayView
-                                    position={selectedLocation}
-                                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                                >
-                                    <LiveLocationPin />
-                                </OverlayView>
-                            )}
-                        </GoogleMap>
-                    </LoadScript>
+                            <GoogleMap
+                                mapContainerStyle={{height: "300px", width: "100%", zIndex: 0}}
+                                center={{lat: 48.519446747786135, lng: 9.057645}}
+                                zoom={13}
+                                options={{styles: mapStyle, disableDefaultUI: true}}
+                                onClick={handleMapClick}
+                            >
+                                {selectedLocation && (
+                                    <OverlayView
+                                        position={selectedLocation}
+                                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                                    >
+                                        <LiveLocationPin />
+                                    </OverlayView>
+                                )}
+                            </GoogleMap>
+                        </LoadScriptNext>
+                    )}
                     {selectedLocation && (
                         <div className='mt-2 text-sm text-black font-bold text-center'>
                             Location <br />
@@ -163,7 +170,7 @@ const AddLocation: React.FC = () => {
                     Submit
                 </button>
             </form>
-        </>
+        </div>
     )
 }
 

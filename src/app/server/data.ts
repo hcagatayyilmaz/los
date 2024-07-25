@@ -129,6 +129,6 @@ export async function getHideAndSeek() {
             attraction: true
         }
     })
-
+    console.log("Hide and Seek:", hideAndSeek)
     return hideAndSeek
 }

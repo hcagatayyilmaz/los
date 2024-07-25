@@ -39,7 +39,7 @@ function Banner() {
         <div className='relative mt-2 w-full bg-customYellow text-white p-4 flex flex-col items-center md:flex-row md:justify-between'>
             <div className='flex justify-between w-full mb-2 mt-1 md:mb-0'>
                 <span className='text-sm text-center w-full'>
-                    Please sign up and enable location permissions.
+                    Please login and enable location permissions.
                 </span>
                 <button
                     className='absolute top-1 right-1 text-white ml-4'
