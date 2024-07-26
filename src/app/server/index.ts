@@ -165,43 +165,43 @@ export async function foundHideAndSeek({
         include: {attraction: true}
     })
 
-    if (!hideAndSeek) {
-        console.error("HideAndSeek not found for ID:", hideAndSeekId)
-        throw new Error("HideAndSeek not found")
-    }
+    if (hideAndSeek && hideAndSeek.attraction) {
+        const distance = await calculateDistance3(
+            userLat,
+            userLng,
+            hideAndSeek.attraction.latitude,
+            hideAndSeek.attraction.longitude
+        )
 
-    const distance = await calculateDistance3(
-        userLat,
-        userLng,
-        hideAndSeek.attraction.latitude,
-        hideAndSeek.attraction.longitude
-    )
+        if (distance <= 20) {
+            const userHideAndSeek = await prisma.userHideAndSeek.create({
+                data: {
+                    userId: user.id,
+                    hideAndSeekId: hideAndSeek.id
+                }
+            })
 
-    if (distance <= 20) {
-        const userHideAndSeek = await prisma.userHideAndSeek.create({
-            data: {
-                userId: user.id,
-                hideAndSeekId: hideAndSeek.id
-            }
-        })
+            await prisma.user.update({
+                where: {id: user.id},
+                data: {points: {increment: hideAndSeek.points}}
+            })
 
-        await prisma.user.update({
-            where: {id: user.id},
-            data: {points: {increment: hideAndSeek.points}}
-        })
+            await prisma.transaction.create({
+                data: {
+                    userId: user.id,
+                    points: hideAndSeek.points,
+                    details: `hide_and_seek_id:${userHideAndSeek.id}`,
+                    type: "EARN_POINTS"
+                }
+            })
 
-        await prisma.transaction.create({
-            data: {
-                userId: user.id,
-                points: hideAndSeek.points,
-                details: `hide_and_seek_id:${userHideAndSeek.id}`,
-                type: "EARN_POINTS"
-            }
-        })
-
-        return {message: "Congratulations! You've found the location and earned points!"}
+            return {message: "Congratulations! You've found the location and earned points!"}
+        } else {
+            return {message: `You are ${distance} meters away from the correct location.`}
+        }
     } else {
-        return {message: `You are ${distance} meters away from the correct location.`}
+        console.error("HideAndSeek or attraction data not found for ID:", hideAndSeekId)
+        throw new Error("HideAndSeek or attraction data not found")
     }
 }
 
@@ -337,12 +337,14 @@ export async function addLocation({
     description,
     taxonomy,
     latitude,
-    longitude
+    longitude,
+    name
 }: {
     description: string
     taxonomy: "ATTRACTION" | "EVENT" | "EXPERIENCE"
     latitude: number
     longitude: number
+    name: string
 }) {
     "use server"
     const {getUser} = getKindeServerSession()
