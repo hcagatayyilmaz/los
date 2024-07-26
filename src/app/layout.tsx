@@ -3,6 +3,7 @@ import {Roboto} from "next/font/google"
 import "./globals.css"
 import {UserLocationProvider} from "./providers/useUserLocation"
 import ToastProvider from "./providers/ToastProvider"
+import Head from "next/head"
 
 const roboto = Roboto({
     subsets: ["latin"],
@@ -21,6 +22,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
+            <Head>
+                <link rel='icon' href='/favicon.png' />
+            </Head>
             <body className={roboto.className}>
                 <ToastProvider>
                     <UserLocationProvider>{children}</UserLocationProvider>
