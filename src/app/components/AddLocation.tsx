@@ -23,6 +23,8 @@ const AddLocation: React.FC = () => {
         null
     )
     const [description, setDescription] = useState("")
+    const [title, setTitle] = useState("")
+    const [address, setAddress] = useState("")
     const [taxonomy, setTaxonomy] = useState<"ATTRACTION" | "EVENT" | "EXPERIENCE">("ATTRACTION")
     const [message, setMessage] = useState<string | null>(null)
     const [isMapVisible, setIsMapVisible] = useState(false) // New state for map visibility
@@ -80,7 +82,8 @@ const AddLocation: React.FC = () => {
                         Title
                     </label>
                     <input
-                        value={description}
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         className={`'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow text-xs ${museumModerno.className}`}
                     />
                 </div>
@@ -91,7 +94,8 @@ const AddLocation: React.FC = () => {
                         Address
                     </label>
                     <input
-                        value={description}
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
                         className={`'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow text-xs ${museumModerno.className}`}
                     />
                 </div>

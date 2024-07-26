@@ -71,12 +71,12 @@ async function QuestsPage({params}: QuestsPageParams) {
                 {/* THEME COMPONENT */}
 
                 {/* POP QUIZ COMPONENT */}
-                <PopQuiz quiz={quiz} />
+                {quiz && <PopQuiz quiz={quiz} />}
                 {/* POP QUIZ COMPONENT */}
 
-                {/* POP QUIZ COMPONENT */}
-                <HideAndSeek quest={hideAndSeek} />
-                {/* POP QUIZ COMPONENT */}
+                {/* HIDE & SEEK COMPONENT */}
+                {hideAndSeek && <HideAndSeek quest={hideAndSeek} />}
+                {/* HIDE & SEEK COMPONENT */}
 
                 {/* ADD PLACE COMPONENT */}
                 <AddLocation />
