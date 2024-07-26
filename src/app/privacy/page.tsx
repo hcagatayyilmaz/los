@@ -38,7 +38,7 @@ function Page() {
                     </li>
                     <li>
                         <strong>Location Data:</strong> With your permission, we access your
-                        browser's location to provide location-based features.
+                        browser&apos;s location to provide location-based features.
                     </li>
                     <li>
                         <strong>Usage Data:</strong> Information about your interactions with the
@@ -71,7 +71,7 @@ function Page() {
                     <strong>Purpose of Data Use:</strong> Personal information is used for account
                     management, personalization, and communication. Location data centers the map on
                     your location and shows nearby attractions, running entirely on your device with
-                    no external storage . Only check-in data is collected to manage rewards.
+                    no external storage. Only check-in data is collected to manage rewards.
                 </p>
                 <p className='text-base mt-2'>
                     <strong>Third-Party Services:</strong> We use services like Kinde Auth for
@@ -80,7 +80,7 @@ function Page() {
                         href='https://www.kinde.com/privacy-policy'
                         className='text-blue-500 underline'
                     >
-                        Kinde's privacy policy
+                        Kinde&apos;s privacy policy
                     </a>
                     .
                 </p>
