@@ -13,12 +13,26 @@ export const LiveLocationPin = () => (
 export const ItemPin: React.FC<{location: Location}> = ({location}) => {
     if (location.isTheme) {
         return (
-            <div className='relative w-8 h-8'>
+            <div className='relative w-10 h-10'>
                 <Image
                     src='/holderlin.png'
                     alt='Theme Pin'
                     fill
                     objectFit='contain' // This maintains the aspect ratio
+                    className='absolute'
+                />
+            </div>
+        )
+    }
+
+    if (location.pin !== null) {
+        return (
+            <div className='relative w-8 h-8'>
+                <Image
+                    src={`/${location.pin}.png`}
+                    alt='Location Pin'
+                    fill
+                    objectFit='contain'
                     className='absolute'
                 />
             </div>
@@ -32,10 +46,10 @@ export const ItemPin: React.FC<{location: Location}> = ({location}) => {
             bgColor = "#FFFFFF"
             break
         case "EVENT":
-            bgColor = "#39FF14"
+            bgColor = "#FFFFED"
             break
         case "EXPERIENCE":
-            bgColor = "#FF474C"
+            bgColor = "#FFD1DF"
             break
         case "LIMITED_TIME":
             bgColor = "#C9FFCE"

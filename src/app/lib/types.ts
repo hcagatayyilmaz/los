@@ -11,4 +11,5 @@ export type Location = {
     endDate: Date | null
     startDate: Date | null
     isTheme: boolean | null
+    pin: string | null
 }

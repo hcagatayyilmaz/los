@@ -62,7 +62,7 @@ export default async function Home() {
                 </div>
                 <h2 className='mt-4 overflow-hidden md:overflow-auto md:whitespace-nowrap text-16 whitespace-normal xl:text-28'>
                     Experience city you live like never before
-                    <span className='hidden md:contents'></span> with span, gamified guides offering
+                    <span className='hidden md:contents'></span> with, gamified guides offering
                     exciting rewards.
                 </h2>
                 <div className='h-[30vh] w-full my-6 rounded-lg'>
@@ -103,8 +103,17 @@ export default async function Home() {
                 </div>
             </div>
             <div className='py-2 bg-white border-t border-black px-2 flex justify-end gap-x-2 items-center'>
-                <div className='border-2 rounded border-black px-2'>Privacy</div>
-                <div className='border-2 rounded border-black px-2'>Contact</div>
+                <a
+                    href='mailto:tuebingen@los.city'
+                    className='border-2 rounded border-black px-2 cursor-pointer'
+                >
+                    Contact
+                </a>
+                <Link href='/privacy'>
+                    <button className='border-2 rounded border-black px-2 cursor-pointer'>
+                        Privacy
+                    </button>
+                </Link>
             </div>
         </main>
     )

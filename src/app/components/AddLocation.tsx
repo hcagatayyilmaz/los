@@ -65,7 +65,7 @@ const AddLocation: React.FC = () => {
                 <span className='inline-block'>
                     <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                         <CoinIcon className='w-4 h-4 text-white' />
-                        <span className='mt-1 ml-1 text-xs text-white'>+ {80}</span>
+                        <span className='mt-1 ml-1 text-xs text-white'>+ {150}</span>
                     </div>
                 </span>
             </div>
@@ -77,12 +77,34 @@ const AddLocation: React.FC = () => {
                     <label
                         className={`block text-md font-medium text-black ${museumModerno.className}`}
                     >
+                        Title
+                    </label>
+                    <input
+                        value={description}
+                        className={`'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow text-xs ${museumModerno.className}`}
+                    />
+                </div>
+                <div className='mb-4'>
+                    <label
+                        className={`block text-md font-medium text-black ${museumModerno.className}`}
+                    >
+                        Address
+                    </label>
+                    <input
+                        value={description}
+                        className={`'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow text-xs ${museumModerno.className}`}
+                    />
+                </div>
+                <div className='mb-4'>
+                    <label
+                        className={`block text-md font-medium text-black ${museumModerno.className}`}
+                    >
                         Description
                     </label>
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className={`'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs ${museumModerno.className}`}
+                        className={`'mt-1 h-24 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow text-xs ${museumModerno.className}`}
                     />
                 </div>
                 <div className='mb-2'>

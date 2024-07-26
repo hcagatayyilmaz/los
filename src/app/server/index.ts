@@ -217,7 +217,7 @@ export async function submitQuiz({
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Please login to submit answers.")
     }
     const quiz = await prisma.quiz.findUnique({
         where: {id: quizId}
@@ -373,23 +373,23 @@ export async function applyForPartnership({
     name,
     description,
     amount,
-    price
+    email
 }: {
     name: string
     description: string
     amount: string
-    price: string
+    email: string
 }) {
     "use server"
 
-    console.log("Applying for partnership:", name, description, amount, price)
+    console.log("Applying for partnership:", name, description, amount, email)
 
     const partnership = await prisma.partnership.create({
         data: {
             name,
             description,
             amount: amount,
-            price: price
+            email: email
         }
     })
     return partnership

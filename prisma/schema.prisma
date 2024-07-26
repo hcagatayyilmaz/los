@@ -50,15 +50,16 @@ model Attraction {
   hideAndSeeks HideAndSeek[]
   userId       String?
   user         User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  pin          String?
 }
 
 model CheckIn {
-  id           String     @id @default(cuid())
+  id           String      @id @default(cuid())
   userId       String
-  attractionId String
-  user         User       @relation(fields: [userId], references: [id])
-  attraction   Attraction @relation(fields: [attractionId], references: [id])
-  createdAt    DateTime   @default(now())
+  attractionId String? // Changed to nullable
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attraction   Attraction? @relation(fields: [attractionId], references: [id], onDelete: SetNull)
+  createdAt    DateTime    @default(now())
 
   @@unique([userId, attractionId])
 }
@@ -88,7 +89,7 @@ model UserReward {
   id        String   @id @default(cuid())
   userId    String
   rewardId  String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   reward    Reward   @relation(fields: [rewardId], references: [id])
   createdAt DateTime @default(now())
   isUsed    Boolean  @default(false)
@@ -144,9 +145,9 @@ model HideAndSeek {
   description      String?
   endDate          DateTime
   points           Int
-  attractionId     String
+  attractionId     String? // Changed to nullable
   active           Boolean           @default(true)
-  attraction       Attraction        @relation(fields: [attractionId], references: [id])
+  attraction       Attraction?       @relation(fields: [attractionId], references: [id], onDelete: Cascade) // Added onDelete: SetNull
   meta             Json
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -160,7 +161,6 @@ model UserHideAndSeek {
   user          User        @relation(fields: [userId], references: [id])
   hideAndSeek   HideAndSeek @relation(fields: [hideAndSeekId], references: [id])
   createdAt     DateTime    @default(now())
-  attractionId  String?
 
   @@unique([userId, hideAndSeekId])
 }
@@ -193,7 +193,7 @@ model Partnership {
   name        String
   description String
   amount      String
-  price       String
+  email       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

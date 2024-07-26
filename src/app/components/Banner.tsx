@@ -6,6 +6,7 @@ import {useRouter} from "next/navigation"
 import {LoginLink} from "@kinde-oss/kinde-auth-nextjs"
 import {IoIosCloseCircleOutline} from "react-icons/io"
 import {MuseoModerno} from "next/font/google"
+import Link from "next/link"
 
 const museoModerno = MuseoModerno({
     subsets: ["latin"]
@@ -40,6 +41,8 @@ function Banner() {
             <div className='flex justify-between w-full mb-2 mt-1 md:mb-0'>
                 <span className='text-sm text-center w-full'>
                     Please login and enable location permissions.
+                    {/* { We don't store your location. To
+                    learn more <Link href={"privacy"}> please read our privacy policy.</Link>} */}
                 </span>
                 <button
                     className='absolute top-1 right-1 text-white ml-4'
