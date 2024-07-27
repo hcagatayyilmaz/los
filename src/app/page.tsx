@@ -80,23 +80,23 @@ export default async function Home() {
                         className={`${museoModerno.className} bg-[#39FF14] rounded-full text-black font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
                     >
                         Berlin
-                        <span className='absolute -top-2 right-0 text-xs bg-white text-[#39FF14] px-2 py-0.5 rounded-full border border-[#39FF14]'>
+                        <span className='absolute -top-2 right-0 text-xs bg-white text-black px-2 py-0.5 rounded-full border border-[#39FF14]'>
                             soon
                         </span>
                     </div>
                     <div
-                        className={`${museoModerno.className} bg-[#FF9900] rounded-full text-white font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
+                        className={`${museoModerno.className} bg-white rounded-full text-black font-medium py-1 px-4 text-sm mb-2 border relative w-full border-black`}
                     >
                         München
-                        <span className='absolute -top-2 right-0 text-xs bg-white text-[#FF9900] px-2 py-0.5 rounded-full border border-[#FF9900]'>
+                        <span className='absolute -top-2 right-0 text-xs bg-white text-black px-2 py-0.5 rounded-full border border-black'>
                             soon
                         </span>
                     </div>
                     <div
-                        className={`${museoModerno.className} bg-[#D600FF] rounded-full text-white font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
+                        className={`${museoModerno.className} bg-black rounded-full text-white font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
                     >
                         Stuttgart
-                        <span className='absolute -top-2 right-0 text-xs bg-white text-[#D600FF] px-2 py-0.5 rounded-full border border-[#D600FF]'>
+                        <span className='absolute -top-2 right-0 text-xs bg-white text-black px-2 py-0.5 rounded-full border border-black'>
                             soon
                         </span>
                     </div>

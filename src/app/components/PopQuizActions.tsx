@@ -29,7 +29,7 @@ const PopQuizActions = ({options, quizId}: {options: string[]; quizId: string}) 
                 {options.map((option) => (
                     <button
                         key={option}
-                        className={`py-1 px-2 rounded-full bg-customYellow text-white text-sm  border ${museoModerno.className}`}
+                        className={`py-1 px-2 rounded-full bg-black text-white text-sm  border `}
                         onClick={() => handlePopQuiz(option)}
                     >
                         {option}

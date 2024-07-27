@@ -65,7 +65,7 @@ export async function checkIn({
 export async function obtainBadge({badgeId}: {badgeId: string}) {
     "use server"
 
-    const {getUser} = getKindeServerSession()
+    const {getUser} = await getKindeServerSession()
     const user = await getUser()
 
     if (!user) {
@@ -74,7 +74,7 @@ export async function obtainBadge({badgeId}: {badgeId: string}) {
 
     const badge = await prisma.badge.findUnique({
         where: {id: badgeId},
-        include: {users: true}
+        include: {attractions: true} // Ensure to fetch attractions
     })
 
     if (!badge) {
@@ -95,28 +95,21 @@ export async function obtainBadge({badgeId}: {badgeId: string}) {
         throw new Error("User already has this badge")
     }
 
-    // Verify if the user has checked into any of the attractions
-    let obtained = false
-    for (const attractionId of badge.attractionIds) {
-        const checkIn = await prisma.checkIn.findFirst({
-            where: {
-                userId: user.id,
-                attractionId: attractionId
+    const checkIns = await prisma.checkIn.findMany({
+        where: {
+            userId: user.id,
+            attractionId: {
+                in: badge.attractions.map((badgeAttraction) => badgeAttraction.attractionId)
             }
-        })
-
-        if (checkIn) {
-            obtained = true
-            break
         }
-    }
+    })
 
-    if (!obtained) {
-        throw new Error("User has not checked into any required attractions")
+    if (checkIns.length !== badge.attractions.length) {
+        throw new Error("User has not checked into all required attractions")
     }
 
     // Add badge to user
-    const userBadge = await prisma.userBadge.create({
+    await prisma.userBadge.create({
         data: {
             userId: user.id,
             badgeId: badgeId
@@ -133,7 +126,7 @@ export async function obtainBadge({badgeId}: {badgeId: string}) {
         data: {
             userId: user.id,
             points: badge.points,
-            details: `badge_id:${userBadge.id}`,
+            details: `badge_id:${badgeId}`,
             type: "EARN_POINTS"
         }
     })

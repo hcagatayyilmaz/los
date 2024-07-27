@@ -45,18 +45,55 @@ model Attraction {
   isTheme      Boolean?
   endDate      DateTime?
   startDate    DateTime?
+  label        String?
   city         City                @relation(fields: [cityId], references: [id])
   checkIns     CheckIn[]
   hideAndSeeks HideAndSeek[]
-  userId       String?
-  user         User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
-  pin          String?
+  badges       BadgeAttraction[]
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  pin    String?
+}
+
+model Badge {
+  id             String            @id @default(cuid())
+  name           String
+  pinName        String?
+  points         Int
+  isActive       Boolean           @default(false)
+  description_en String
+  description_de String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  users          UserBadge[]
+  attractions    BadgeAttraction[] // Many-to-many relationship with Attraction through BadgeAttraction
+}
+
+model BadgeAttraction {
+  badgeId      String
+  attractionId String
+  badge        Badge      @relation(fields: [badgeId], references: [id])
+  attraction   Attraction @relation(fields: [attractionId], references: [id])
+
+  @@id([badgeId, attractionId]) // Composite primary key
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeId   String
+  user      User     @relation(fields: [userId], references: [id])
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
 }
 
 model CheckIn {
   id           String      @id @default(cuid())
   userId       String
-  attractionId String? // Changed to nullable
+  attractionId String? // Nullable to allow check-ins without specific attraction
   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   attraction   Attraction? @relation(fields: [attractionId], references: [id], onDelete: SetNull)
   createdAt    DateTime    @default(now())
@@ -105,7 +142,7 @@ enum TransactionType {
 model Transaction {
   id        String          @id @default(cuid())
   userId    String
-  rewardId  String? // Make this field nullable
+  rewardId  String? // Nullable to allow transactions without specific reward
   points    Int
   details   String
   user      User            @relation(fields: [userId], references: [id])
@@ -116,39 +153,15 @@ model Transaction {
   @@unique([userId, rewardId])
 }
 
-model Badge {
-  id            String      @id @default(cuid())
-  name          String
-  description   Json
-  points        Int
-  attractionIds String[]
-  meta          Json
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  users         UserBadge[]
-}
-
-model UserBadge {
-  id        String   @id @default(cuid())
-  userId    String
-  badgeId   String
-  user      User     @relation(fields: [userId], references: [id])
-  badge     Badge    @relation(fields: [badgeId], references: [id])
-  createdAt DateTime @default(now())
-
-  @@unique([userId, badgeId])
-}
-
 model HideAndSeek {
   id               String            @id @default(cuid())
-  name             String?
-  description      String?
   endDate          DateTime
   points           Int
-  attractionId     String? // Changed to nullable
+  attractionId     String? // Nullable to allow hide-and-seek without specific attraction
   active           Boolean           @default(true)
-  attraction       Attraction?       @relation(fields: [attractionId], references: [id], onDelete: Cascade) // Added onDelete: SetNull
-  meta             Json
+  attraction       Attraction?       @relation(fields: [attractionId], references: [id], onDelete: Cascade)
+  description_en   String
+  description_de   String
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   userHideAndSeeks UserHideAndSeek[]

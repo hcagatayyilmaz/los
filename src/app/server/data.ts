@@ -1,6 +1,7 @@
 "use server"
 import {KindeUser} from "@kinde-oss/kinde-auth-nextjs/types"
 import {PrismaClient} from "@prisma/client"
+import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 
 const prisma = new PrismaClient()
 
@@ -129,6 +130,50 @@ export async function getHideAndSeek() {
             attraction: true
         }
     })
-    console.log("Hide and Seek:", hideAndSeek)
     return hideAndSeek
+}
+
+export async function getBadge() {
+    try {
+        const badges = await prisma.badge.findFirst({
+            where: {
+                isActive: true
+            },
+            include: {
+                attractions: {
+                    include: {
+                        attraction: true // Include attraction details, but no check-ins or user-based data
+                    }
+                }
+            }
+        })
+
+        return badges
+    } catch (error) {
+        console.error("Error fetching active badges:", error)
+        throw new Error("Could not fetch active badges")
+    }
+}
+
+export async function getBadgeStatus(attractionIds: string[]) {
+    const {getUser} = await getKindeServerSession()
+    const user = await getUser()
+
+    if (!user) {
+        throw new Error("User not authenticated")
+    }
+
+    const checkedIn = await prisma.checkIn.findMany({
+        where: {
+            userId: user.id,
+            attractionId: {
+                in: attractionIds
+            }
+        },
+        select: {
+            attractionId: true
+        }
+    })
+
+    return checkedIn.map((checkIn) => checkIn.attractionId)
 }

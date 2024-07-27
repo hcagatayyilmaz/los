@@ -9,7 +9,7 @@ const museumModerno = MuseoModerno({
 const PopQuiz = ({quiz}: {quiz: any}) => {
     return (
         <>
-            <div className='px-6'>
+            <div className='mt-2 pt-1 px-6 bg-pink-100'>
                 <div className='flex justify-between items-center mt-4'>
                     <h1
                         className={`font-bold text-xl ${museumModerno.className} break-words whitespace-normal`}
@@ -24,13 +24,13 @@ const PopQuiz = ({quiz}: {quiz: any}) => {
                     </span>
                 </div>
 
-                <p className={`my-1 text-sm ${museumModerno.className}`}>
+                <p className={`pt-1 text-sm ${museumModerno.className}`}>
                     Learn more about your city with daily quizzes.
                 </p>
             </div>
-            <div className='bg-pink-100 p-4 rounded-md flex flex-col items-center shadow-lg'>
+            <div className='bg-pink-100 px-4 py-2 rounded-md flex flex-col items-center shadow-lg'>
                 <div className='bg-pink-100 px-10 rounded-md w-full max-w-md'>
-                    <p className='text-black text-center mb-4'>
+                    <p className={`text-black text-center mb-4 ${museumModerno.className}`}>
                         {quiz?.meta?.question || "No question available"}
                     </p>
                 </div>

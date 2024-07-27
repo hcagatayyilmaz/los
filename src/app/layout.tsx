@@ -11,8 +11,8 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-    title: "Los - Gamified Travel with Rewards!",
-    description: "Los - Gamified Travel with Rewards!"
+    title: "Los - Gamified Experiences with Rewards!",
+    description: "Los - Experiences Travel with Rewards!"
 }
 
 export default function RootLayout({

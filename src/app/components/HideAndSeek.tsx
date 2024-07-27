@@ -15,7 +15,6 @@ type HideAndSeekProps = {
 }
 
 const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
-    console.log("Quest:", quest)
     const [message, setMessage] = useState<string | null>(null)
     const {userLocation} = useUserLocation()
     const [isMapVisible, setIsMapVisible] = useState(false) // State for map visibility
@@ -72,7 +71,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
                         <h2 className={`text-lg font-semibold px-2 ${museumModerno.className} `}>
                             Hint
                         </h2>
-                        <p className='text-gray-800 text-sm px-2'>{quest.meta.description.en}</p>
+                        <p className='text-gray-800 text-sm px-2'>{quest.description_en}</p>
                         <button
                             className={`text-customYellow py-2 px-2 rounded-xl transition duration-200 w-full  ${museumModerno.className}`}
                             onClick={() => setIsMapVisible(!isMapVisible)}
