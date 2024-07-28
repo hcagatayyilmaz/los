@@ -44,6 +44,7 @@ const AddLocation: React.FC = () => {
         }
         try {
             const res = await addLocation({
+                name: title,
                 description,
                 taxonomy,
                 latitude: selectedLocation.lat,
