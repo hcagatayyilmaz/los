@@ -6,7 +6,8 @@ export type Location = {
     points: number
     taxonomy?: string | null
     imageUrl: string | null
-    meta: any
+    description_en?: string | null
+    description_de?: string | null
     isActive: boolean
     endDate: Date | null
     startDate: Date | null

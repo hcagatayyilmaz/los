@@ -32,10 +32,8 @@ const RewardsPage = async () => {
                     </div>
                 </Link>
             </div>
-            <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
-                Rewards
-            </h1>
-            <p className={`px-6 mb-2 ${museumModerno.className}`}>
+
+            <p className={`px-6 mb-2 ${museumModerno.className} `}>
                 Use your points to get free experiences in your city! If there is no reward in
                 market, use and support us to reach more rewards!
             </p>

@@ -21,17 +21,13 @@ function Badge({data}: {data: any}) {
             <div className='flex gap-4'>
                 {data.attractions.map((attraction: any, index: number) => (
                     <div key={index} className='w-1/3 flex flex-col items-center'>
-                        <div className={`flex flex-col items-center flex-1 `}>
-                            <div className='relative w-full'>
-                                <Image
-                                    src='/tree.png'
-                                    alt='Holderlin Image'
-                                    layout='responsive'
-                                    width={16}
-                                    height={9}
-                                    objectFit='contain'
-                                />
-                            </div>
+                        <div className='relative h-[120px] w-full'>
+                            <Image
+                                src={data.pinName || "/default-image.png"}
+                                alt={attraction.name}
+                                layout='fill'
+                                objectFit='cover'
+                            />
                         </div>
                         <div className={`text-center text-xs mt-2 ${museoModerno.className}`}>
                             {attraction.attraction.name}

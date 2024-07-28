@@ -28,9 +28,7 @@ export const ItemCard = ({location}: ItemCardProps) => {
                         <CoinIcon className='w-5 h-5 mr-1' />
                         <span className='font-semibold'>{location.points}</span>
                     </div> */}
-                    <p className='text-gray-500 text-xs text-wrap'>
-                        {location.meta.description.de}
-                    </p>
+                    <p className='text-gray-500 text-xs text-wrap'>{location.description_en}</p>
                 </div>
             </div>
             <div className='w-full mt-4'>

@@ -32,24 +32,25 @@ enum AttractionTaxonomy {
 }
 
 model Attraction {
-  id           String              @id @default(cuid())
-  taxonomy     AttractionTaxonomy?
-  name         String
-  latitude     Float
-  longitude    Float
-  points       Int
-  cityId       String
-  imageUrl     String?
-  meta         Json?
-  isActive     Boolean             @default(true)
-  isTheme      Boolean?
-  endDate      DateTime?
-  startDate    DateTime?
-  label        String?
-  city         City                @relation(fields: [cityId], references: [id])
-  checkIns     CheckIn[]
-  hideAndSeeks HideAndSeek[]
-  badges       BadgeAttraction[]
+  id             String              @id @default(cuid())
+  taxonomy       AttractionTaxonomy?
+  name           String
+  latitude       Float
+  longitude      Float
+  points         Int
+  cityId         String
+  imageUrl       String?
+  description_en String?
+  description_de String?
+  isActive       Boolean             @default(true)
+  isTheme        Boolean?
+  endDate        DateTime?
+  startDate      DateTime?
+  label          String?
+  city           City                @relation(fields: [cityId], references: [id])
+  checkIns       CheckIn[]
+  hideAndSeeks   HideAndSeek[]
+  badges         BadgeAttraction[]
 
   userId String?
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
