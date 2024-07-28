@@ -96,6 +96,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
             </SelectedItemProvider>
         )
     } catch (error) {
+        console.error(error)
         return (
             <main className='h-dvh w-screen flex items-center justify-center'>
                 <h1 className='text-4xl'>An error occurred</h1>

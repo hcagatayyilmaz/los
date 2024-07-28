@@ -76,7 +76,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                     locationLatLng
                 )
 
-                newDistances[location.name] = distance
+                newDistances[location.name_en] = distance
 
                 if (distance < closestDistance) {
                     closest = location

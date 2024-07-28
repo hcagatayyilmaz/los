@@ -2,7 +2,8 @@ export type Location = {
     id: string
     latitude: number
     longitude: number
-    name: string
+    name_en: string
+    name_de: string
     points: number
     taxonomy?: string | null
     imageUrl: string | null

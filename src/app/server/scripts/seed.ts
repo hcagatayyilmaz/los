@@ -1,5 +1,3 @@
-import {AttractionTaxonomy} from "@prisma/client"
-
 const {PrismaClient} = require("@prisma/client")
 const fs = require("fs")
 const {parse} = require("csv-parse")
@@ -11,7 +9,8 @@ async function loadAttractions() {
         .pipe(parse({delimiter: ",", from_line: 2}))
         .on("data", async (row: any) => {
             const [
-                name,
+                name_en,
+                name_de,
                 latitude,
                 longitude,
                 points,
@@ -20,14 +19,25 @@ async function loadAttractions() {
                 description_de,
                 isActive
             ] = row
-
+            console.log("Row:", row)
+            console.log(latitude, typeof latitude)
             // Validate and parse numerical values
             const lat = parseFloat(latitude)
             const lng = parseFloat(longitude)
             const pts = parseInt(points, 10)
             const active = isActive === "TRUE"
 
-            if (isNaN(lat) || isNaN(lng) || isNaN(pts)) {
+            // Limit the precision to six decimal places and convert back to number
+            const latFixed = parseFloat(lat.toFixed(6))
+            const lngFixed = parseFloat(lng.toFixed(6))
+
+            // Logging the parsed values
+            console.log("Parsed values:", {latFixed, lngFixed, pts, active})
+
+            if (isNaN(latFixed) || isNaN(lngFixed) || isNaN(pts)) {
+                console.log("Latitude is NaN:", isNaN(latFixed))
+                console.log("Longitude is NaN:", isNaN(lngFixed))
+                console.log("Points is NaN:", isNaN(pts))
                 console.error("Invalid numerical data:", row)
                 return
             }
@@ -35,9 +45,10 @@ async function loadAttractions() {
             try {
                 await prisma.attraction.create({
                     data: {
-                        name,
-                        latitude: lat,
-                        longitude: lng,
+                        name_en,
+                        name_de,
+                        latitude: latFixed,
+                        longitude: lngFixed,
                         points: pts,
                         city: {
                             connect: {id: cityId} // Ensure this ID exists in the City table
@@ -45,7 +56,7 @@ async function loadAttractions() {
                         description_en,
                         description_de,
                         isActive: active,
-                        taxonomy: "ATTRACTION" as AttractionTaxonomy
+                        taxonomy: "ATTRACTION"
                     }
                 })
             } catch (error) {

@@ -27,9 +27,9 @@ export const ItemPin: React.FC<{location: Location}> = ({location}) => {
 
     if (location.pin !== null) {
         return (
-            <div className='relative w-8 h-8'>
+            <div className='relative w-12 h-12'>
                 <Image
-                    src={`/${location.pin}.png`}
+                    src={`/${location.pin}`}
                     alt='Location Pin'
                     fill
                     objectFit='contain'

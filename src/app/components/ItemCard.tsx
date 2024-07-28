@@ -23,7 +23,7 @@ export const ItemCard = ({location}: ItemCardProps) => {
                     )}
                 </div>
                 <div className='w-2/3 pl-4'>
-                    <h2 className='text-md font-bold text-wrap'>{location.name}</h2>
+                    <h2 className='text-md font-bold text-wrap'>{location.name_en}</h2>
                     {/* <div className='flex items-center text-pink-500 my-2'>
                         <CoinIcon className='w-5 h-5 mr-1' />
                         <span className='font-semibold'>{location.points}</span>
