@@ -52,7 +52,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
 
         if (!city) {
             return (
-                <main className='h-dvh w-screen flex items-center justify-center'>
+                <main className='h-screen w-screen flex items-center justify-center'>
                     <h1 className='text-4xl'>City not found</h1>
                 </main>
             )
@@ -70,9 +70,9 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
 
         return (
             <SelectedItemProvider initialLocation={attractions[0]}>
-                <main className='h-dvh w-screen relative'>
-                    <div className='absolute top-0 left-0 h-full w-full pointer-events-none'>
-                        <div className='h-full w-full pointer-events-auto '>
+                <main className='h-dvh w-full max-w-md mx-auto relative'>
+                    <div className='absolute inset-0 pointer-events-none'>
+                        <div className='h-full w-full pointer-events-auto'>
                             <Map locations={attractions} />
                         </div>
                     </div>
@@ -83,12 +83,8 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                         <Banner />
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
-                        <div className='flex mx-4 mb-1 justify-between '>
-                            {user ? (
-                                <TotalPoints points={user.points} />
-                            ) : (
-                                <TotalPoints points={0} />
-                            )}
+                        <div className='flex mx-4 mb-1 justify-between items-center'>
+                            <TotalPoints points={user ? user.points : 0} />
                             <div className='flex gap-1'>
                                 <ClosestPlace locations={attractions} />
                                 <LocationPermissionButton />
@@ -101,7 +97,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
         )
     } catch (error) {
         return (
-            <main className='h-screen w-screen flex items-center justify-center'>
+            <main className='h-dvh w-screen flex items-center justify-center'>
                 <h1 className='text-4xl'>An error occurred</h1>
             </main>
         )
