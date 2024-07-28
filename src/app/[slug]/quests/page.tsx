@@ -1,14 +1,16 @@
 import React from "react"
 
 import HideAndSeek from "@/app/components/HideAndSeek"
-import ObtainBadge from "@/app/components/ObtainBadge"
+
 import PopQuiz from "@/app/components/PopQuiz"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
 import {getPopQuiz, getHideAndSeek, getBadge} from "../../server/data"
 import AddLocation from "../../components/AddLocation"
-import Theme from "../../components/Theme"
+
+import Badge from "../../components/Badge"
+import StreakParent from "../../components/StreakParent"
 
 type QuestsPageParams = {
     params: {
@@ -44,19 +46,25 @@ async function QuestsPage({params}: QuestsPageParams) {
                 </Link>
             </div>
 
-            <div>
-                {/* THEME COMPONENT */}
-                <Theme badge={badge} />
-                {/* THEME COMPONENT */}
+            <div className='px-6 mt-6'>
+                <p className={`my-1 text-sm ${museumModerno.className} mb-1`}>
+                    Complete the get points and rewards. Choose any quest to start.
+                </p>
+            </div>
 
+            <div>
+                {/* BADGE COMPONENT */}
+                <Badge data={badge} /> {/* Pass badge as data */}
+                {/* BADGE COMPONENT */}
+                {/* STREAK COMPONENT */}
+                {/* <StreakParent /> */}
+                {/* STREAK COMPONENT */}
                 {/* POP QUIZ COMPONENT */}
                 {quiz && <PopQuiz quiz={quiz} />}
                 {/* POP QUIZ COMPONENT */}
-
                 {/* HIDE & SEEK COMPONENT */}
                 {hideAndSeek && <HideAndSeek quest={hideAndSeek} />}
                 {/* HIDE & SEEK COMPONENT */}
-
                 {/* ADD PLACE COMPONENT */}
                 <AddLocation />
                 {/* ADD PLACE COMPONENT */}

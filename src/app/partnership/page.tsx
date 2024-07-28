@@ -3,7 +3,6 @@ import Link from "next/link"
 import React, {useState} from "react"
 import Image from "next/image"
 import {MuseoModerno} from "next/font/google"
-import {useKindeBrowserClient} from "@kinde-oss/kinde-auth-nextjs"
 import {useRouter} from "next/navigation"
 import {applyForPartnership} from "@/app/server/index"
 import {toast} from "react-hot-toast"
@@ -19,6 +18,9 @@ const Partnership: React.FC = () => {
     const [description, setDescription] = useState("")
     const [amount, setAmount] = useState("")
     const [language, setLanguage] = useState("EN")
+    const [showForm, setShowForm] = useState(false)
+    const [showAskForm, setShowAskForm] = useState(false)
+    const [askEmail, setAskEmail] = useState("")
     const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -50,6 +52,13 @@ const Partnership: React.FC = () => {
         }
     }
 
+    const handleAskSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        // Logic for handling Ask for Partnership form submission
+        console.log("Ask for partnership email:", askEmail)
+        // Add your submission logic here
+    }
+
     return (
         <div className={`h-screen w-screen flex flex-col items-center ${museoModerno.className}`}>
             <div className='w-full max-w-md px-4 bg-white flex justify-between border-b border-black'>
@@ -67,7 +76,7 @@ const Partnership: React.FC = () => {
                 </div>
                 <div className='flex items-center gap-2'>
                     <Link href={"/partnership"}>
-                        <button className='bg-black text-white px-2 rounded'>Partnership</button>
+                        <button className='bg-black text-white px-2 rounded'>Partner Login</button>
                     </Link>
                     <button className='text-sm font-medium text-gray-700 focus:outline-none'>
                         {language === "EN" ? "EN | DE" : "DE | EN"}
@@ -85,75 +94,125 @@ const Partnership: React.FC = () => {
                 </p>
             </div>
 
-            <div className='w-full h-full'>
-                <form
-                    onSubmit={handleSubmit}
-                    className='bg-white p-4 rounded shadow-md max-w-md w-full flex h-full flex-col justify-between flex-grow'
+            <div className='flex space-x-4 mt-4'>
+                <button
+                    className='bg-black text-white py-2 px-4 rounded'
+                    onClick={() => setShowAskForm(!showAskForm)}
                 >
-                    <div className='mb-4'>
-                        <label className='block text-sm font-medium text-gray-700'>
-                            Your email address
-                        </label>
-                        <input
-                            type='text'
-                            value={email}
-                            placeholder='E.g. example@example.com'
-                            onChange={(e) => setEmail(e.target.value)}
-                            className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow sm:text-sm'
-                            required
-                        />
-                    </div>
-                    <div className='mb-4'>
-                        <label className='block text-sm font-medium text-gray-700'>
-                            Name of your place
-                        </label>
-                        <input
-                            type='text'
-                            value={placeName}
-                            placeholder='E.g. Gallery of Cool Experiences'
-                            onChange={(e) => setPlaceName(e.target.value)}
-                            className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow sm:text-sm'
-                            required
-                        />
-                    </div>
+                    {"Apply for Partnership"}
+                </button>
+                <button
+                    className='bg-black text-white py-2 px-4 rounded'
+                    onClick={() => setShowForm(!showForm)}
+                >
+                    {"Offer Rewards"}
+                </button>
+            </div>
 
-                    <div className='mb-4'>
-                        <label className='block text-sm font-medium text-gray-700'>
-                            Description of the rewards
-                        </label>
-                        <textarea
-                            value={description}
-                            placeholder='E.g. Free entry for Los members or free drink for every 5 visits'
-                            onChange={(e) => setDescription(e.target.value)}
-                            className='mt-1 block w-full h-[20vh] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow sm:text-sm'
-                            rows={3}
-                            required
-                        />
-                    </div>
-
-                    <div className='flex space-x-4 mb-4'>
-                        <div className='flex-grow'>
+            {showForm && (
+                <div className='w-full h-full'>
+                    <form
+                        onSubmit={handleSubmit}
+                        className='bg-white p-4 rounded shadow-md max-w-md w-full flex h-full flex-col justify-between flex-grow'
+                    >
+                        <div className='mb-4'>
                             <label className='block text-sm font-medium text-gray-700'>
-                                Amount
+                                Your email address
                             </label>
                             <input
                                 type='text'
-                                placeholder='E.g. 3'
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
+                                value={email}
+                                placeholder='E.g. example@example.com'
+                                onChange={(e) => setEmail(e.target.value)}
                                 className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow sm:text-sm'
                                 required
                             />
                         </div>
-                    </div>
-                    <button
-                        type='submit'
-                        className='bg-black text-white py-2 px-4 rounded transition duration-200 w-full'
+                        <div className='mb-4'>
+                            <label className='block text-sm font-medium text-gray-700'>
+                                Name of your place
+                            </label>
+                            <input
+                                type='text'
+                                value={placeName}
+                                placeholder='E.g. Gallery of Cool Experiences'
+                                onChange={(e) => setPlaceName(e.target.value)}
+                                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow sm:text-sm'
+                                required
+                            />
+                        </div>
+
+                        <div className='mb-4'>
+                            <label className='block text-sm font-medium text-gray-700'>
+                                Description of the rewards
+                            </label>
+                            <textarea
+                                value={description}
+                                placeholder='E.g. Free entry for Los members or free drink for every 5 visits'
+                                onChange={(e) => setDescription(e.target.value)}
+                                className='mt-1 block w-full h-[20vh] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow sm:text-sm'
+                                rows={3}
+                                required
+                            />
+                        </div>
+
+                        <div className='flex space-x-4 mb-4'>
+                            <div className='flex-grow'>
+                                <label className='block text-sm font-medium text-gray-700'>
+                                    Amount
+                                </label>
+                                <input
+                                    type='text'
+                                    placeholder='E.g. 3'
+                                    value={amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow sm:text-sm'
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <button
+                            type='submit'
+                            className='bg-black text-white py-2 px-4 rounded transition duration-200 w-full'
+                        >
+                            Submit
+                        </button>
+                    </form>
+                </div>
+            )}
+
+            {showAskForm && (
+                <div className='w-full h-full mt-4'>
+                    <form
+                        onSubmit={handleAskSubmit}
+                        className='bg-white p-4 rounded shadow-md max-w-md w-full flex flex-col'
                     >
-                        Submit
-                    </button>
-                </form>
-            </div>
+                        <div className='mb-4'>
+                            <p className='my-2'>
+                                As a Los partner, you can start listing your events on Los and reach
+                                new people.
+                            </p>
+                            <label className='block text-sm font-medium text-gray-700 mt-6'>
+                                Your email address
+                            </label>
+                            <input
+                                type='text'
+                                value={askEmail}
+                                placeholder='E.g. example@example.com'
+                                onChange={(e) => setAskEmail(e.target.value)}
+                                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-customYellow focus:border-customYellow sm:text-sm'
+                                required
+                            />
+                        </div>
+                        <button
+                            type='submit'
+                            className='bg-black text-white py-2 px-4 rounded transition duration-200 w-full'
+                        >
+                            Submit
+                        </button>
+                    </form>
+                </div>
+            )}
         </div>
     )
 }

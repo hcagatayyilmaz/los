@@ -62,7 +62,7 @@ export async function checkIn({
     }
 }
 
-export async function obtainBadge({badgeId}: {badgeId: string}) {
+export async function obtainBadge(badgeId: string) {
     "use server"
 
     const {getUser} = await getKindeServerSession()
