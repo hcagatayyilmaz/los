@@ -1,3 +1,5 @@
+import {AttractionTaxonomy} from "@prisma/client"
+
 const {PrismaClient} = require("@prisma/client")
 const fs = require("fs")
 const {parse} = require("csv-parse")
@@ -8,7 +10,16 @@ async function loadAttractions() {
     fs.createReadStream("src/app/server/scripts/seed.csv")
         .pipe(parse({delimiter: ",", from_line: 2}))
         .on("data", async (row: any) => {
-            const [taxonomy, name, latitude, longitude, points, cityId, meta, isActive] = row
+            const [
+                name,
+                latitude,
+                longitude,
+                points,
+                cityId,
+                description_en,
+                description_de,
+                isActive
+            ] = row
 
             // Validate and parse numerical values
             const lat = parseFloat(latitude)
@@ -24,16 +35,17 @@ async function loadAttractions() {
             try {
                 await prisma.attraction.create({
                     data: {
-                        taxonomy,
                         name,
                         latitude: lat,
                         longitude: lng,
                         points: pts,
                         city: {
-                            connect: {id: cityId} // Assuming cityId corresponds to the City model's primary key
+                            connect: {id: cityId} // Ensure this ID exists in the City table
                         },
-                        meta: JSON.parse(meta.replace(/""/g, '"')),
-                        isActive: active
+                        description_en,
+                        description_de,
+                        isActive: active,
+                        taxonomy: "ATTRACTION" as AttractionTaxonomy
                     }
                 })
             } catch (error) {
