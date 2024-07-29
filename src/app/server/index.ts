@@ -331,12 +331,14 @@ export async function addLocation({
     taxonomy,
     latitude,
     longitude,
+    address,
     name
 }: {
     description: string
     taxonomy: "ATTRACTION" | "EVENT" | "EXPERIENCE"
     latitude: number
     longitude: number
+    address: string | null
     name: string
 }) {
     "use server"
@@ -350,15 +352,18 @@ export async function addLocation({
 
     const location = await prisma.attraction.create({
         data: {
-            name_en: description,
-            name_de: description,
-            latitude,
-            longitude,
+            name_en: name,
+            name_de: name,
+            description_en: description,
+            description_de: description,
+            latitude: latitude,
+            longitude: longitude,
+            address,
             taxonomy,
             userId: user.id,
             isActive: false,
             points: 0,
-            cityId: "clyxbvyuf0000tilmjxuheabw"
+            cityId: "clz627elo0000mybntk1bb38g"
         }
     })
 

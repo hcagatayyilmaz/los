@@ -38,17 +38,15 @@ const AddLocation: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setMessage(null)
-        if (!selectedLocation || !description) {
-            setMessage("Please describe the place and select its location on the map.")
-            return
-        }
+
         try {
             const res = await addLocation({
                 name: title,
                 description,
                 taxonomy,
-                latitude: selectedLocation.lat,
-                longitude: selectedLocation.lng
+                address,
+                latitude: selectedLocation ? selectedLocation.lat : 0,
+                longitude: selectedLocation ? selectedLocation.lng : 0
             })
             setMessage(res.message)
         } catch (error: any) {

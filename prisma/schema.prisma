@@ -39,6 +39,7 @@ model Attraction {
   name_de        String
   latitude       Float
   longitude      Float
+  address        String?
   points         Int
   cityId         String
   imageUrl       String?
