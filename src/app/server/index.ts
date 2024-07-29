@@ -350,7 +350,8 @@ export async function addLocation({
 
     const location = await prisma.attraction.create({
         data: {
-            name: description,
+            name_en: description,
+            name_de: description,
             latitude,
             longitude,
             taxonomy,
