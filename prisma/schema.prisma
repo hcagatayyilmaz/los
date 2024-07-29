@@ -29,6 +29,7 @@ enum AttractionTaxonomy {
   EVENT
   EXPERIENCE
   REWARD
+  TRIVIA
 }
 
 model Attraction {
