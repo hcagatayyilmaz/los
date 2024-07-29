@@ -17,7 +17,9 @@ function Badge({data}: {data: any}) {
 
     return (
         <div className='w-full flex flex-col gap-4'>
-            <h1 className={`px-6 mt-2 text-xl font-bold ${museoModerno.className}`}>{data.name}</h1>
+            <h1 className={`px-6 mt-2 text-xl font-bold ${museoModerno.className}`}>
+                {data.name_en}
+            </h1>
             <div className='flex gap-4'>
                 {data.attractions.map((attraction: any, index: number) => (
                     <div key={index} className='w-1/3 flex flex-col items-center'>

@@ -54,7 +54,7 @@ async function QuestsPage({params}: QuestsPageParams) {
 
             <div>
                 {/* BADGE COMPONENT */}
-                <Badge data={badge} /> {/* Pass badge as data */}
+                {badge && <Badge data={badge} />}
                 {/* BADGE COMPONENT */}
                 {/* STREAK COMPONENT */}
                 {/* <StreakParent /> */}
