@@ -33,7 +33,7 @@ export async function checkIn({
     }
 
     const distance = await calculateDistance3(userLat, userLng, place.latitude, place.longitude)
-    if (distance <= 25) {
+    if (distance <= 20) {
         // 25 meters threshold
         const checkIn = await prisma.checkIn.create({
             data: {
