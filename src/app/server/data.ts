@@ -16,6 +16,9 @@ export async function getAllRewards() {
 
 export async function getAttractions(cityId: string, filter: any) {
     "use server"
+
+    const {getUser} = await getKindeServerSession()
+    const user = await getUser()
     const now = new Date()
 
     const whereClause: any = {
@@ -57,9 +60,34 @@ export async function getAttractions(cityId: string, filter: any) {
         ]
     }
 
-    const attractions = await prisma.attraction.findMany({
+    let attractions = await prisma.attraction.findMany({
         where: whereClause
     })
+
+    if (user) {
+        // Fetch all check-ins for the current user
+        const checkIns = await prisma.checkIn.findMany({
+            where: {
+                userId: user.id,
+                attractionId: {in: attractions.map((attr) => attr.id)}
+            },
+            select: {attractionId: true}
+        })
+
+        const checkedInAttractionIds = new Set(checkIns.map((checkIn) => checkIn.attractionId))
+
+        // Add checkedIn flag to each attraction
+        attractions = attractions.map((attraction) => ({
+            ...attraction,
+            checkedIn: checkedInAttractionIds.has(attraction.id)
+        }))
+    } else {
+        // If no user, set checkedIn to false for all attractions
+        attractions = attractions.map((attraction) => ({
+            ...attraction,
+            checkedIn: false
+        }))
+    }
 
     console.log("Attractions:", attractions)
 

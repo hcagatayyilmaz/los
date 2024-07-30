@@ -39,6 +39,16 @@ export const ItemPin: React.FC<{location: Location}> = ({location}) => {
         )
     }
 
+    if (location.checkedIn === true) {
+        return (
+            <div className='relative w-6 h-6'>
+                <div
+                    className={`absolute w-6 h-6 rounded-full border-4 border-black bg-green-400`}
+                ></div>
+            </div>
+        )
+    }
+
     let bgColor = ""
 
     switch (location.taxonomy) {
