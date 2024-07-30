@@ -10,7 +10,10 @@ export const LiveLocationPin = () => (
     </div>
 )
 
-export const ItemPin: React.FC<{location: Location}> = ({location}) => {
+export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
+    location,
+    isSelected
+}) => {
     if (location.isTheme) {
         return (
             <div className='relative w-10 h-10'>
@@ -18,7 +21,7 @@ export const ItemPin: React.FC<{location: Location}> = ({location}) => {
                     src='/holderlin.png'
                     alt='Theme Pin'
                     fill
-                    objectFit='contain' // This maintains the aspect ratio
+                    objectFit='contain'
                     className='absolute'
                 />
             </div>
@@ -69,6 +72,10 @@ export const ItemPin: React.FC<{location: Location}> = ({location}) => {
             break
         default:
             bgColor = "#FFFFFF" // default color if type is not recognized
+    }
+
+    if (isSelected) {
+        bgColor = "#FF1493" // pink color for selected pin
     }
 
     return (

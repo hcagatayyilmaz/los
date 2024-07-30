@@ -1,4 +1,5 @@
 "use client"
+
 import React, {useState, useEffect, useMemo, useCallback} from "react"
 import {GoogleMap, useLoadScript, OverlayView, Libraries} from "@react-google-maps/api"
 import {useUserLocation} from "../providers/useUserLocation"
@@ -16,7 +17,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     })
 
     const {userLocation} = useUserLocation()
-    const {setSelectedLocation} = useSelectedItem()
+    const {setSelectedLocation, selectedLocation} = useSelectedItem()
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [distances, setDistances] = useState<Record<string, number>>({})
 
@@ -88,6 +89,13 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         }
     }, [userLocation, map, locations])
 
+    useEffect(() => {
+        if (selectedLocation && map) {
+            const {latitude, longitude} = selectedLocation
+            map.panTo({lat: latitude, lng: longitude})
+        }
+    }, [selectedLocation, map])
+
     if (loadError) return <div>Error loading maps</div>
     if (!isLoaded) return <div>Loading maps</div>
 
@@ -116,7 +124,10 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                     mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                 >
                     <div onClick={() => setSelectedLocation(location)}>
-                        <ItemPin location={location} />
+                        <ItemPin
+                            location={location}
+                            isSelected={selectedLocation?.id === location.id}
+                        />
                     </div>
                 </OverlayView>
             ))}
