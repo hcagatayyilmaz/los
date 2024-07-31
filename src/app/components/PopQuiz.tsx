@@ -14,7 +14,7 @@ const PopQuiz = ({quiz}: {quiz: any}) => {
                     <h1
                         className={`font-bold text-xl ${museumModerno.className} break-words whitespace-normal`}
                     >
-                        Question of the day
+                        Pop Quiz
                     </h1>
                     <span className='inline-block'>
                         <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
@@ -25,7 +25,7 @@ const PopQuiz = ({quiz}: {quiz: any}) => {
                 </div>
 
                 <p className={`pt-1 text-sm ${museumModerno.className}`}>
-                    Learn more about your city with daily quizzes.
+                    Easy points while learning cool things about the Tübingen.
                 </p>
             </div>
             <div className='bg-pink-100 px-4 py-2 rounded-md flex flex-col items-center shadow-lg'>

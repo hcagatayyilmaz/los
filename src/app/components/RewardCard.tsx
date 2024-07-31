@@ -33,7 +33,7 @@ export const RewardCard = ({reward}: any) => {
             <div className='flex'>
                 <div className='w-full px-2'>
                     <div className='flex items-center justify-between mb-2'>
-                        <h2 className='text-md font-bold text-wrap'>{reward.name}</h2>
+                        <h2 className='text-md font-bold text-wrap'>{reward.name_en}</h2>
                         <div className='flex items-center'>
                             <div className='relative flex items-center justify-center  text-customYellow text-md font-bold py-1 px-2 rounded-full'>
                                 <span className='flex items-center justify-center'>
@@ -43,10 +43,7 @@ export const RewardCard = ({reward}: any) => {
                             </div>
                         </div>
                     </div>
-                    <p className='text-gray-500 text-xs text-wrap'>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni ad aliquid
-                        voluptas.
-                    </p>
+                    <p className='text-gray-500 text-xs text-wrap'>{reward.description_en}</p>
                 </div>
             </div>
             <div className='w-full my-2 flex flex-col items-end gap-1'>

@@ -114,15 +114,18 @@ model City {
 }
 
 model Reward {
-  id           String        @id @default(cuid())
-  name         String
-  points       Int
-  meta         Json
-  available    Boolean       @default(true)
-  transactions Transaction[]
-  startAt      DateTime?
-  endAt        DateTime?
-  userRewards  UserReward[]
+  id             String        @id @default(cuid())
+  name_en        String
+  name_de        String
+  points         Int
+  description_en String?
+  description_de String?
+  available      Boolean       @default(true)
+  numberOfUses   Int
+  transactions   Transaction[]
+  startAt        DateTime?
+  endAt          DateTime?
+  userRewards    UserReward[]
 }
 
 model UserReward {
