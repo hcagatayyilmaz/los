@@ -31,7 +31,20 @@ export const ItemCard = ({location}: ItemCardProps) => {
                     <p className='text-gray-500 text-xs text-wrap'>{location.description_en}</p>
                 </div>
             </div>
-            <div className='w-full mt-4'>
+            <div className='px-4 flex justify-between mt-4'>
+                <div className='flex items-center gap-1'>
+                    <span className='text-sm text-gray-800 '>Added by</span>
+                    <Image
+                        src='/favicon.png' // replace with your avatar path
+                        alt='Avatar'
+                        width={16} // w-4 in Tailwind CSS is equivalent to 16px
+                        height={16} // h-4 in Tailwind CSS is equivalent to 16px
+                        className='rounded-full'
+                    />
+                </div>
+                <p className='text-xs text-gray-800'>1.4K check-in</p>
+            </div>
+            <div className='w-full mt-2'>
                 <ItemButtonGroup location={location} />
             </div>
         </div>

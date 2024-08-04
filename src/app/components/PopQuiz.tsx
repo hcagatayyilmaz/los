@@ -9,8 +9,8 @@ const museumModerno = MuseoModerno({
 const PopQuiz = ({quiz}: {quiz: any}) => {
     return (
         <>
-            <div className='mt-2 pt-1 px-6 bg-pink-100'>
-                <div className='flex justify-between items-center mt-4'>
+            <div className='mt-2 pt-1 px-6 '>
+                <div className='flex justify-between items-center mt-4 bg-white'>
                     <h1
                         className={`font-bold text-xl ${museumModerno.className} break-words whitespace-normal`}
                     >
@@ -24,7 +24,7 @@ const PopQuiz = ({quiz}: {quiz: any}) => {
                     </span>
                 </div>
 
-                <p className={`pt-1 text-sm ${museumModerno.className}`}>
+                <p className={`pt-1 text-sm ${museumModerno.className} `}>
                     Easy points while learning cool things about the Tübingen.
                 </p>
             </div>

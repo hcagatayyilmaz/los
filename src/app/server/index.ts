@@ -323,7 +323,7 @@ export async function redeemReward(rewardId: string) {
         data: {available: false}
     })
 
-    return {success: true, message: "Reward redeemed successfully!"}
+    return {success: true, message: "Reward obtained successfully!"}
 }
 
 export async function addLocation({

@@ -65,7 +65,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
                     Go and find what is hidden for this week. In 20 meters radius. Follow the hint!
                 </p>
             </div>
-            <div className='max-w-lg mx-auto'>
+            <div className='w-full mx-auto'>
                 <section className='mb-6'>
                     <div className='p-4 rounded-lg bg-pink-100'>
                         <h2 className={`text-lg font-semibold px-2 ${museumModerno.className} `}>

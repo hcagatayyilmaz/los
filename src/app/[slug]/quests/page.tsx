@@ -57,6 +57,8 @@ async function QuestsPage({params}: QuestsPageParams) {
                 {badge && <Badge data={badge} />}
                 {/* BADGE COMPONENT */}
                 {/* STREAK COMPONENT */}
+                <AddLocation />
+                {/* ADD PLACE COMPONENT */}
                 {/* <StreakParent /> */}
                 {/* STREAK COMPONENT */}
                 {/* POP QUIZ COMPONENT */}
@@ -65,8 +67,6 @@ async function QuestsPage({params}: QuestsPageParams) {
                 {/* HIDE & SEEK COMPONENT */}
                 {hideAndSeek && <HideAndSeek quest={hideAndSeek} />}
                 {/* HIDE & SEEK COMPONENT */}
-                {/* ADD PLACE COMPONENT */}
-                <AddLocation />
                 {/* ADD PLACE COMPONENT */}
             </div>
         </div>

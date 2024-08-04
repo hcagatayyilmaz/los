@@ -205,3 +205,14 @@ export async function getBadgeStatus(attractionIds: string[]) {
 
     return checkedIn.map((checkIn) => checkIn.attractionId)
 }
+
+export async function getRewardsById(rewardId: string) {
+    "use server"
+    const reward = await prisma.reward.findUnique({
+        where: {
+            id: rewardId
+        }
+    })
+
+    return reward
+}
