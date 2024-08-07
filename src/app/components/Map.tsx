@@ -36,15 +36,13 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         }
     }, [userLocation, locations])
 
-    const [center, setCenter] = useState(initialCenter)
-
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
             setMap(map)
 
             if (userLocation) {
                 map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
-                map.setZoom(17) // Set zoom level to show approximately 500 meters around the user location
+                map.setZoom(10) // Set zoom level to show approximately 500 meters around the user location
             } else {
                 const bounds = new window.google.maps.LatLngBounds()
                 locations.forEach((location) => {
@@ -71,7 +69,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     return (
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            center={center}
+            center={initialCenter}
             zoom={14}
             onLoad={onMapLoad}
             options={{

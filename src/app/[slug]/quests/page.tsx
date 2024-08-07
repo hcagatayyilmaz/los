@@ -11,6 +11,7 @@ import AddLocation from "../../components/AddLocation"
 
 import Badge from "../../components/Badge"
 import StreakParent from "../../components/StreakParent"
+import {RankingIcon} from "@/app/lib/CustomIcons"
 
 type QuestsPageParams = {
     params: {
@@ -51,6 +52,13 @@ async function QuestsPage({params}: QuestsPageParams) {
                     Choose any quests to earn points while having fun and experience more in your
                     city. Start ranking in the city to get some rewards!
                 </p>
+            </div>
+
+            <div className='flex item-center justify-center px-6'>
+                <div className='flex flex-col justify-center items-center'>
+                    <RankingIcon number={"?"} />
+                    <span>Your ranking in city!</span>
+                </div>
             </div>
 
             <div>

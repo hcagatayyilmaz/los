@@ -57,7 +57,7 @@ const AddLocation: React.FC = () => {
 
     return (
         <div className='px-4 w-full' id='add-new-place'>
-            <div className='flex justify-between items-center mt-4 w-full'>
+            <div className='flex justify-between items-center mt-6 w-full'>
                 <h1
                     className={`font-bold text-xl ${museumModerno.className} break-words whitespace-normal`}
                 >
@@ -71,10 +71,8 @@ const AddLocation: React.FC = () => {
                     </div>
                 </span>
             </div>
-            <p className={`${museumModerno.className}`}>
-                When people check in at the place you've added, you earn 1 point for each check-in.
-                It's a simple and smart way to rack up points quickly. A great investment
-                opportunity!
+            <p className={`${museumModerno.className} mt-2`}>
+                If people check in at the place you've added, you earn 1 point for each check-in.
             </p>
             <form
                 onSubmit={handleSubmit}
