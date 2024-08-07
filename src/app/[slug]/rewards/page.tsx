@@ -5,6 +5,7 @@ import RewardCard from "../../components/RewardCard"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
 import MyRewards from "../../components/MyRewards"
+import {RankingIcon} from "../../lib/CustomIcons"
 
 const museumModerno = MuseoModerno({
     subsets: ["latin"]
@@ -31,6 +32,13 @@ const RewardsPage = async () => {
                         </div>
                     </div>
                 </Link>
+            </div>
+
+            <div className='flex item-center justify-center px-6'>
+                <div className='flex flex-col justify-center items-center'>
+                    <RankingIcon number={31} />
+                    <span>Your ranking!</span>
+                </div>
             </div>
 
             <p className={`px-6 mb-2 ${museumModerno.className} `}>

@@ -162,6 +162,9 @@ export async function getHideAndSeek() {
 }
 
 export async function getBadge() {
+    const {getUser} = await getKindeServerSession()
+    const user = await getUser()
+
     try {
         const badges = await prisma.badge.findFirst({
             where: {
@@ -175,6 +178,28 @@ export async function getBadge() {
                 }
             }
         })
+
+        if (user) {
+            const userCheckIns = await prisma.checkIn.findMany({
+                where: {
+                    userId: user.id
+                },
+                select: {
+                    attractionId: true
+                }
+            })
+
+            const checkedInAttractionIds = new Set(
+                userCheckIns.map((checkIn) => checkIn.attractionId)
+            )
+
+            if (badges && badges.attractions) {
+                badges.attractions = badges.attractions.map((attraction) => ({
+                    ...attraction,
+                    checkedIn: checkedInAttractionIds.has(attraction.attractionId)
+                }))
+            }
+        }
 
         return badges
     } catch (error) {

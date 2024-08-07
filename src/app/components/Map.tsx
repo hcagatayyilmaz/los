@@ -1,5 +1,4 @@
 "use client"
-
 import React, {useState, useEffect, useMemo, useCallback} from "react"
 import {GoogleMap, useLoadScript, OverlayView, Libraries} from "@react-google-maps/api"
 import {useUserLocation} from "../providers/useUserLocation"
@@ -19,7 +18,6 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     const {userLocation} = useUserLocation()
     const {setSelectedLocation, selectedLocation} = useSelectedItem()
     const [map, setMap] = useState<google.maps.Map | null>(null)
-    const [distances, setDistances] = useState<Record<string, number>>({})
 
     const mapContainerStyle = useMemo(
         () => ({
@@ -46,6 +44,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
 
             if (userLocation) {
                 map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
+                map.setZoom(17) // Set zoom level to show approximately 500 meters around the user location
             } else {
                 const bounds = new window.google.maps.LatLngBounds()
                 locations.forEach((location) => {
@@ -58,36 +57,6 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         },
         [userLocation, locations]
     )
-
-    useEffect(() => {
-        if (userLocation && map && window.google) {
-            const userLatLng = new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
-
-            const newDistances: Record<string, number> = {}
-            let closest: Location | null = null
-            let closestDistance = Infinity
-
-            locations.forEach((location) => {
-                const locationLatLng = new window.google.maps.LatLng(
-                    location.latitude,
-                    location.longitude
-                )
-                const distance = window.google.maps.geometry.spherical.computeDistanceBetween(
-                    userLatLng,
-                    locationLatLng
-                )
-
-                newDistances[location.name_en] = distance
-
-                if (distance < closestDistance) {
-                    closest = location
-                    closestDistance = distance
-                }
-            })
-
-            setDistances(newDistances)
-        }
-    }, [userLocation, map, locations])
 
     useEffect(() => {
         if (selectedLocation && map) {

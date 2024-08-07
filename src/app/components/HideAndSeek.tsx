@@ -52,7 +52,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
                     <h1
                         className={`font-bold text-xl ${museumModerno.className} break-words whitespace-normal`}
                     >
-                        Weekly Hide & Seek
+                        Find the Hidden Place
                     </h1>
                     <span className='inline-block'>
                         <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>

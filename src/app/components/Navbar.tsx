@@ -15,35 +15,35 @@ export default function Navbar() {
     const {isAuthenticated} = useKindeBrowserClient()
 
     return (
-        <div className='flex justify-around items-center bg-transparent mt-1 '>
+        <div className='flex justify-between px-2 items-center bg-transparent mt-1 '>
             <Link href={""}>
-                <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border border-gray-300 shadow-md'>
-                    <CiMap className='w-5 h-5 font-bold' />
+                <div className='flex gap-2  items-center text-muted-foreground bg-white px-6 py-1 rounded border border-gray-300 shadow-md'>
+                    <CiMap className='w-5 h-5 ' />
                     <span>Map</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/quests`}>
-                <div className='flex  items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
+                <div className='flex gap-2  items-center text-muted-foreground bg-white px-6 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
                     <MapIcon className='w-5 h-5' />
                     <span>Quests</span>
                 </div>
             </Link>
-            <Link href={`${currentPath}/rewards`}>
+            {/* <Link href={`${currentPath}/rewards`}>
                 <div className=' flex items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
                     <IoGiftOutline className='w-5 h-5 font-xs' />
-                    <span>Rewards</span>
+                    <span>Account</span>
                 </div>
-            </Link>
+            </Link> */}
             {isAuthenticated ? (
                 <LogoutLink>
-                    <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
+                    <div className='flex gap-2  items-center text-muted-foreground bg-white px-4 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
                         <RiAccountCircleLine className='w-5 h-5' />
                         <span>Logout</span>
                     </div>
                 </LogoutLink>
             ) : (
                 <LoginLink>
-                    <div className='flex items-center text-muted-foreground bg-white px-2 py-1 rounded border  hover:text-customYellow border-gray-300 shadow-md'>
+                    <div className='flex gap-2 items-center text-muted-foreground bg-white px-6 py-1 rounded border  hover:text-customYellow border-gray-300 shadow-md'>
                         <RiAccountCircleLine className='w-5 h-5' />
                         <span>Login</span>
                     </div>

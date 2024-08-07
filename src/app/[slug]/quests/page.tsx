@@ -46,9 +46,10 @@ async function QuestsPage({params}: QuestsPageParams) {
                 </Link>
             </div>
 
-            <div className='px-6 mt-6'>
+            <div className='px-4 mt-6'>
                 <p className={`my-1 text-sm ${museumModerno.className} mb-1`}>
-                    Complete the get points and rewards. Choose any quest to start.
+                    Choose any quests to earn points while having fun and experience more in your
+                    city. Start ranking in the city to get some rewards!
                 </p>
             </div>
 

@@ -24,7 +24,7 @@ const PopQuiz = ({quiz}: {quiz: any}) => {
                     </span>
                 </div>
 
-                <p className={`pt-1 text-sm ${museumModerno.className} `}>
+                <p className={`pt-2 pb-4 text-sm ${museumModerno.className} `}>
                     Easy points while learning cool things about the Tübingen.
                 </p>
             </div>

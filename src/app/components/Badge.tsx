@@ -3,6 +3,7 @@ import {MuseoModerno} from "next/font/google"
 import {getBadgeStatus} from "../server/data"
 import BadgeButton from "./BadgeButton"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
+import {CoinIcon} from "../lib/CustomIcons"
 
 const museoModerno = MuseoModerno({
     subsets: ["latin"]
@@ -11,32 +12,42 @@ const museoModerno = MuseoModerno({
 function Badge({data}: {data: any}) {
     const {getUser} = getKindeServerSession()
     const user = getUser()
-
-    // const badge = getBadgeStatus(data.attractions.map((attraction: any) => attraction.attractionId))
-    // console.log("Badge:", badge)
+    console.log("Badge:", data)
 
     return (
         <div className='w-full flex flex-col gap-4'>
-            <h1 className={`px-6 mt-2 text-xl font-bold ${museoModerno.className}`}>
-                {data.name_en}
-            </h1>
+            <div className='flex justify-between px-4'>
+                <h1 className={` mt-2 text-xl font-bold ${museoModerno.className}`}>{data.name}</h1>
+                <span className='inline-block'>
+                    <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
+                        <CoinIcon className='w-4 h-4 text-white' />
+                        <span className='mt-1 ml-1 text-xs text-white'>+ {150}</span>
+                    </div>
+                </span>
+            </div>
             <div className='flex gap-4'>
                 {data.attractions.map((attraction: any, index: number) => (
-                    <div key={index} className='w-1/3 flex flex-col items-center'>
-                        <div className='relative h-[120px] w-full'>
+                    <div
+                        key={index}
+                        className={`flex flex-col items-center flex-1 ${
+                            attraction.checkedIn ? "opacity-100" : "opacity-40"
+                        }`}
+                    >
+                        <div className='relative w-full h-32'>
                             <Image
                                 src={data.pinName || "/default-image.png"}
-                                alt={attraction.name}
+                                alt={attraction.attraction.name_en}
                                 layout='fill'
-                                objectFit='cover'
+                                objectFit='contain'
                             />
                         </div>
                         <div className={`text-center text-xs mt-2 ${museoModerno.className}`}>
-                            {attraction.attraction.name}
+                            {attraction.attraction.name_en}
                         </div>
                     </div>
                 ))}
             </div>
+
             <div className='px-4 py-1'>
                 <BadgeButton id={data.id} />
             </div>
