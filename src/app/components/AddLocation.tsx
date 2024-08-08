@@ -72,7 +72,8 @@ const AddLocation: React.FC = () => {
                 </span>
             </div>
             <p className={`${museumModerno.className} mt-2`}>
-                If people check in at the place you've added, you earn 1 point for each check-in.
+                If people check in at the place you&apos;ve added, you earn 1 point for each
+                check-in.
             </p>
             <form
                 onSubmit={handleSubmit}
