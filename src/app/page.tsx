@@ -68,56 +68,66 @@ export default async function Home() {
                 <div className='h-[30vh] w-full my-6 rounded-lg'>
                     <ImageSlider />
                 </div>
-                <div className='my-4'>
+                <div className=''>
                     <Link href={"/tuebingen"}>
                         <button
-                            className={`${museoModerno.className} bg-blue-500 rounded-full text-white font-medium py-1 text-sm px-4 mb-2 border w-full`}
+                            className={`${museoModerno.className} bg-customYellow text-xl rounded-full text-white font-medium py-3 text-sm px-4 mb-2 border w-full`}
                         >
-                            App
+                            Start Playing!
                         </button>
                     </Link>
                 </div>
-                <div className='grid grid-cols-2 gap-4 '>
+                <div className='py-4'>
+                    <h1 className={`${museoModerno.className} text-4xl font-semibold`}>Cities</h1>
+                </div>
+                <div className='grid grid-cols-2 gap-2 '>
                     <Link href={"/tuebingen"}>
                         <button
-                            className={`${museoModerno.className} bg-customYellow rounded-full text-white font-medium py-1 text-sm px-4 mb-2 border w-full`}
+                            className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
                         >
                             Tübingen
                         </button>
                     </Link>
-                    <div
-                        className={`${museoModerno.className} bg-[#39FF14] rounded-full text-black font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
+                    <button
+                        className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
                     >
                         Berlin
-                        <span className='absolute -top-2 right-0 text-xs bg-white text-black px-2 py-0.5 rounded-full border border-[#39FF14]'>
-                            soon
-                        </span>
-                    </div>
-                    <div
-                        className={`${museoModerno.className} bg-white rounded-full text-black font-medium py-1 px-4 text-sm mb-2 border relative w-full border-black`}
+                    </button>
+                    <button
+                        className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
                     >
-                        München
-                        <span className='absolute -top-2 right-0 text-xs bg-white text-black px-2 py-0.5 rounded-full border border-black'>
-                            soon
-                        </span>
-                    </div>
-                    <div
-                        className={`${museoModerno.className} bg-black rounded-full text-white font-medium py-1 px-4 text-sm mb-2 border relative w-full`}
+                        Hamburg
+                    </button>
+                    <button
+                        className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
+                    >
+                        Münich
+                    </button>
+                    <button
+                        className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
                     >
                         Stuttgart
-                        <span className='absolute -top-2 right-0 text-xs bg-white text-black px-2 py-0.5 rounded-full border border-black'>
-                            soon
-                        </span>
-                    </div>
+                    </button>
+                    <button
+                        className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
+                    >
+                        New York
+                    </button>
                 </div>
             </div>
-            <div className='py-2 bg-white border-t border-black px-2 flex justify-end gap-x-2 items-center'>
+
+            <div className='py-2 mt-4 w-full bg-black text-white border-black px-2 flex justify-between items-center'>
                 <a
                     href='mailto:tuebingen@los.city'
                     className='border-2 rounded border-black px-2 cursor-pointer'
                 >
                     Contact
                 </a>
+                <Link href='/privacy'>
+                    <button className='border-2 rounded border-black px-2 cursor-pointer'>
+                        Terms of use
+                    </button>
+                </Link>
                 <Link href='/privacy'>
                     <button className='border-2 rounded border-black px-2 cursor-pointer'>
                         Privacy
