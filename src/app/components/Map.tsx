@@ -71,9 +71,8 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     return (
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            center={initialCenter}
-            zoom={15}
             onLoad={onMapLoad}
+            zoom={15}
             options={{
                 mapTypeControl: false,
                 fullscreenControl: false,
