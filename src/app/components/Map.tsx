@@ -9,9 +9,6 @@ import {LiveLocationPin, ItemPin} from "./Pins"
 
 const libraries: Libraries = ["places", "geometry"]
 
-// Define your fallback city location here
-const fallbackCityLocation = {lat: 40.7128, lng: -74.006} // Example: New York City
-
 const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
@@ -21,6 +18,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     const {userLocation} = useUserLocation()
     const {setSelectedLocation, selectedLocation} = useSelectedItem()
     const [map, setMap] = useState<google.maps.Map | null>(null)
+    const [isCentered, setIsCentered] = useState(false) // Track if the map has been centered
 
     const mapContainerStyle = useMemo(
         () => ({
@@ -33,26 +31,31 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     const initialCenter = useMemo(() => {
         if (userLocation) {
             return {lat: userLocation.lat, lng: userLocation.lng}
-        } else {
+        } else if (locations.length > 0) {
             const firstLocation = locations[0]
             return {lat: firstLocation.latitude, lng: firstLocation.longitude}
+        } else {
+            return {lat: 0, lng: 0} // Default to a neutral location if no locations are provided
         }
-    }, [userLocation, locations]) // Now userLocation is included in the dependency array
+    }, [userLocation, locations])
 
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
             setMap(map)
 
-            if (userLocation) {
-                map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
-                map.setZoom(10) // Set zoom level to show approximately 500 meters around the user location
-            } else {
-                // If no user location, center on the fallback city location
-                map.setCenter(fallbackCityLocation)
-                map.setZoom(12) // Adjust zoom level as needed for the city
+            if (!isCentered) {
+                if (userLocation) {
+                    map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
+                    map.setZoom(10)
+                } else if (locations.length > 0) {
+                    const firstLocation = locations[0]
+                    map.setCenter({lat: firstLocation.latitude, lng: firstLocation.longitude})
+                    map.setZoom(12)
+                }
+                setIsCentered(true) // Mark the map as centered
             }
         },
-        [userLocation, locations] // User location is a dependency here
+        [userLocation, isCentered, locations]
     )
 
     useEffect(() => {
