@@ -9,9 +9,7 @@ const museoModerno = MuseoModerno({
 function StreakParent() {
     return (
         <div className='w-full flex flex-col gap-4'>
-            <h1 className={`px-6 mt-2 text-xl font-bold ${museoModerno.className}`}>
-                Tübingen&#x27;s Nature
-            </h1>
+            <h1 className={`px-6 mt-2 text-xl font-bold ${museoModerno.className}`}>Streak!</h1>
             <p className={`px-6 ${museoModerno.className} text-sm`}>
                 Visit places with tree icon on the map to get rewards!
             </p>

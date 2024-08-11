@@ -9,6 +9,9 @@ import {LiveLocationPin, ItemPin} from "./Pins"
 
 const libraries: Libraries = ["places", "geometry"]
 
+// Define your fallback city location here
+const fallbackCityLocation = {lat: 40.7128, lng: -74.006} // Example: New York City
+
 const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
@@ -34,7 +37,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             const firstLocation = locations[0]
             return {lat: firstLocation.latitude, lng: firstLocation.longitude}
         }
-    }, [userLocation, locations])
+    }, [userLocation, locations]) // Now userLocation is included in the dependency array
 
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
@@ -44,16 +47,12 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                 map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
                 map.setZoom(10) // Set zoom level to show approximately 500 meters around the user location
             } else {
-                const bounds = new window.google.maps.LatLngBounds()
-                locations.forEach((location) => {
-                    bounds.extend(
-                        new window.google.maps.LatLng(location.latitude, location.longitude)
-                    )
-                })
-                map.fitBounds(bounds)
+                // If no user location, center on the fallback city location
+                map.setCenter(fallbackCityLocation)
+                map.setZoom(12) // Adjust zoom level as needed for the city
             }
         },
-        [userLocation, locations]
+        [userLocation, locations] // User location is a dependency here
     )
 
     useEffect(() => {
@@ -70,7 +69,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={initialCenter}
-            zoom={14}
+            zoom={15}
             onLoad={onMapLoad}
             options={{
                 mapTypeControl: false,

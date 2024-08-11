@@ -29,7 +29,7 @@ async function QuestsPage({params}: QuestsPageParams) {
     const badge = await getBadge()
 
     return (
-        <div className='max-w-xl mx-auto py-2  font-sans border rounded-lg'>
+        <div className='max-w-xl mx-auto pt-2  font-sans border rounded-lg'>
             <div className={`flex items-center justify-center bg-white border-b `}>
                 <Link href={"/tuebingen"}>
                     <div
@@ -68,7 +68,7 @@ async function QuestsPage({params}: QuestsPageParams) {
                 {/* STREAK COMPONENT */}
                 <AddLocation />
                 {/* ADD PLACE COMPONENT */}
-                {/* <StreakParent /> */}
+                <StreakParent />
                 {/* STREAK COMPONENT */}
                 {/* POP QUIZ COMPONENT */}
                 {quiz && <PopQuiz quiz={quiz} />}

@@ -5,7 +5,7 @@ import {MuseoModerno} from "next/font/google"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import Select from "react-select"
 import {addLocation} from "@/app/server" // Adjust the import path as necessary
-import mapStyle from "../lib/style"
+import {mapStyleWithoutText} from "../lib/style"
 import {LiveLocationPin} from "./Pins"
 
 const museumModerno = MuseoModerno({
@@ -56,12 +56,12 @@ const AddLocation: React.FC = () => {
     }
 
     return (
-        <div className='px-4 w-full' id='add-new-place'>
+        <div className='px-4 w-full bg-pink-100 py-4 mt-2' id='add-new-place'>
             <div className='flex justify-between items-center mt-6 w-full'>
                 <h1
                     className={`font-bold text-xl ${museumModerno.className} break-words whitespace-normal`}
                 >
-                    Add Location
+                    Add Place - Collect Rents
                 </h1>
 
                 <span className='inline-block'>
@@ -75,9 +75,13 @@ const AddLocation: React.FC = () => {
                 If people check in at the place you&apos;ve added, you earn 1 point for each
                 check-in.
             </p>
+            <p className={`${museumModerno.className} mt-2 text-xs`}>
+                Please read the guidelines before adding places. If a place does not meet the
+                guidelines, it will not be displayed on the app. Reviews may take up to 7 days.
+            </p>
             <form
                 onSubmit={handleSubmit}
-                className='w-full  bg-white rounded-xl flex flex-col mt-6'
+                className='w-full bg-pink-100 rounded-xl flex flex-col mt-4'
             >
                 <div className='mb-4'>
                     <label
@@ -161,7 +165,7 @@ const AddLocation: React.FC = () => {
                         Choose on Map
                     </button>
 
-                    {isMapVisible && (
+                    {/* {isMapVisible && (
                         <LoadScriptNext
                             googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
                         >
@@ -169,7 +173,7 @@ const AddLocation: React.FC = () => {
                                 mapContainerStyle={{height: "300px", width: "100%", zIndex: 0}}
                                 center={{lat: 48.519446747786135, lng: 9.057645}}
                                 zoom={13}
-                                options={{styles: mapStyle, disableDefaultUI: true}}
+                                options={{styles: mapStyleWithoutText, disableDefaultUI: true}}
                                 onClick={handleMapClick}
                             >
                                 {selectedLocation && (
@@ -182,7 +186,7 @@ const AddLocation: React.FC = () => {
                                 )}
                             </GoogleMap>
                         </LoadScriptNext>
-                    )}
+                    )} */}
                     {selectedLocation && (
                         <div className='mt-2 text-sm text-black font-bold text-center'>
                             Location <br />

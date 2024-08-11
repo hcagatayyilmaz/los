@@ -138,7 +138,7 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
                 onClick={handleAddPlaceClick}
             >
                 <Image src={"/logo.png"} width={24} height={24} alt='Logo Icon' />
-                <span className='ml-1'>Add Place</span>
+                <span className='ml-1'>Rent Place</span>
             </div>
         </div>
     )

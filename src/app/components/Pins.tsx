@@ -29,10 +29,11 @@ export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
     }
 
     if (location.pin !== null) {
+        console.log(location.pin)
         return (
-            <div className='relative w-12 h-12'>
+            <div className='relative w-8 h-8'>
                 <Image
-                    src={`/${location.pin}`}
+                    src={location.pin}
                     alt='Location Pin'
                     fill
                     objectFit='contain'
@@ -45,9 +46,9 @@ export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
     if (location.checkedIn === true) {
         return (
             <div className='relative w-6 h-6'>
-                <div
-                    className={`absolute w-6 h-6 rounded-full border-4 border-black bg-green-400`}
-                ></div>
+                <div className={`absolute w-6 h-6 rounded-full border-4 border-black bg-green-400`}>
+                    <span>1</span>
+                </div>
             </div>
         )
     }
@@ -81,7 +82,7 @@ export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
     return (
         <div className='relative'>
             <div
-                className={`absolute w-6 h-6 rounded-full border-4 border-black`}
+                className={`absolute w-6 h-6 rounded-full border-4 border-black flex justify-center items-center`}
                 style={{backgroundColor: bgColor}}
             ></div>
         </div>

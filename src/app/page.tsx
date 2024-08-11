@@ -60,15 +60,24 @@ export default async function Home() {
                         <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow border'></span>
                     </div>
                 </div>
-                <h2 className='mt-4 overflow-hidden md:overflow-auto md:whitespace-nowrap text-16 whitespace-normal xl:text-28'>
-                    Experience city you live like never before
+                <h2 className='mt-4 overflow-hidden md:overflow-auto whitespace-normal text-16 xl:text-28'>
+                    Experience the world
                     <span className='hidden md:contents'></span> with, gamified guides offering
                     exciting rewards.
                 </h2>
                 <div className='h-[30vh] w-full my-6 rounded-lg'>
                     <ImageSlider />
                 </div>
-                <div className='grid grid-cols-2 gap-4 px-2 p-2'>
+                <div className='my-4'>
+                    <Link href={"/tuebingen"}>
+                        <button
+                            className={`${museoModerno.className} bg-blue-500 rounded-full text-white font-medium py-1 text-sm px-4 mb-2 border w-full`}
+                        >
+                            App
+                        </button>
+                    </Link>
+                </div>
+                <div className='grid grid-cols-2 gap-4 '>
                     <Link href={"/tuebingen"}>
                         <button
                             className={`${museoModerno.className} bg-customYellow rounded-full text-white font-medium py-1 text-sm px-4 mb-2 border w-full`}
