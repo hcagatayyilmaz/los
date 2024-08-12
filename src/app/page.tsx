@@ -14,7 +14,7 @@ export default async function Home() {
     const language = "EN"
 
     return (
-        <main className='h-screen w-screen flex flex-col items-center'>
+        <main className='min-h-dvh	 w-screen flex flex-col items-center'>
             <div className='w-full max-w-md px-4 bg-white flex justify-between border-b border-black'>
                 <div
                     className={`flex items-center bg-white py-1 rounded-3xl text-center space-x-2 ${museoModerno.className}`}
