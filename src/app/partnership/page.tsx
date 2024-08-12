@@ -60,7 +60,7 @@ const Partnership: React.FC = () => {
     }
 
     return (
-        <div className={`h-screen w-screen flex flex-col items-center ${museoModerno.className}`}>
+        <div className={`h-screen w-screen flex flex-col items-center `}>
             <div className='w-full max-w-md px-4 bg-white flex justify-between border-b border-black'>
                 <div
                     className={`flex items-center bg-white py-1 rounded-3xl text-center space-x-2 ${museoModerno.className}`}
@@ -78,9 +78,11 @@ const Partnership: React.FC = () => {
                     <Link href={"/partnership"}>
                         <button className='bg-black text-white px-2 rounded'>Partner Login</button>
                     </Link>
+                    <button className='text-sm font-medium text-gray-700 focus:outline-none font-base'>
+                        {language === "EN" ? "EN | DE" : "DE | EN"}
+                    </button>
                 </div>
             </div>
-
             <div className='bg-customYellow text-white text-center p-6 w-full bg-text-white'>
                 <h1 className={`text-3xl font-bold ${museoModerno.className} text-white`}>
                     Partnership
@@ -90,10 +92,9 @@ const Partnership: React.FC = () => {
                     community to join Los. No fees, just mutual benefits.
                 </p>
             </div>
-
             <div className='flex space-x-4 mt-4'>
                 <button
-                    className='bg-black text-white py-2 px-4 rounded'
+                    className={`bg-black text-white py-2 px-4 rounded ${museoModerno.className}`}
                     onClick={() => setShowAskForm(!showAskForm)}
                 >
                     {"Apply for Partnership"}
@@ -105,7 +106,6 @@ const Partnership: React.FC = () => {
                     {"Offer Rewards"}
                 </button> */}
             </div>
-
             {/* {showForm && (
                 <div className='w-full h-full'>
                     <form
@@ -179,13 +179,13 @@ const Partnership: React.FC = () => {
             )} */}
 
             {showAskForm && (
-                <div className='w-full h-full mt-4'>
+                <div className={`w-full h-full mt-4 ${museoModerno.className}`}>
                     <form
                         onSubmit={handleAskSubmit}
                         className='bg-white p-4 rounded shadow-md max-w-md w-full flex flex-col'
                     >
                         <div className='mb-4'>
-                            <p className='my-2'>
+                            <p className='my-2 '>
                                 As a Los partner, you can start listing your events on Los and reach
                                 new people. You can start posting your events and offer rewards to
                                 Los community. We will reach you out after you send the application
