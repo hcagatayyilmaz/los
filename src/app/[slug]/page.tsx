@@ -14,6 +14,7 @@ import ActionsButtons from "../components/ActionsButtons"
 import ClosestPlace from "../components/ClosestPlace"
 import {UIProvider} from "@/app/providers/UIProvider" // Ensure this is the correct path
 import MainLayout from "../components/MainLayout"
+import SliderWrapper from "../components/SliderWrapper"
 
 type CityPageParams = {
     params: {
@@ -94,7 +95,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                                     <LocationPermissionButton />
                                 </div>
                             </div>
-                            <ItemsSlider locations={attractions} />
+                            <SliderWrapper locations={attractions} />
                         </div>
                     </main>
                 </SelectedItemProvider>
