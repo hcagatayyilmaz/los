@@ -4,6 +4,7 @@ import "./globals.css"
 import {UserLocationProvider} from "./providers/useUserLocation"
 import ToastProvider from "./providers/ToastProvider"
 import Head from "next/head"
+import {UIProvider} from "./providers/UIProvider"
 
 const roboto = Roboto({
     subsets: ["latin"],

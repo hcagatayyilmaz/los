@@ -28,6 +28,8 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         []
     )
 
+    const tübingenCoordinates = {lat: 48.5216, lng: 9.0576} // Tübingen coordinates
+
     const initialCenter = useMemo(() => {
         if (userLocation) {
             return {lat: userLocation.lat, lng: userLocation.lng}
@@ -35,7 +37,7 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
             const firstLocation = locations[0]
             return {lat: firstLocation.latitude, lng: firstLocation.longitude}
         } else {
-            return {lat: 0, lng: 0} // Default to a neutral location if no locations are provided
+            return tübingenCoordinates // Default to Tübingen if no user location or locations are provided
         }
     }, [userLocation, locations])
 
@@ -43,21 +45,34 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         (map: google.maps.Map) => {
             setMap(map)
 
-            if (!isCentered) {
-                if (userLocation) {
-                    map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
-                    map.setZoom(10)
-                } else if (locations.length > 0) {
-                    const firstLocation = locations[0]
-                    map.setCenter({lat: firstLocation.latitude, lng: firstLocation.longitude})
-                    map.setZoom(12)
-                }
+            if (userLocation && !isCentered) {
+                map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
+                map.setZoom(16)
+                setIsCentered(true) // Mark the map as centered
+            } else if (locations.length > 0 && !isCentered) {
+                const firstLocation = locations[0]
+                map.setCenter({lat: firstLocation.latitude, lng: firstLocation.longitude})
+                map.setZoom(16)
+                setIsCentered(true) // Mark the map as centered
+            } else if (!isCentered) {
+                map.setCenter(tübingenCoordinates)
+                map.setZoom(14) // Default zoom for Tübingen
                 setIsCentered(true) // Mark the map as centered
             }
         },
-        [userLocation, isCentered, locations]
+        [userLocation, isCentered, locations, tübingenCoordinates]
     )
 
+    // This effect will run when the userLocation changes, but will only center the map if it hasn't been centered yet.
+    useEffect(() => {
+        if (map && userLocation && !isCentered) {
+            map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
+            map.setZoom(16)
+            setIsCentered(true) // Mark the map as centered
+        }
+    }, [map, userLocation, isCentered])
+
+    // Pan to the selected location whenever it changes
     useEffect(() => {
         if (selectedLocation && map) {
             const {latitude, longitude} = selectedLocation

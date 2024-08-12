@@ -6,7 +6,7 @@ import {MdGpsFixed} from "react-icons/md"
 import toast from "react-hot-toast"
 
 const LocationPermissionButton: React.FC = () => {
-    const {setUserLocation} = useUserLocation()
+    const {setUserLocation, userLocation} = useUserLocation()
     const [toastShown, setToastShown] = useState(false)
 
     const requestLocationPermission = () => {
@@ -39,9 +39,10 @@ const LocationPermissionButton: React.FC = () => {
     return (
         <div
             onClick={requestLocationPermission}
-            className='bg-white p-[6px] rounded-full shadow-md cursor-pointer border-2 border-customYellow'
+            className='flex justify-center  items-center gap-2 bg-white p-[6px] rounded-full shadow-md cursor-pointer border-2 border-customYellow'
         >
             <MdGpsFixed className='text-black text-2xl' />
+            {userLocation ? "" : "Enable location permission"}
         </div>
     )
 }

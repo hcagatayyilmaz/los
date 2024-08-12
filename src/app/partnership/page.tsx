@@ -78,9 +78,6 @@ const Partnership: React.FC = () => {
                     <Link href={"/partnership"}>
                         <button className='bg-black text-white px-2 rounded'>Partner Login</button>
                     </Link>
-                    <button className='text-sm font-medium text-gray-700 focus:outline-none'>
-                        {language === "EN" ? "EN | DE" : "DE | EN"}
-                    </button>
                 </div>
             </div>
 
@@ -101,15 +98,15 @@ const Partnership: React.FC = () => {
                 >
                     {"Apply for Partnership"}
                 </button>
-                <button
+                {/* <button
                     className='bg-black text-white py-2 px-4 rounded'
                     onClick={() => setShowForm(!showForm)}
                 >
                     {"Offer Rewards"}
-                </button>
+                </button> */}
             </div>
 
-            {showForm && (
+            {/* {showForm && (
                 <div className='w-full h-full'>
                     <form
                         onSubmit={handleSubmit}
@@ -179,7 +176,7 @@ const Partnership: React.FC = () => {
                         </button>
                     </form>
                 </div>
-            )}
+            )} */}
 
             {showAskForm && (
                 <div className='w-full h-full mt-4'>
@@ -190,7 +187,9 @@ const Partnership: React.FC = () => {
                         <div className='mb-4'>
                             <p className='my-2'>
                                 As a Los partner, you can start listing your events on Los and reach
-                                new people.
+                                new people. You can start posting your events and offer rewards to
+                                Los community. We will reach you out after you send the application
+                                for partnership.
                             </p>
                             <label className='block text-sm font-medium text-gray-700 mt-6'>
                                 Your email address

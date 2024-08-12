@@ -16,15 +16,18 @@ function Banner() {
     const {isAuthenticated} = useKindeBrowserClient()
     const {userLocation, requestLocationPermission} = useUserLocation()
     const [showBanner, setShowBanner] = useState(false)
+    const [hasChecked, setHasChecked] = useState(false) // State to check if the conditions were met initially
     const router = useRouter()
 
     useEffect(() => {
-        if (!isAuthenticated || !userLocation) {
-            setShowBanner(true)
-        } else {
-            setShowBanner(false)
+        if (!hasChecked) {
+            // userLocation is treated as a boolean
+            if (!isAuthenticated || !userLocation) {
+                setShowBanner(true)
+            }
+            setHasChecked(true) // Set the flag to true after the initial check
         }
-    }, [isAuthenticated, userLocation])
+    }, [isAuthenticated, userLocation, hasChecked])
 
     const handleLocationPermission = async () => {
         try {

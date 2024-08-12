@@ -45,19 +45,19 @@ export default async function Home() {
                             Explore
                         </span>
                         <span> the city</span>
-                        <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow'></span>
+                        <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow border-dashed border'></span>
                     </div>
                     <div>
                         <span className={`${museoModerno.className} text-4xl font-bold`}>
                             Collect
                         </span>
                         <span> the points</span>
-                        <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow'></span>
+                        <span className='inline-block ml-1 h-3 w-3 rounded-full border-dashed bg-customYellow border'></span>
                     </div>
                     <div>
                         <span className={`${museoModerno.className} text-4xl font-bold`}>Win</span>
                         <span> the rewards</span>
-                        <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow border'></span>
+                        <span className='inline-block ml-1 h-3 border-dashed w-3 rounded-full bg-customYellow border'></span>
                     </div>
                 </div>
                 <h2 className='mt-4 overflow-hidden md:overflow-auto whitespace-normal text-16 xl:text-28'>
@@ -69,7 +69,7 @@ export default async function Home() {
                     <ImageSlider />
                 </div>
                 <div className=''>
-                    <Link href={"/tuebingen"}>
+                    <Link href={"/world"}>
                         <button
                             className={`${museoModerno.className} bg-customYellow text-xl rounded-full text-white font-medium py-3 px-4 mb-2 border w-full`}
                         >
@@ -116,7 +116,7 @@ export default async function Home() {
                 </div>
             </div>
 
-            <div className='py-2 mt-4 w-full bg-black text-white border-black px-2 flex justify-between items-center'>
+            <div className='py-2  mt-4 w-full max-w-md bg-black text-white border-black px-3 flex justify-between items-center'>
                 <a
                     href='mailto:tuebingen@los.city'
                     className='border-2 rounded border-black px-2 cursor-pointer'

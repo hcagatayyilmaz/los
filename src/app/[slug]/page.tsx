@@ -67,6 +67,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
 
         const attractions = await getAttractions(city.id, filter)
         const {getUser} = getKindeServerSession()
+
         const kindeUser = await getUser()
         const user = kindeUser ? await getDBUser(kindeUser.id) : null
 
@@ -82,7 +83,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                         <Header user={user} name={city.name} />
                         <Navbar />
                         <ActionsButtons slug={city.slug} />
-                        <Banner />
+                        {/* <Banner /> */}
                     </div>
                     <div className='absolute bottom-0 left-0 w-full z-20'>
                         <div className='flex mx-4 mb-1 justify-between items-center'>
