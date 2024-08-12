@@ -58,7 +58,9 @@ async function QuestsPage({params}: QuestsPageParams) {
                 <div className='flex flex-col justify-center items-center'>
                     <RankingIcon number={"?"} />
                     <div className='w-full h-4 rounded-full bg-customYellow'></div>
-                    <span>Your ranking in city!</span>
+                    <span className={`${museumModerno.className}`}>
+                        Sign up to see your level and rank!
+                    </span>
                 </div>
             </div>
 

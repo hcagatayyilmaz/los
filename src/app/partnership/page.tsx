@@ -60,7 +60,7 @@ const Partnership: React.FC = () => {
     }
 
     return (
-        <div className={`h-screen w-screen flex flex-col items-center `}>
+        <div className={`h-screen w-screen max-w-md flex flex-col items-center mx-auto`}>
             <div className='w-full max-w-md px-4 bg-white flex justify-between border-b border-black'>
                 <div
                     className={`flex items-center bg-white py-1 rounded-3xl text-center space-x-2 ${museoModerno.className}`}
