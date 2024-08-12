@@ -34,10 +34,19 @@ const RewardsPage = async () => {
                 </Link>
             </div>
 
+            <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
+                Rewards
+            </h1>
+
             <div className='flex item-center justify-center px-6'>
                 <div className='flex flex-col justify-center items-center'>
-                    <RankingIcon number={31} />
-                    <span>Your ranking!</span>
+                    <RankingIcon number={2} />
+                    <span>You are level 2!</span>
+                    <span
+                        className={`${museumModerno.className} font-normal my-2 text-xl text-center`}
+                    >
+                        You can unlock rewards when you reach level 5!
+                    </span>
                 </div>
             </div>
 

@@ -138,6 +138,13 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
                 onClick={handleAddPlaceClick}
             >
                 <Image src={"/logo.png"} width={24} height={24} alt='Logo Icon' />
+                <span className='ml-1'>List</span>
+            </div>
+            <div
+                className=' bg-white px-2 py-1 rounded-full flex items-center border shadow-md cursor-pointer mr-1'
+                onClick={handleAddPlaceClick}
+            >
+                <Image src={"/logo.png"} width={24} height={24} alt='Logo Icon' />
                 <span className='ml-1'>Add Place</span>
             </div>
         </div>

@@ -22,6 +22,8 @@ type CityPageParams = {
     searchParams?: {[key: string]: string | string[] | undefined} | undefined
 }
 
+// false | 0 | number
+
 export async function generateStaticParams() {
     unstable_noStore()
     const cities = await prisma.city.findMany()

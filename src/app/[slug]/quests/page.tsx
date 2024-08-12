@@ -57,6 +57,7 @@ async function QuestsPage({params}: QuestsPageParams) {
             <div className='flex item-center justify-center px-6'>
                 <div className='flex flex-col justify-center items-center'>
                     <RankingIcon number={"?"} />
+                    <div className='w-full h-4 rounded-full bg-customYellow'></div>
                     <span>Your ranking in city!</span>
                 </div>
             </div>

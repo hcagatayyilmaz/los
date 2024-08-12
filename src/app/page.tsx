@@ -71,9 +71,9 @@ export default async function Home() {
                 <div className=''>
                     <Link href={"/tuebingen"}>
                         <button
-                            className={`${museoModerno.className} bg-customYellow text-xl rounded-full text-white font-medium py-3 text-sm px-4 mb-2 border w-full`}
+                            className={`${museoModerno.className} bg-customYellow text-xl rounded-full text-white font-medium py-3 px-4 mb-2 border w-full`}
                         >
-                            Start Playing!
+                            Start Exploring!
                         </button>
                     </Link>
                 </div>
