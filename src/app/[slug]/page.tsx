@@ -7,13 +7,13 @@ import Map from "@/app/components/Map"
 import ItemsSlider from "@/app/components/ItemSlider"
 import {SelectedItemProvider} from "@/app/providers/useSelectedItem"
 import {getAttractions, getDBUser} from "@/app/server/data"
-import toast from "react-hot-toast"
 import {unstable_noStore} from "next/cache"
 import LocationPermissionButton from "../components/LocationPermissionButton"
 import TotalPoints from "../components/TotalPoints"
 import ActionsButtons from "../components/ActionsButtons"
 import ClosestPlace from "../components/ClosestPlace"
-import Banner from "../components/Banner"
+import {UIProvider} from "@/app/providers/UIProvider" // Ensure this is the correct path
+import MainLayout from "../components/MainLayout"
 
 type CityPageParams = {
     params: {
@@ -72,31 +72,33 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
         const user = kindeUser ? await getDBUser(kindeUser.id) : null
 
         return (
-            <SelectedItemProvider initialLocation={attractions[0]}>
-                <main className='h-dvh w-full max-w-md mx-auto relative'>
-                    <div className='absolute inset-0 pointer-events-none'>
-                        <div className='h-full w-full pointer-events-auto'>
-                            <Map locations={attractions} />
-                        </div>
-                    </div>
-                    <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
-                        <Header user={user} name={city.name} />
-                        <Navbar />
-                        <ActionsButtons slug={city.slug} />
-                        {/* <Banner /> */}
-                    </div>
-                    <div className='absolute bottom-0 left-0 w-full z-20'>
-                        <div className='flex mx-4 mb-1 justify-between items-center'>
-                            <TotalPoints points={user ? user.points : 0} />
-                            <div className='flex gap-1'>
-                                <ClosestPlace locations={attractions} />
-                                <LocationPermissionButton />
+            <UIProvider>
+                <SelectedItemProvider initialLocation={attractions[0]}>
+                    <main className='h-dvh w-full max-w-md mx-auto relative'>
+                        <div className='absolute inset-0 pointer-events-none'>
+                            <div className='h-full w-full pointer-events-auto'>
+                                <MainLayout locations={attractions} />
                             </div>
                         </div>
-                        <ItemsSlider locations={attractions} />
-                    </div>
-                </main>
-            </SelectedItemProvider>
+                        <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
+                            <Header user={user} name={city.name} />
+                            <Navbar />
+                            <ActionsButtons slug={city.slug} />
+                            {/* <Banner /> */}
+                        </div>
+                        <div className='absolute bottom-0 left-0 w-full z-20'>
+                            <div className='flex mx-4 mb-1 justify-between items-center'>
+                                <TotalPoints points={user ? user.points : 0} />
+                                <div className='flex gap-1'>
+                                    <ClosestPlace locations={attractions} />
+                                    <LocationPermissionButton />
+                                </div>
+                            </div>
+                            <ItemsSlider locations={attractions} />
+                        </div>
+                    </main>
+                </SelectedItemProvider>
+            </UIProvider>
         )
     } catch (error) {
         console.error(error)

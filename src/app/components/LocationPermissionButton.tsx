@@ -42,7 +42,7 @@ const LocationPermissionButton: React.FC = () => {
             className='flex justify-center  items-center gap-2 bg-white p-[6px] rounded-full shadow-md cursor-pointer border-2 border-customYellow'
         >
             <MdGpsFixed className='text-black text-2xl' />
-            {userLocation ? "" : "Enable location permission"}
+            {userLocation ? "" : <span className='text-xs'>Enable location</span>}
         </div>
     )
 }

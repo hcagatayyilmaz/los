@@ -1,19 +1,21 @@
-import React, {useState} from "react"
+"use client"
+import React from "react"
 import {BsList} from "react-icons/bs"
 import {MdMap} from "react-icons/md"
+import {useUIContext} from "@/app/providers/UIProvider" // Ensure the correct path
 
 const ToggleSwitch = () => {
-    const [isMapView, setIsMapView] = useState(false)
+    const {isListView, setIsListView} = useUIContext() // Use context to manage view state
 
-    const toggleView = (view: any) => {
-        setIsMapView(view === "map")
+    const toggleView = (view: string) => {
+        setIsListView(view === "list")
     }
 
     return (
-        <div className='flex items-center bg-white  gap-2 rounded-full border shadow-lg'>
+        <div className='flex items-center bg-white gap-2 rounded-full border shadow-lg'>
             <button
                 className={`${
-                    !isMapView ? "bg-customYellow text-white" : "text-black"
+                    isListView ? "bg-customYellow text-white" : "text-black"
                 } flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-200 ease-in-out`}
                 onClick={() => toggleView("list")}
             >
@@ -21,7 +23,7 @@ const ToggleSwitch = () => {
             </button>
             <button
                 className={`${
-                    isMapView ? "bg-customYellow text-white" : "text-black"
+                    !isListView ? "bg-customYellow text-white" : "text-black"
                 } flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-200 ease-in-out`}
                 onClick={() => toggleView("map")}
             >

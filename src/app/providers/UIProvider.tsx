@@ -11,7 +11,7 @@ type UIContextType = {
 const UIContext = createContext<UIContextType | undefined>(undefined)
 
 export const UIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
-    const [isListView, setIsListView] = useState(false) // Initialize isListView to false
+    const [isListView, setIsListView] = useState(false)
 
     return <UIContext.Provider value={{isListView, setIsListView}}>{children}</UIContext.Provider>
 }
