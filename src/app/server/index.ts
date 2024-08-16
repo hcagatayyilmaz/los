@@ -21,7 +21,7 @@ export async function checkIn({
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Plesae login to check in")
     }
 
     const place = await prisma.attraction.findUnique({
@@ -69,7 +69,7 @@ export async function obtainBadge(badgeId: string) {
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Please login to obtain badge")
     }
 
     const badge = await prisma.badge.findUnique({
@@ -150,7 +150,7 @@ export async function foundHideAndSeek({
 
     if (!user) {
         console.error("User not authenticated")
-        throw new Error("User not authenticated")
+        throw new Error("Please login to play hide and seek")
     }
 
     const hideAndSeek = await prisma.hideAndSeek.findUnique({
@@ -346,7 +346,7 @@ export async function addLocation({
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Please login to add checkpoint")
     }
     console.log("User_id:", user.id)
 

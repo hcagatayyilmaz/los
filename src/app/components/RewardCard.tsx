@@ -29,7 +29,7 @@ export const RewardCard = ({reward}: any) => {
     }
 
     return (
-        <div className='w-full max-w-md bg-white rounded-xl shadow-xl p-4 flex flex-col border border-gray-300 mb-4'>
+        <div className='w-full  bg-white rounded-xl shadow-xl p-4 flex flex-col border border-gray-300 mb-4'>
             <div className='flex'>
                 <div className='w-full px-2'>
                     <div className='flex items-center justify-between mb-2'>

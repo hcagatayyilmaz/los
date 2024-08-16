@@ -213,7 +213,7 @@ export async function getBadgeStatus(attractionIds: string[]) {
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Please login to get your badge!")
     }
 
     const checkedIn = await prisma.checkIn.findMany({

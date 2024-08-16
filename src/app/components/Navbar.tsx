@@ -19,21 +19,16 @@ export default function Navbar() {
             <Link href={""}>
                 <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border border-gray-300 shadow-md'>
                     <CiMap className='w-5 h-5 ' />
-                    <span>Map</span>
+                    <span>Social</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/quests`}>
                 <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
                     <MapIcon className='w-5 h-5' />
-                    <span>Quests</span>
+                    <span>Quests & Rewards</span>
                 </div>
             </Link>
-            <Link href={`${currentPath}/rewards`}>
-                <div className=' flex items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
-                    <IoGiftOutline className='w-5 h-5 font-xs' />
-                    <span>Rewards</span>
-                </div>
-            </Link>
+
             {isAuthenticated ? (
                 <LogoutLink>
                     <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>

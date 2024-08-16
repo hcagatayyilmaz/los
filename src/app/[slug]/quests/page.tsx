@@ -1,17 +1,17 @@
 import React from "react"
-
-import HideAndSeek from "@/app/components/HideAndSeek"
-
-import PopQuiz from "@/app/components/PopQuiz"
-import {CoinIcon} from "@/app/lib/CustomIcons"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
 import {getPopQuiz, getHideAndSeek, getBadge} from "../../server/data"
-import AddLocation from "../../components/AddLocation"
-
 import Badge from "../../components/Badge"
-import StreakParent from "../../components/StreakParent"
-import {RankingIcon} from "@/app/lib/CustomIcons"
+import {getAllRewards} from "../../server/data"
+import RewardCard from "../../components/RewardCard"
+import MyRewards from "../../components/MyRewards"
+import {RankingIcon} from "../../lib/CustomIcons"
+
+import HideAndSeek from "@/app/components/HideAndSeek"
+import PopQuiz from "@/app/components/PopQuiz"
+import {CoinIcon} from "@/app/lib/CustomIcons"
+import AddLocation from "../../components/AddLocation"
 
 type QuestsPageParams = {
     params: {
@@ -27,6 +27,8 @@ async function QuestsPage({params}: QuestsPageParams) {
     const quiz = await getPopQuiz()
     const hideAndSeek = await getHideAndSeek()
     const badge = await getBadge()
+    const rewards = await getAllRewards()
+    console.log("Rewards:", rewards)
 
     return (
         <div className='max-w-xl mx-auto pt-2  font-sans border rounded-lg'>
@@ -54,32 +56,56 @@ async function QuestsPage({params}: QuestsPageParams) {
                 </p>
             </div>
 
-            <div className='flex item-center justify-center px-6'>
-                <div className='flex flex-col justify-center items-center'>
-                    <RankingIcon number={"?"} />
-                    <div className='w-full h-4 rounded-full bg-customYellow'></div>
-                    <span className={`${museumModerno.className}`}>
-                        Sign up to see your level and rank!
-                    </span>
-                </div>
-            </div>
-
             <div>
                 {/* BADGE COMPONENT */}
                 {badge && <Badge data={badge} />}
                 {/* BADGE COMPONENT */}
                 {/* STREAK COMPONENT */}
-                <AddLocation />
+                {/* <AddLocation /> */}
                 {/* ADD PLACE COMPONENT */}
-                <StreakParent />
+                {/* <StreakParent /> */}
                 {/* STREAK COMPONENT */}
                 {/* POP QUIZ COMPONENT */}
-                {quiz && <PopQuiz quiz={quiz} />}
+                {/* {quiz && <PopQuiz quiz={quiz} />} */}
                 {/* POP QUIZ COMPONENT */}
                 {/* HIDE & SEEK COMPONENT */}
-                {hideAndSeek && <HideAndSeek quest={hideAndSeek} />}
+                {/* {hideAndSeek && <HideAndSeek quest={hideAndSeek} />} */}
                 {/* HIDE & SEEK COMPONENT */}
                 {/* ADD PLACE COMPONENT */}
+            </div>
+
+            <div>
+                <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
+                    Rewards
+                </h1>
+
+                <div className='flex item-center justify-center px-6'>
+                    <div className='flex flex-col justify-center items-center'>
+                        <RankingIcon number={2} />
+                        <span>You are level 2!</span>
+                        <span
+                            className={`${museumModerno.className} font-normal my-2 text-xl text-center`}
+                        >
+                            You can unlock rewards when you reach level 5!
+                        </span>
+                    </div>
+                </div>
+
+                <p className={`px-6 mb-2 ${museumModerno.className} `}>
+                    Use your points to get free experiences in your city! If there is no reward in
+                    market, use and support us to reach more rewards!
+                </p>
+                <div className='px-4'>
+                    {rewards.map((reward) => (
+                        <RewardCard key={reward.id} reward={reward} />
+                    ))}
+                </div>
+                <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
+                    My Rewards
+                </h1>
+                <div className='px-4'>
+                    <MyRewards />
+                </div>
             </div>
         </div>
     )
