@@ -19,7 +19,7 @@ export default function Navbar() {
             <Link href={""}>
                 <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border border-gray-300 shadow-md'>
                     <CiMap className='w-5 h-5 ' />
-                    <span>Social</span>
+                    <span>Account</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/quests`}>

@@ -87,7 +87,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                             <ActionsButtons slug={city.slug} />
                             {/* <Banner /> */}
                         </div>
-                        <div className='absolute bottom-0 left-0 w-full z-20'>
+                        <div className='absolute bottom-0 left-0 w-full z-1'>
                             <div className='flex mx-4 mb-1 justify-between items-center'>
                                 <TotalPoints points={user ? user.points : 0} />
                                 <div className='flex gap-1'>

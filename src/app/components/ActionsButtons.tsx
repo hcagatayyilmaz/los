@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation"
 import {FilterIcon} from "../lib/CustomIcons"
 import Image from "next/image"
 import ToggleSwitch from "./ToggleSwitch"
+import AddLocationPopup from "./AddLocationPopup"
 
 interface ActionsButtonsProps {
     slug: string
@@ -12,7 +13,8 @@ interface ActionsButtonsProps {
 const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
     const [isOpen, setIsOpen] = useState(false)
     const [isTypeOpen, setIsTypeOpen] = useState(false)
-    const [isDateOpen, setIsDateOpen] = useState(false)
+    const [isPopupVisible, setIsPopupVisible] = useState(false)
+    const [userLocation, setUserLocation] = useState<{lat: number; lng: number} | null>(null)
     const router = useRouter()
 
     const handleFilterClick = (filter: string) => {
@@ -21,36 +23,32 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
         router.push(`/${slug}?taxonomy=${filter}`)
         setIsOpen(false)
         setIsTypeOpen(false)
-        setIsDateOpen(false)
-    }
-
-    const handleDateClick = (date: string) => {
-        router.push(`/${slug}?date=${date}`)
-        setIsOpen(false)
-        setIsTypeOpen(false)
-        setIsDateOpen(false)
     }
 
     const handleAddPlaceClick = () => {
-        router.push(`/${slug}/quests#add-new-place`)
-    }
-
-    const getFormattedDates = () => {
-        const dates = []
-        for (let i = 0; i < 3; i++) {
-            const date = new Date()
-            date.setDate(date.getDate() + i)
-            const formattedDate = date.toISOString().split("T")[0]
-            const displayDate = date.toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric"
-            })
-            dates.push({formattedDate, displayDate})
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    })
+                },
+                (error) => {
+                    console.error("Error getting user location:", error)
+                    setUserLocation(null) // Reset location on error
+                }
+            )
+        } else {
+            setUserLocation(null) // Reset location if geolocation is not supported
         }
-        return dates
+        setIsPopupVisible(true) // Show the popup regardless of location success or failure
     }
 
-    const dates = getFormattedDates()
+    const handleClosePopup = () => {
+        setIsPopupVisible(false)
+        setUserLocation(null) // Reset the user location state after closing the popup
+    }
 
     return (
         <div className='w-full flex mt-2 items-center justify-between'>
@@ -109,39 +107,24 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
                                     </button>
                                 </div>
                             )}
-                            {/* <button
-                                className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left'
-                                role='menuitem'
-                                onClick={() => setIsDateOpen(!isDateOpen)}
-                            >
-                                Date
-                            </button>
-                            {isDateOpen && (
-                                <div className='pl-4'>
-                                    {dates.map((date) => (
-                                        <button
-                                            key={date.formattedDate}
-                                            className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left'
-                                            role='menuitem'
-                                            onClick={() => handleDateClick(date.formattedDate)}
-                                        >
-                                            {date.displayDate}
-                                        </button>
-                                    ))}
-                                </div>
-                            )} */}
                         </div>
                     </div>
                 )}
             </div>
             <ToggleSwitch />
             <div
-                className=' bg-white px-2 py-1 rounded-full flex items-center border shadow-md cursor-pointer mr-1'
+                className='bg-white px-2 py-1 rounded-full flex items-center border shadow-md cursor-pointer mr-1'
                 onClick={handleAddPlaceClick}
             >
                 <Image src={"/logo.png"} width={24} height={24} alt='Logo Icon' />
                 <span className='ml-1'>Add Place</span>
             </div>
+            {isPopupVisible && (
+                <AddLocationPopup
+                    onClose={handleClosePopup}
+                    userLocation={userLocation ?? undefined}
+                />
+            )}
         </div>
     )
 }
