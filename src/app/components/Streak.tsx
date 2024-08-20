@@ -7,7 +7,7 @@ function Streak({completed}: {completed?: boolean}) {
         <div className={`flex flex-col items-center flex-1 ${opacity}`}>
             <div className='relative w-full'>
                 <Image
-                    src='/tree.png'
+                    src='/berlin-badge.png'
                     alt='Holderlin Image'
                     layout='responsive'
                     width={16}

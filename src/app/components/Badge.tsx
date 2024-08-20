@@ -15,16 +15,19 @@ function Badge({data}: {data: any}) {
     console.log("Badge:", data)
 
     return (
-        <div className='w-full flex flex-col gap-4'>
+        <div className='w-full flex flex-col gap-2 mt-4'>
             <div className='flex justify-between px-4'>
                 <h1 className={` mt-2 text-xl font-bold ${museoModerno.className}`}>{data.name}</h1>
-                <span className='inline-block'>
-                    <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
-                        <CoinIcon className='w-4 h-4 text-white' />
-                        <span className='mt-1 ml-1 text-xs text-white'>+ {150}</span>
-                    </div>
-                </span>
+                {data.points && (
+                    <span className='inline-block'>
+                        <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
+                            <CoinIcon className='w-4 h-4 text-white' />
+                            <span className='mt-1 ml-1 text-xs text-white'>+ {data.points}</span>
+                        </div>
+                    </span>
+                )}
             </div>
+            <p className={`px-4 text-md ${museoModerno.className}`}>{data.description_en}</p>
             <div className='flex gap-4'>
                 {data.attractions.map((attraction: any, index: number) => (
                     <div
@@ -49,7 +52,7 @@ function Badge({data}: {data: any}) {
             </div>
 
             <div className='px-4 py-1'>
-                <BadgeButton id={data.id} />
+                <BadgeButton id={data.id} name={data.name} />
             </div>
         </div>
     )

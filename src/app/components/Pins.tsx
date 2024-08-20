@@ -76,9 +76,9 @@ export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
     }
 
     return (
-        <div className='relative'>
+        <div className='relative hover:w-8 h-8'>
             <div
-                className={`absolute w-6 h-6 rounded-full border-4 border-black flex justify-center items-center`}
+                className={`absolute w-5 h-5 rounded-full border-4 border-black flex justify-center items-center`}
                 style={{backgroundColor: bgColor}}
             ></div>
         </div>

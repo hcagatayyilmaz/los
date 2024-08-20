@@ -21,6 +21,12 @@ const mapContainerStyle = {
     height: "300px"
 }
 
+// Default location for Berlin
+const berlinLocation = {
+    lat: 52.52,
+    lng: 13.405
+}
+
 const AddLocationPopup: React.FC<{
     onClose: () => void
     userLocation: {lat: number; lng: number} | undefined
@@ -42,8 +48,8 @@ const AddLocationPopup: React.FC<{
                 description,
                 taxonomy,
                 address,
-                latitude: currentLocation?.lat || 0,
-                longitude: currentLocation?.lng || 0
+                latitude: currentLocation?.lat || berlinLocation.lat,
+                longitude: currentLocation?.lng || berlinLocation.lng
             })
             setMessage(res.message)
             onClose() // Close the popup on successful submission
@@ -132,8 +138,8 @@ const AddLocationPopup: React.FC<{
                     </div>
 
                     <div className='text-sm text-black font-bold mb-4'>
-                        Location: {(currentLocation?.lat || 0).toFixed(4)},{" "}
-                        {(currentLocation?.lng || 0).toFixed(4)}
+                        Location: {(currentLocation?.lat || berlinLocation.lat).toFixed(4)},{" "}
+                        {(currentLocation?.lng || berlinLocation.lng).toFixed(4)}
                     </div>
 
                     <div className='relative mb-4'>
@@ -142,7 +148,7 @@ const AddLocationPopup: React.FC<{
                         >
                             <GoogleMap
                                 mapContainerStyle={mapContainerStyle}
-                                center={currentLocation || {lat: 0, lng: 0}}
+                                center={currentLocation || berlinLocation}
                                 zoom={10}
                                 onClick={handleMapClick}
                             >

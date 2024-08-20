@@ -12,6 +12,7 @@ import HideAndSeek from "@/app/components/HideAndSeek"
 import PopQuiz from "@/app/components/PopQuiz"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import AddLocation from "../../components/AddLocation"
+import StreakParent from "../../components/StreakParent"
 
 type QuestsPageParams = {
     params: {
@@ -48,8 +49,10 @@ async function QuestsPage({params}: QuestsPageParams) {
                     </div>
                 </Link>
             </div>
-
-            <div className='px-4 mt-6'>
+            <h1 className={`text-4xl font-semibold my-4 px-4 ${museumModerno.className}`}>
+                Quests
+            </h1>
+            <div className='px-4 my-2'>
                 <p className={`my-1 text-sm ${museumModerno.className} mb-1`}>
                     Choose any quests to earn points while having fun and experience more in your
                     city. Start ranking in the city to get some rewards!
@@ -57,13 +60,13 @@ async function QuestsPage({params}: QuestsPageParams) {
             </div>
 
             <div>
-                {/* BADGE COMPONENT */}
+                <StreakParent />
                 {badge && <Badge data={badge} />}
                 {/* BADGE COMPONENT */}
                 {/* STREAK COMPONENT */}
                 {/* <AddLocation /> */}
                 {/* ADD PLACE COMPONENT */}
-                {/* <StreakParent /> */}
+
                 {/* STREAK COMPONENT */}
                 {/* POP QUIZ COMPONENT */}
                 {/* {quiz && <PopQuiz quiz={quiz} />} */}
@@ -82,9 +85,10 @@ async function QuestsPage({params}: QuestsPageParams) {
                 <div className='flex item-center justify-center px-6'>
                     <div className='flex flex-col justify-center items-center'>
                         <RankingIcon number={2} />
-                        <span>You are level 2!</span>
+                        <span>You are level 4!</span>
+                        <span className='text-customYellow font-bold'>120/250</span>
                         <span
-                            className={`${museumModerno.className} font-normal my-2 text-xl text-center`}
+                            className={`${museumModerno.className} font-normal mb-4 text-xl text-center`}
                         >
                             You can unlock rewards when you reach level 5!
                         </span>

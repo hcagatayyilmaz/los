@@ -18,13 +18,13 @@ const handleClick = async (id: string) => {
     }
 }
 
-function BadgeButton({id}: {id: string}) {
+function BadgeButton({id, name}: {id: string; name: string}) {
     return (
         <button
             className='w-full mx-auto px-4 py-2 rounded-2xl bg-customYellow text-white text-center'
             onClick={() => handleClick(id)}
         >
-            Get Badge!
+            Get the Badge!
         </button>
     )
 }

@@ -8,12 +8,16 @@ const museoModerno = MuseoModerno({
 
 function StreakParent() {
     return (
-        <div className='w-full flex flex-col gap-4'>
-            <h1 className={`px-6 mt-2 text-xl font-bold ${museoModerno.className}`}>Streak!</h1>
-            <p className={`px-6 ${museoModerno.className} text-sm`}>
-                Visit places with tree icon on the map to get rewards!
+        <div className='w-full flex flex-col gap-2'>
+            <h1 className={`px-4 mt-2 text-xl font-bold ${museoModerno.className}`}>
+                Tübingen City Badge
+            </h1>
+            <p className={`px-4 ${museoModerno.className} text-sm`}>
+                Check in at 5 locations to earn a limited city badge, available to the first 100
+                people, unlocking exclusive offers just for badge holders and get 5 free event
+                tickets for your city.
             </p>
-            <div className='flex flex-row flex-wrap gap-4 px-4'>
+            <div className='flex mt-2 flex-row flex-wrap gap-4 px-4'>
                 <Streak completed={true} />
                 <Streak completed={true} />
                 <Streak completed={true} />

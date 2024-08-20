@@ -60,9 +60,11 @@ export default async function Home() {
                         <span className='inline-block ml-1 h-3 border-dashed w-3 rounded-full bg-customYellow border'></span>
                     </div>
                 </div>
-                <h2 className='mt-4 overflow-hidden md:overflow-auto whitespace-normal text-16 xl:text-28'>
-                    Experience the world
-                    <span className='hidden md:contents'></span> with, gamified guides offering
+                <h2
+                    className={`mt-4 overflow-hidden md:overflow-auto whitespace-normal text-16 xl:text-28 ${museoModerno.className}`}
+                >
+                    Find the coolest experiences and explore the cities
+                    <span className='hidden md:contents'></span> with gamified experiences offering
                     exciting rewards.
                 </h2>
                 <div className='h-[30vh] w-full my-6 rounded-lg'>
@@ -78,7 +80,7 @@ export default async function Home() {
                     </Link>
                 </div>
                 <div className='py-4'>
-                    <h1 className={`${museoModerno.className} text-4xl font-semibold`}>Cities</h1>
+                    <h1 className={`${museoModerno.className} text-4xl font-medium`}>Los Cities</h1>
                 </div>
                 <div className='grid grid-cols-2 gap-2 '>
                     <Link href={"/tuebingen"}>
