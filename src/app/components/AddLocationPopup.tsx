@@ -23,7 +23,8 @@ const mapContainerStyle = {
 
 const AddLocationPopup: React.FC<{
     onClose: () => void
-}> = ({onClose}) => {
+    userLocation: {lat: number; lng: number} | undefined
+}> = ({onClose, userLocation}) => {
     const [description, setDescription] = useState("")
     const [title, setTitle] = useState("")
     const [address, setAddress] = useState("")
