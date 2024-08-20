@@ -4,6 +4,7 @@ import Select from "react-select"
 import {addLocation} from "@/app/server"
 import {MdOutlineCancel} from "react-icons/md"
 import {MuseoModerno} from "next/font/google"
+import {GoogleMap, LoadScriptNext, Marker} from "@react-google-maps/api"
 
 const museoModerno = MuseoModerno({
     subsets: ["latin"]
@@ -15,15 +16,20 @@ const options = [
     {value: "EXPERIENCE", label: "Experience"}
 ]
 
+const mapContainerStyle = {
+    width: "100%",
+    height: "300px"
+}
+
 const AddLocationPopup: React.FC<{
     onClose: () => void
-    userLocation?: {lat: number; lng: number}
-}> = ({onClose, userLocation}) => {
+}> = ({onClose}) => {
     const [description, setDescription] = useState("")
     const [title, setTitle] = useState("")
     const [address, setAddress] = useState("")
     const [taxonomy, setTaxonomy] = useState<"ATTRACTION" | "EVENT" | "EXPERIENCE">("ATTRACTION")
     const [message, setMessage] = useState<string | null>(null)
+    const [currentLocation, setCurrentLocation] = useState<{lat: number; lng: number} | null>(null)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -35,14 +41,23 @@ const AddLocationPopup: React.FC<{
                 description,
                 taxonomy,
                 address,
-                latitude: userLocation?.lat || 0, // Use 0 if no location is provided
-                longitude: userLocation?.lng || 0 // Use 0 if no location is provided
+                latitude: currentLocation?.lat || 0,
+                longitude: currentLocation?.lng || 0
             })
             setMessage(res.message)
             onClose() // Close the popup on successful submission
         } catch (error: any) {
             setMessage(error.message)
             console.error("Error submitting location:", error)
+        }
+    }
+
+    const handleMapClick = (e: google.maps.MapMouseEvent) => {
+        if (e.latLng) {
+            setCurrentLocation({
+                lat: e.latLng.lat(),
+                lng: e.latLng.lng()
+            })
         }
     }
 
@@ -59,9 +74,8 @@ const AddLocationPopup: React.FC<{
                     </button>
                 </div>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nulla iste mollitia
-                    eligendi ipsam nisi neque accusantium porro dolorem eveniet provident pariatur
-                    reiciendis cumque voluptate tenetur ratione ut, soluta explicabo facere?
+                    Please provide details for the new checkpoint and select a location by clicking
+                    on the map.
                 </p>
                 <form onSubmit={handleSubmit} className='space-y-4'>
                     <div>
@@ -115,13 +129,31 @@ const AddLocationPopup: React.FC<{
                             }}
                         />
                     </div>
-                    <div className='text-sm text-black font-bold'>
-                        Location: {(userLocation?.lat || 0).toFixed(4)},{" "}
-                        {(userLocation?.lng || 0).toFixed(4)}
+
+                    <div className='text-sm text-black font-bold mb-4'>
+                        Location: {(currentLocation?.lat || 0).toFixed(4)},{" "}
+                        {(currentLocation?.lng || 0).toFixed(4)}
                     </div>
+
+                    <div className='relative mb-4'>
+                        <LoadScriptNext
+                            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+                        >
+                            <GoogleMap
+                                mapContainerStyle={mapContainerStyle}
+                                center={currentLocation || {lat: 0, lng: 0}}
+                                zoom={10}
+                                onClick={handleMapClick}
+                            >
+                                {currentLocation && <Marker position={currentLocation} />}
+                            </GoogleMap>
+                        </LoadScriptNext>
+                    </div>
+
                     {message && (
                         <div className='text-center text-sm text-customYellow'>{message}</div>
                     )}
+
                     <div className='flex justify-between'>
                         <button
                             type='submit'

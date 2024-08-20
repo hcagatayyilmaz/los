@@ -23,7 +23,7 @@ type CityPageParams = {
     searchParams?: {[key: string]: string | string[] | undefined} | undefined
 }
 
-// false | 0 | number
+export const revalidate = 3600
 
 export async function generateStaticParams() {
     unstable_noStore()
