@@ -64,11 +64,11 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
         <div className='w-full'>
             {location.checkedIn ? (
                 <button
-                    className='w-full border-2 border-customYellow text-customYellow rounded-2xl py-1 flex items-center justify-center gap-2'
+                    className='w-full border-2 border-customYellow text-white bg-customYellow rounded-2xl py-1 flex items-center justify-center gap-2'
                     onClick={handleCheckIn}
                 >
                     <div className='flex items-center'>
-                        <ImUnlocked className='w-3 h-3 text-white bg-customYellow  mr-1' />
+                        <ImUnlocked className='w-3 h-3 text-customYellow  mr-1' />
                         Great! You are already checked in!
                     </div>
                 </button>
@@ -81,14 +81,6 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
                         <FaLock className='w-3 h-3 text-customYellow  mr-1' />
                         Check In!
                     </div>
-                    {/* <span className='inline-block'>
-                        <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
-                            <CoinIcon className='w-4 h-4 text-white' />
-                            <span className='mt-1 ml-1 text-xs text-white'>
-                                + {location.points}
-                            </span>
-                        </div>
-                    </span> */}
                 </button>
             )}
         </div>
