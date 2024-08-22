@@ -78,10 +78,17 @@ export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
 
     return (
         <div className='relative group w-8 h-8'>
-            <div
+            {/* <div
                 className={`absolute w-5 h-5 rounded-full border-4 border-black flex justify-center items-center group-hover:scale-150 transition-transform duration-200`}
                 style={{backgroundColor: bgColor}}
-            ></div>
+            ></div> */}
+            <Image
+                src={"/poi.png"}
+                alt='Location Pin'
+                fill
+                objectFit='contain'
+                className='absolute group-hover:scale-150 transition-transform duration-200'
+            />
         </div>
     )
 }
