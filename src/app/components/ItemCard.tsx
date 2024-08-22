@@ -3,6 +3,7 @@ import Image from "next/image"
 import {Location} from "../lib/types"
 import Link from "next/link"
 import ItemButtonGroup from "./ItemButtonGroup"
+import {FaDirections} from "react-icons/fa"
 
 type ItemCardProps = {
     location: Location
@@ -24,15 +25,28 @@ export const ItemCard = ({location}: ItemCardProps) => {
                         />
                     </div>
                 )}
-                <div className={`pl-4 ${location.imageUrl ? "w-2/3" : "w-full"}`}>
+                <div
+                    className={`pl-4 flex justify-between items-center ${
+                        location.imageUrl ? "w-2/3" : "w-full"
+                    }`}
+                >
                     <h2 className='text-md font-bold text-wrap'>{location.name_en}</h2>
-                    <div className='flex items-center text-pink-500 my-2'>
-                        <CoinIcon className='w-5 h-5 mr-1' />
-                        <span className='font-semibold'>{location.points}</span>
+                    <div className='flex gap-2'>
+                        <span className='inline-block'>
+                            <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
+                                <CoinIcon className='w-4 h-4 text-white' />
+                                <span className='mt-1 ml-1 text-xs text-white'>
+                                    + {location.points}
+                                </span>
+                            </div>
+                        </span>
+                        <Link href={mapUrl} target='_blank' rel='noopener noreferrer'>
+                            <FaDirections className='w-6 h-6' fill='#FF1493' />
+                        </Link>
                     </div>
-                    <p className='text-gray-500 text-xs text-wrap'>{location.description_en}</p>
                 </div>
             </div>
+            <p className='pl-4 mt-2 text-gray-500 text-xs text-wrap'>{location.description_en}</p>
 
             <div className='px-4 flex justify-between mt-4'>
                 {/* <div className='flex items-center gap-1'>

@@ -68,7 +68,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
                     onClick={handleCheckIn}
                 >
                     <div className='flex items-center'>
-                        <ImUnlocked className='w-3 h-3 text-customYellow  mr-1' />
+                        <ImUnlocked className='w-3 h-3 text-white bg-customYellow  mr-1' />
                         Great! You are already checked in!
                     </div>
                 </button>
@@ -81,14 +81,14 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
                         <FaLock className='w-3 h-3 text-customYellow  mr-1' />
                         Check In!
                     </div>
-                    <span className='inline-block'>
+                    {/* <span className='inline-block'>
                         <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                             <CoinIcon className='w-4 h-4 text-white' />
                             <span className='mt-1 ml-1 text-xs text-white'>
                                 + {location.points}
                             </span>
                         </div>
-                    </span>
+                    </span> */}
                 </button>
             )}
         </div>

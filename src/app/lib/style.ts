@@ -1,81 +1,3 @@
-// const mapStyle = [
-//     {
-//         featureType: "landscape.natural",
-//         elementType: "geometry.fill",
-//         stylers: [
-//             {
-//                 visibility: "on"
-//             },
-//             {
-//                 color: "#e0efef"
-//             }
-//         ]
-//     },
-//     {
-//         featureType: "poi",
-//         elementType: "geometry.fill",
-//         stylers: [
-//             {
-//                 visibility: "on"
-//             },
-//             {
-//                 color: "#c0e8e8"
-//             }
-//         ]
-//     },
-//     {
-//         featureType: "poi",
-//         elementType: "labels",
-//         stylers: [
-//             {
-//                 visibility: "off"
-//             }
-//         ]
-//     },
-//     {
-//         featureType: "road",
-//         elementType: "geometry",
-//         stylers: [
-//             {
-//                 lightness: 100
-//             },
-//             {
-//                 visibility: "simplified"
-//             }
-//         ]
-//     },
-//     {
-//         featureType: "road",
-//         elementType: "labels",
-//         stylers: [
-//             {
-//                 visibility: "on"
-//             }
-//         ]
-//     },
-//     {
-//         featureType: "transit.line",
-//         elementType: "geometry",
-//         stylers: [
-//             {
-//                 visibility: "on"
-//             },
-//             {
-//                 lightness: 700
-//             }
-//         ]
-//     },
-//     {
-//         featureType: "water",
-//         elementType: "all",
-//         stylers: [
-//             {
-//                 color: "#7dcdcd"
-//             }
-//         ]
-//     }
-// ]
-
 const mapStyle = [
     {
         featureType: "landscape.natural",
@@ -112,13 +34,28 @@ const mapStyle = [
     },
     {
         featureType: "road",
-        elementType: "geometry",
+        elementType: "geometry.stroke",
         stylers: [
             {
                 lightness: 100
             },
             {
                 visibility: "simplified"
+            },
+            {
+                weight: 3 // Increase the size of the streets
+            }
+        ]
+    },
+    {
+        featureType: "road",
+        elementType: "geometry.fill",
+        stylers: [
+            {
+                visibility: "on"
+            },
+            {
+                color: "#ffffff" // Ensure road fill is visible
             }
         ]
     },
@@ -127,7 +64,7 @@ const mapStyle = [
         elementType: "labels",
         stylers: [
             {
-                visibility: "off"
+                visibility: "off" // Remove all road labels
             }
         ]
     },
@@ -148,10 +85,7 @@ const mapStyle = [
         elementType: "all",
         stylers: [
             {
-                color: "#4A90E2"
-            },
-            {
-                visibility: "on"
+                color: "#7dcdcd"
             }
         ]
     },
@@ -160,7 +94,7 @@ const mapStyle = [
         elementType: "labels",
         stylers: [
             {
-                visibility: "off"
+                visibility: "off" // Remove administrative labels
             }
         ]
     },
@@ -169,7 +103,7 @@ const mapStyle = [
         elementType: "labels",
         stylers: [
             {
-                visibility: "off"
+                visibility: "off" // Remove local road labels
             }
         ]
     },
@@ -178,7 +112,7 @@ const mapStyle = [
         elementType: "labels",
         stylers: [
             {
-                visibility: "off"
+                visibility: "off" // Remove transit labels
             }
         ]
     }
