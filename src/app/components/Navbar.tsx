@@ -15,15 +15,15 @@ export default function Navbar() {
     const {isAuthenticated} = useKindeBrowserClient()
 
     return (
-        <div className='flex justify-between px-2 items-center bg-transparent mt-1 '>
+        <div className='flex justify-between px-2 items-center bg-transparent mt-1 text-sm'>
             <Link href={""}>
-                <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border border-gray-300 shadow-md'>
+                <div className='flex gap-2 items-center text-muted-foreground bg-white px-2 py-1 rounded border text-sm border-gray-300 shadow-md'>
                     <CiMap className='w-5 h-5 ' />
                     <span>Account</span>
                 </div>
             </Link>
             <Link href={`${currentPath}/quests`}>
-                <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
+                <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md text-sm'>
                     <MapIcon className='w-5 h-5' />
                     <span>Quests & Rewards</span>
                 </div>
@@ -31,7 +31,7 @@ export default function Navbar() {
 
             {isAuthenticated ? (
                 <LogoutLink>
-                    <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md'>
+                    <div className='flex gap-2  items-center text-muted-foreground bg-white px-2 py-1 rounded border hover:text-customYellow border-gray-300 shadow-md text-sm'>
                         <RiAccountCircleLine className='w-5 h-5' />
                         <span>Logout</span>
                     </div>
