@@ -4,9 +4,9 @@ import Image from "next/image"
 // border-white or border-black for live location pin
 
 export const LiveLocationPin = () => (
-    <div className='relative'>
-        <div className='absolute w-6 h-6 bg-[#FF1493] border-dashed rounded-full border-4 border-white shadow-2xl shadow-[#FF1493]/50'></div>
-        <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75'></div>
+    <div className='relative group'>
+        <div className='absolute w-6 h-6 bg-[#FF1493] border-dashed rounded-full border-4 border-white shadow-2xl shadow-[#FF1493]/50 group-hover:scale-150 transition-transform duration-200'></div>
+        <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75 group-hover:scale-150 transition-transform duration-200'></div>
     </div>
 )
 
@@ -16,34 +16,35 @@ export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
 }) => {
     if (location.checkedIn === true) {
         return (
-            <div className='relative w-6 h-6'>
-                <div className={`absolute w-6 h-6 rounded-full border-4 border-black bg-green-400`}>
+            <div className='relative group w-6 h-6'>
+                <div
+                    className={`absolute w-6 h-6 rounded-full border-4 border-black bg-green-400 group-hover:scale-150 transition-transform duration-200`}
+                >
                     <span></span>
                 </div>
             </div>
         )
     } else if (location.isTheme) {
         return (
-            <div className='relative w-10 h-10'>
+            <div className='relative group w-10 h-10'>
                 <Image
                     src='/holderlin.png'
                     alt='Theme Pin'
                     fill
                     objectFit='contain'
-                    className='absolute'
+                    className='absolute group-hover:scale-150 transition-transform duration-200'
                 />
             </div>
         )
     } else if (location.pin !== null) {
-        console.log(location.pin)
         return (
-            <div className='relative w-8 h-8'>
+            <div className='relative group w-8 h-8'>
                 <Image
                     src={location.pin}
                     alt='Location Pin'
                     fill
                     objectFit='contain'
-                    className='absolute'
+                    className='absolute group-hover:scale-150 transition-transform duration-200'
                 />
             </div>
         )
@@ -76,9 +77,9 @@ export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
     }
 
     return (
-        <div className='relative hover:w-8 h-8'>
+        <div className='relative group w-8 h-8'>
             <div
-                className={`absolute w-5 h-5 rounded-full border-4 border-black flex justify-center items-center`}
+                className={`absolute w-5 h-5 rounded-full border-4 border-black flex justify-center items-center group-hover:scale-150 transition-transform duration-200`}
                 style={{backgroundColor: bgColor}}
             ></div>
         </div>

@@ -21,10 +21,7 @@ export const MyRewardCard = ({reward, isUsed}: any) => {
                             )}
                         </div>
                     </div>
-                    <p className='text-gray-500 text-xs text-wrap'>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni ad aliquid
-                        voluptas.
-                    </p>
+                    <p className='text-gray-500 text-xs text-wrap'>{reward.description_en}</p>
                 </div>
             </div>
             <div className='mt-1 flex justify-center'>
