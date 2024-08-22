@@ -10,7 +10,7 @@ export const MyRewardCard = ({reward, isUsed}: any) => {
             <div className='flex'>
                 <div className='w-full px-2'>
                     <div className='flex items-center justify-between mb-2'>
-                        <h2 className='text-md font-bold text-wrap'>{reward.name}</h2>
+                        <h2 className='text-md font-bold text-wrap'>{reward.name_en}</h2>
                         <div className='flex items-center'>
                             {isUsed ? (
                                 <span className='text-white bg-black text-md font-bold'>Used</span>
