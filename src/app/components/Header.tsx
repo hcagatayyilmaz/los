@@ -5,37 +5,42 @@ import {CoinIcon} from "../lib/CustomIcons"
 import Image from "next/image"
 
 const museumModerno = MuseoModerno({
-    subsets: ["latin"]
+  subsets: ["latin"]
 })
 
 interface LogoProps {
-    name?: string
-    user?: any
+  name?: string
+  user?: any
+  isMap?: boolean
 }
 
-export default function Header({name, user}: LogoProps) {
-    return (
+export default function Header({name, user, isMap}: LogoProps) {
+  return (
+    <div
+      className={`px-2 py-1 flex items-center justify-center bg-white border rounded-b -xl shadow-xl`}
+    >
+      <Link href={"/"}>
         <div
-            className={`px-2 py-1 flex items-center justify-center bg-white border rounded-b -xl shadow-xl`}
+          className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
+          style={{border: "1px dashed white"}}
         >
-            <Link href={"/"}>
-                <div
-                    className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
-                    style={{border: "1px dashed white"}}
-                >
-                    <h1 className='text-3xl flex items-end font-medium text-center'>
-                        <span className={`text-black font-bold ${museumModerno.className}`}>
-                            Los
-                        </span>
-                        <div className='ml-[2px] mb-2 '>
-                            <Image src='/logo.png' alt='Logo' width={12} height={12} />
-                        </div>
-                    </h1>
-                    <div className='flex items-end justify-end mt-2'>
-                        <h2 className='text-md font-semibold text-customYellow'>{name}</h2>
-                    </div>
-                </div>
-            </Link>
+          <h1 className='text-3xl flex items-end font-medium text-center'>
+            <span className={`text-black font-bold ${museumModerno.className}`}>
+              Los
+            </span>
+            <div className='ml-[2px] mb-2 '>
+              <Image src='/logo.png' alt='Logo' width={12} height={12} />
+            </div>
+          </h1>
+          <div className='flex items-end justify-end mt-2'>
+            {!isMap && (
+              <h2 className='text-md font-semibold text-customYellow'>
+                {name}
+              </h2>
+            )}
+          </div>
         </div>
-    )
+      </Link>
+    </div>
+  )
 }
