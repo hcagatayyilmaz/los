@@ -14,7 +14,7 @@ import {LiveLocationPin, ItemPin} from "./Pins"
 
 const libraries: Libraries = ["places", "geometry"]
 
-const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
+const Map: React.FC<{locations: Location[]; isMapPage?: boolean}> = ({
   locations,
   isMapPage
 }) => {
@@ -95,6 +95,27 @@ const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
       map.panTo({lat: latitude, lng: longitude})
     }
   }, [selectedLocation, map])
+
+  // New effect to handle centering map on user location
+  useEffect(() => {
+    const centerMapToUserLocation = () => {
+      if (map && userLocation) {
+        map.panTo(
+          new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
+        )
+        map.setZoom(16)
+      }
+    }
+
+    window.addEventListener("centerMapToUserLocation", centerMapToUserLocation)
+
+    return () => {
+      window.removeEventListener(
+        "centerMapToUserLocation",
+        centerMapToUserLocation
+      )
+    }
+  }, [map, userLocation])
 
   const handlePinClick = (location: Location) => {
     if (isMapPage) {

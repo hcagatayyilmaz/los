@@ -4,6 +4,8 @@ import Header from "@/app/components/Header"
 import Navbar from "@/app/components/Navbar"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 
+import CardButtonWrapper from "../components/CardButtonWrapper"
+
 import {SelectedItemProvider} from "@/app/providers/useSelectedItem"
 import {getAttractions, getDBUser} from "@/app/server/data"
 import {unstable_noStore} from "next/cache"
@@ -87,13 +89,10 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
               {/* <Banner /> */}
             </div>
             <div className='absolute bottom-0 left-0 w-full z-1'>
-              <div className='flex mx-4 mb-1 justify-between items-center'>
-                <TotalPoints points={user ? user.points : 0} />
-                <div className='flex gap-1'>
-                  <ClosestPlace locations={attractions} />
-                  <LocationPermissionButton />
-                </div>
-              </div>
+              <CardButtonWrapper
+                points={user ? user.points : 0}
+                locations={attractions}
+              />
               <SliderWrapper locations={attractions} />
             </div>
           </main>
