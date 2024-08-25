@@ -13,7 +13,7 @@ import ActionsButtons from "../components/ActionsButtons"
 import ClosestPlace from "../components/ClosestPlace"
 import {UIProvider} from "@/app/providers/UIProvider" // Ensure this is the correct path
 import Map from "../components/Map"
-import SliderWrapper from "../components/SliderWrapper"
+import MapItemWrapper from "../components/MapItemWrapper"
 
 type MapPageParams = {
   params: {
@@ -55,11 +55,10 @@ const CityPage = async ({searchParams}: MapPageParams) => {
             <div className='flex mx-4 mb-1 justify-between items-center'>
               <TotalPoints points={user ? user.points : 0} />
               <div className='flex gap-1'>
-                <ClosestPlace locations={attractions} isMap={true} />
                 <LocationPermissionButton />
               </div>
             </div>
-            <SliderWrapper locations={attractions} />
+            <MapItemWrapper />
           </div>
         </main>
       </SelectedItemProvider>

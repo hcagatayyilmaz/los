@@ -24,9 +24,10 @@ const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
   })
 
   const {userLocation} = useUserLocation()
-  const {setSelectedLocation, selectedLocation} = useSelectedItem()
+  const {setSelectedLocation, updateSelectedLocation, selectedLocation} =
+    useSelectedItem()
   const [map, setMap] = useState<google.maps.Map | null>(null)
-  const [isCentered, setIsCentered] = useState(false) // Track if the map has been centered
+  const [isCentered, setIsCentered] = useState(false)
 
   const mapContainerStyle = useMemo(
     () => ({
@@ -36,7 +37,7 @@ const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
     []
   )
 
-  const tübingenCoordinates = {lat: 48.5216, lng: 9.0576} // Tübingen coordinates
+  const tübingenCoordinates = {lat: 48.5216, lng: 9.0576}
 
   const initialCenter = useMemo(() => {
     if (userLocation) {
@@ -45,7 +46,7 @@ const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
       const firstLocation = locations[0]
       return {lat: firstLocation.latitude, lng: firstLocation.longitude}
     } else {
-      return tübingenCoordinates // Default to Tübingen if no user location or locations are provided
+      return tübingenCoordinates
     }
   }, [userLocation, locations])
 
@@ -60,7 +61,7 @@ const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
           new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
         )
         map.setZoom(16)
-        setIsCentered(true) // Mark the map as centered
+        setIsCentered(true)
       } else if (locations.length > 0 && !isCentered) {
         const firstLocation = locations[0]
         map.setCenter({
@@ -68,34 +69,40 @@ const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
           lng: firstLocation.longitude
         })
         map.setZoom(16)
-        setIsCentered(true) // Mark the map as centered
+        setIsCentered(true)
       } else if (!isCentered) {
         map.setCenter(tübingenCoordinates)
-        map.setZoom(14) // Default zoom for Tübingen
-        setIsCentered(true) // Mark the map as centered
+        map.setZoom(14)
+        setIsCentered(true)
       }
     },
     [userLocation, isCentered, locations, tübingenCoordinates, isMapPage]
   )
 
-  // This effect will run when the userLocation changes, but will only center the map if it hasn't been centered yet.
   useEffect(() => {
     if (map && userLocation && !isCentered && !isMapPage) {
       map.setCenter(
         new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
       )
       map.setZoom(16)
-      setIsCentered(true) // Mark the map as centered
+      setIsCentered(true)
     }
   }, [map, userLocation, isCentered, isMapPage])
 
-  // Pan to the selected location whenever it changes
   useEffect(() => {
     if (selectedLocation && map) {
       const {latitude, longitude} = selectedLocation
       map.panTo({lat: latitude, lng: longitude})
     }
   }, [selectedLocation, map])
+
+  const handlePinClick = (location: Location) => {
+    if (isMapPage) {
+      updateSelectedLocation(location.id)
+    } else {
+      setSelectedLocation(location)
+    }
+  }
 
   if (loadError) return <div>Error loading maps</div>
   if (!isLoaded) return <div>Loading maps</div>
@@ -104,7 +111,7 @@ const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
       onLoad={onMapLoad}
-      zoom={isMapPage ? 4 : 15} // Default zoom based on isMapPage prop
+      zoom={isMapPage ? 4 : 15}
       options={{
         mapTypeControl: false,
         fullscreenControl: false,
@@ -123,7 +130,7 @@ const Map: React.FC<{locations: Location[]; isMapPage: boolean}> = ({
           position={{lat: location.latitude, lng: location.longitude}}
           mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
         >
-          <div onClick={() => setSelectedLocation(location)}>
+          <div onClick={() => handlePinClick(location)}>
             <ItemPin
               location={location}
               isSelected={selectedLocation?.id === location.id}

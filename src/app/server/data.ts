@@ -256,3 +256,18 @@ export const getAllPlaces = unstable_cache(
   ["all-places"],
   {revalidate: 600} // 10 minutes
 )
+
+export async function getPlaceDetails(placeId: string) {
+  const place = await prisma.attraction.findUnique({
+    where: {
+      id: placeId,
+      isActive: true
+    }
+  })
+
+  if (!place) {
+    return null
+  }
+
+  return place
+}
