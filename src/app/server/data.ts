@@ -1,6 +1,7 @@
 "use server"
 import {KindeUser} from "@kinde-oss/kinde-auth-nextjs/types"
 import {PrismaClient} from "@prisma/client"
+import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 
 const prisma = new PrismaClient()
 
@@ -15,6 +16,9 @@ export async function getAllRewards() {
 
 export async function getAttractions(cityId: string, filter: any) {
     "use server"
+
+    const {getUser} = await getKindeServerSession()
+    const user = await getUser()
     const now = new Date()
 
     const whereClause: any = {
@@ -56,9 +60,34 @@ export async function getAttractions(cityId: string, filter: any) {
         ]
     }
 
-    const attractions = await prisma.attraction.findMany({
+    let attractions = await prisma.attraction.findMany({
         where: whereClause
     })
+
+    if (user) {
+        // Fetch all check-ins for the current user
+        const checkIns = await prisma.checkIn.findMany({
+            where: {
+                userId: user.id,
+                attractionId: {in: attractions.map((attr) => attr.id)}
+            },
+            select: {attractionId: true}
+        })
+
+        const checkedInAttractionIds = new Set(checkIns.map((checkIn) => checkIn.attractionId))
+
+        // Add checkedIn flag to each attraction
+        attractions = attractions.map((attraction) => ({
+            ...attraction,
+            checkedIn: checkedInAttractionIds.has(attraction.id)
+        }))
+    } else {
+        // If no user, set checkedIn to false for all attractions
+        attractions = attractions.map((attraction) => ({
+            ...attraction,
+            checkedIn: false
+        }))
+    }
 
     console.log("Attractions:", attractions)
 
@@ -129,6 +158,86 @@ export async function getHideAndSeek() {
             attraction: true
         }
     })
-
     return hideAndSeek
+}
+
+export async function getBadge() {
+    const {getUser} = await getKindeServerSession()
+    const user = await getUser()
+
+    try {
+        const badges = await prisma.badge.findFirst({
+            where: {
+                isActive: true
+            },
+            include: {
+                attractions: {
+                    include: {
+                        attraction: true // Include attraction details, but no check-ins or user-based data
+                    }
+                }
+            }
+        })
+
+        if (user) {
+            const userCheckIns = await prisma.checkIn.findMany({
+                where: {
+                    userId: user.id
+                },
+                select: {
+                    attractionId: true
+                }
+            })
+
+            const checkedInAttractionIds = new Set(
+                userCheckIns.map((checkIn) => checkIn.attractionId)
+            )
+
+            if (badges && badges.attractions) {
+                badges.attractions = badges.attractions.map((attraction) => ({
+                    ...attraction,
+                    checkedIn: checkedInAttractionIds.has(attraction.attractionId)
+                }))
+            }
+        }
+
+        return badges
+    } catch (error) {
+        console.error("Error fetching active badges:", error)
+        throw new Error("Could not fetch active badges")
+    }
+}
+
+export async function getBadgeStatus(attractionIds: string[]) {
+    const {getUser} = await getKindeServerSession()
+    const user = await getUser()
+
+    if (!user) {
+        throw new Error("Please login to get your badge!")
+    }
+
+    const checkedIn = await prisma.checkIn.findMany({
+        where: {
+            userId: user.id,
+            attractionId: {
+                in: attractionIds
+            }
+        },
+        select: {
+            attractionId: true
+        }
+    })
+
+    return checkedIn.map((checkIn) => checkIn.attractionId)
+}
+
+export async function getRewardsById(rewardId: string) {
+    "use server"
+    const reward = await prisma.reward.findUnique({
+        where: {
+            id: rewardId
+        }
+    })
+
+    return reward
 }

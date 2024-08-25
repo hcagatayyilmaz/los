@@ -2,12 +2,17 @@ export type Location = {
     id: string
     latitude: number
     longitude: number
-    name: string
+    name_en: string
+    name_de: string
     points: number
     taxonomy?: string | null
     imageUrl: string | null
-    meta: any
+    description_en?: string | null
+    description_de?: string | null
     isActive: boolean
     endDate: Date | null
     startDate: Date | null
+    isTheme: boolean | null
+    pin: string | null
+    checkedIn?: boolean
 }

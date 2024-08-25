@@ -1,13 +1,26 @@
 "use client"
-import React, {useState} from "react"
+import React from "react"
 import {submitQuiz} from "../server"
+import {MuseoModerno} from "next/font/google"
+import {toast} from "react-hot-toast"
+import CustomToast from "./CustomToast" // Ensure correct path to the CustomToast component
+
+const museoModerno = MuseoModerno({
+    subsets: ["latin"]
+})
 
 const PopQuizActions = ({options, quizId}: {options: string[]; quizId: string}) => {
-    const [quizMessage, setQuizMessage] = useState<string | null>(null)
-
     const handlePopQuiz = async (answer: string) => {
-        const response = await submitQuiz({quizId, submitted_answer: answer})
-        setQuizMessage(response.message)
+        try {
+            const response = await submitQuiz({quizId, submitted_answer: answer})
+            toast.custom(<CustomToast message={response.message} type='success' />, {
+                position: "top-center"
+            })
+        } catch (error: any) {
+            toast.custom(<CustomToast message={error.message} type='error' />, {
+                position: "top-center"
+            })
+        }
     }
 
     return (
@@ -16,14 +29,13 @@ const PopQuizActions = ({options, quizId}: {options: string[]; quizId: string}) 
                 {options.map((option) => (
                     <button
                         key={option}
-                        className='py-2 px-4 rounded-full bg-customYellow text-white font-semibold border'
+                        className={`py-1 px-4 rounded-full bg-black text-white text-md  border `}
                         onClick={() => handlePopQuiz(option)}
                     >
                         {option}
                     </button>
                 ))}
             </div>
-            {quizMessage && <p className='text-green-600 mt-4'>{quizMessage}</p>}
         </div>
     )
 }

@@ -7,12 +7,14 @@ import Map from "@/app/components/Map"
 import ItemsSlider from "@/app/components/ItemSlider"
 import {SelectedItemProvider} from "@/app/providers/useSelectedItem"
 import {getAttractions, getDBUser} from "@/app/server/data"
-import toast from "react-hot-toast"
 import {unstable_noStore} from "next/cache"
 import LocationPermissionButton from "../components/LocationPermissionButton"
 import TotalPoints from "../components/TotalPoints"
 import ActionsButtons from "../components/ActionsButtons"
 import ClosestPlace from "../components/ClosestPlace"
+import {UIProvider} from "@/app/providers/UIProvider" // Ensure this is the correct path
+import MainLayout from "../components/MainLayout"
+import SliderWrapper from "../components/SliderWrapper"
 
 type CityPageParams = {
     params: {
@@ -20,6 +22,8 @@ type CityPageParams = {
     }
     searchParams?: {[key: string]: string | string[] | undefined} | undefined
 }
+
+export const revalidate = 3600
 
 export async function generateStaticParams() {
     unstable_noStore()
@@ -48,11 +52,10 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                 slug: params.slug
             }
         })
-        console.log("City:", city)
 
         if (!city) {
             return (
-                <main className='h-dvh w-screen flex items-center justify-center'>
+                <main className='h-screen w-screen flex items-center justify-center'>
                     <h1 className='text-4xl'>City not found</h1>
                 </main>
             )
@@ -63,48 +66,45 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
             taxonomy: searchParams.taxonomy
         }
 
-        console.log("Filter:", filter)
-
         const attractions = await getAttractions(city.id, filter)
         const {getUser} = getKindeServerSession()
+
         const kindeUser = await getUser()
         const user = kindeUser ? await getDBUser(kindeUser.id) : null
-        console.log(user)
 
         return (
-            <SelectedItemProvider initialLocation={attractions[0]}>
-                <main className='h-dvh w-screen relative'>
-                    <div className='absolute top-0 left-0 h-full w-full pointer-events-none'>
-                        <div className='h-full w-full pointer-events-auto '>
-                            <Map locations={attractions} />
-                        </div>
-                    </div>
-                    <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
-                        <Header user={user} name={city.name} />
-                        <Navbar />
-                        <ActionsButtons slug={city.slug} />
-                    </div>
-                    <div className='absolute bottom-0 left-0 w-full z-20'>
-                        <div className='flex mx-4 mb-1 justify-between '>
-                            {user ? (
-                                <TotalPoints points={user.points} />
-                            ) : (
-                                <TotalPoints points={0} />
-                            )}
-                            <div className='flex gap-1'>
-                                <ClosestPlace locations={attractions} />
-                                <LocationPermissionButton />
+            <UIProvider>
+                <SelectedItemProvider initialLocation={attractions[0]}>
+                    <main className='h-dvh w-full max-w-md mx-auto relative'>
+                        <div className='absolute inset-0 pointer-events-none'>
+                            <div className='h-full w-full pointer-events-auto'>
+                                <MainLayout locations={attractions} />
                             </div>
                         </div>
-                        <ItemsSlider locations={attractions} />
-                    </div>
-                </main>
-            </SelectedItemProvider>
+                        <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
+                            <Header user={user} name={city.name} />
+                            <Navbar />
+                            <ActionsButtons slug={city.slug} />
+                            {/* <Banner /> */}
+                        </div>
+                        <div className='absolute bottom-0 left-0 w-full z-1'>
+                            <div className='flex mx-4 mb-1 justify-between items-center'>
+                                <TotalPoints points={user ? user.points : 0} />
+                                <div className='flex gap-1'>
+                                    <ClosestPlace locations={attractions} />
+                                    <LocationPermissionButton />
+                                </div>
+                            </div>
+                            <SliderWrapper locations={attractions} />
+                        </div>
+                    </main>
+                </SelectedItemProvider>
+            </UIProvider>
         )
     } catch (error) {
         console.error(error)
         return (
-            <main className='h-screen w-screen flex items-center justify-center'>
+            <main className='h-dvh w-screen flex items-center justify-center'>
                 <h1 className='text-4xl'>An error occurred</h1>
             </main>
         )

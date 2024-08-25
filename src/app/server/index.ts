@@ -21,7 +21,7 @@ export async function checkIn({
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Plesae login to check in")
     }
 
     const place = await prisma.attraction.findUnique({
@@ -33,7 +33,7 @@ export async function checkIn({
     }
 
     const distance = await calculateDistance3(userLat, userLng, place.latitude, place.longitude)
-    if (distance <= 25) {
+    if (distance <= 20) {
         // 25 meters threshold
         const checkIn = await prisma.checkIn.create({
             data: {
@@ -62,19 +62,19 @@ export async function checkIn({
     }
 }
 
-export async function obtainBadge({badgeId}: {badgeId: string}) {
+export async function obtainBadge(badgeId: string) {
     "use server"
 
-    const {getUser} = getKindeServerSession()
+    const {getUser} = await getKindeServerSession()
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Please login to obtain badge")
     }
 
     const badge = await prisma.badge.findUnique({
         where: {id: badgeId},
-        include: {users: true}
+        include: {attractions: true} // Ensure to fetch attractions
     })
 
     if (!badge) {
@@ -95,28 +95,21 @@ export async function obtainBadge({badgeId}: {badgeId: string}) {
         throw new Error("User already has this badge")
     }
 
-    // Verify if the user has checked into any of the attractions
-    let obtained = false
-    for (const attractionId of badge.attractionIds) {
-        const checkIn = await prisma.checkIn.findFirst({
-            where: {
-                userId: user.id,
-                attractionId: attractionId
+    const checkIns = await prisma.checkIn.findMany({
+        where: {
+            userId: user.id,
+            attractionId: {
+                in: badge.attractions.map((badgeAttraction) => badgeAttraction.attractionId)
             }
-        })
-
-        if (checkIn) {
-            obtained = true
-            break
         }
-    }
+    })
 
-    if (!obtained) {
-        throw new Error("User has not checked into any required attractions")
+    if (checkIns.length !== badge.attractions.length) {
+        throw new Error("User has not checked into all required attractions")
     }
 
     // Add badge to user
-    const userBadge = await prisma.userBadge.create({
+    await prisma.userBadge.create({
         data: {
             userId: user.id,
             badgeId: badgeId
@@ -133,7 +126,7 @@ export async function obtainBadge({badgeId}: {badgeId: string}) {
         data: {
             userId: user.id,
             points: badge.points,
-            details: `badge_id:${userBadge.id}`,
+            details: `badge_id:${badgeId}`,
             type: "EARN_POINTS"
         }
     })
@@ -157,7 +150,7 @@ export async function foundHideAndSeek({
 
     if (!user) {
         console.error("User not authenticated")
-        throw new Error("User not authenticated")
+        throw new Error("Please login to play hide and seek")
     }
 
     const hideAndSeek = await prisma.hideAndSeek.findUnique({
@@ -165,43 +158,43 @@ export async function foundHideAndSeek({
         include: {attraction: true}
     })
 
-    if (!hideAndSeek) {
-        console.error("HideAndSeek not found for ID:", hideAndSeekId)
-        throw new Error("HideAndSeek not found")
-    }
+    if (hideAndSeek && hideAndSeek.attraction) {
+        const distance = await calculateDistance3(
+            userLat,
+            userLng,
+            hideAndSeek.attraction.latitude,
+            hideAndSeek.attraction.longitude
+        )
 
-    const distance = await calculateDistance3(
-        userLat,
-        userLng,
-        hideAndSeek.attraction.latitude,
-        hideAndSeek.attraction.longitude
-    )
+        if (distance <= 20) {
+            const userHideAndSeek = await prisma.userHideAndSeek.create({
+                data: {
+                    userId: user.id,
+                    hideAndSeekId: hideAndSeek.id
+                }
+            })
 
-    if (distance <= 20) {
-        const userHideAndSeek = await prisma.userHideAndSeek.create({
-            data: {
-                userId: user.id,
-                hideAndSeekId: hideAndSeek.id
-            }
-        })
+            await prisma.user.update({
+                where: {id: user.id},
+                data: {points: {increment: hideAndSeek.points}}
+            })
 
-        await prisma.user.update({
-            where: {id: user.id},
-            data: {points: {increment: hideAndSeek.points}}
-        })
+            await prisma.transaction.create({
+                data: {
+                    userId: user.id,
+                    points: hideAndSeek.points,
+                    details: `hide_and_seek_id:${userHideAndSeek.id}`,
+                    type: "EARN_POINTS"
+                }
+            })
 
-        await prisma.transaction.create({
-            data: {
-                userId: user.id,
-                points: hideAndSeek.points,
-                details: `hide_and_seek_id:${userHideAndSeek.id}`,
-                type: "EARN_POINTS"
-            }
-        })
-
-        return {message: "Congratulations! You've found the location and earned points!"}
+            return {message: "Congratulations! You've found the location and earned points!"}
+        } else {
+            return {message: `You are ${distance} meters away from the correct location.`}
+        }
     } else {
-        return {message: `You are ${distance} meters away from the correct location.`}
+        console.error("HideAndSeek or attraction data not found for ID:", hideAndSeekId)
+        throw new Error("HideAndSeek or attraction data not found")
     }
 }
 
@@ -217,7 +210,7 @@ export async function submitQuiz({
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Please login to submit answers.")
     }
     const quiz = await prisma.quiz.findUnique({
         where: {id: quizId}
@@ -330,41 +323,75 @@ export async function redeemReward(rewardId: string) {
         data: {available: false}
     })
 
-    return {success: true, message: "Reward redeemed successfully!"}
+    return {success: true, message: "Reward obtained successfully!"}
 }
 
 export async function addLocation({
     description,
     taxonomy,
     latitude,
-    longitude
+    longitude,
+    address,
+    name
 }: {
     description: string
     taxonomy: "ATTRACTION" | "EVENT" | "EXPERIENCE"
     latitude: number
     longitude: number
+    address: string | null
+    name: string
 }) {
     "use server"
     const {getUser} = getKindeServerSession()
     const user = await getUser()
 
     if (!user) {
-        throw new Error("User not authenticated")
+        throw new Error("Please login to add checkpoint")
     }
     console.log("User_id:", user.id)
 
     const location = await prisma.attraction.create({
         data: {
-            name: description,
-            latitude,
-            longitude,
+            name_en: name,
+            name_de: name,
+            description_en: description,
+            description_de: description,
+            latitude: latitude,
+            longitude: longitude,
+            address,
             taxonomy,
             userId: user.id,
             isActive: false,
             points: 0,
-            cityId: "clyxbvyuf0000tilmjxuheabw"
+            cityId: "clz627elo0000mybntk1bb38g"
         }
     })
 
     return {success: true, message: "Location added successfully", location}
+}
+
+export async function applyForPartnership({
+    name,
+    description,
+    amount,
+    email
+}: {
+    name: string
+    description: string
+    amount: string
+    email: string
+}) {
+    "use server"
+
+    console.log("Applying for partnership:", name, description, amount, email)
+
+    const partnership = await prisma.partnership.create({
+        data: {
+            name,
+            description,
+            amount: amount,
+            email: email
+        }
+    })
+    return partnership
 }

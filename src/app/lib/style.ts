@@ -34,13 +34,28 @@ const mapStyle = [
     },
     {
         featureType: "road",
-        elementType: "geometry",
+        elementType: "geometry.stroke",
         stylers: [
             {
                 lightness: 100
             },
             {
                 visibility: "simplified"
+            },
+            {
+                weight: 3 // Increase the size of the streets
+            }
+        ]
+    },
+    {
+        featureType: "road",
+        elementType: "geometry.fill",
+        stylers: [
+            {
+                visibility: "on"
+            },
+            {
+                color: "#ffffff" // Ensure road fill is visible
             }
         ]
     },
@@ -49,7 +64,7 @@ const mapStyle = [
         elementType: "labels",
         stylers: [
             {
-                visibility: "on"
+                visibility: "off" // Remove all road labels
             }
         ]
     },
@@ -71,6 +86,33 @@ const mapStyle = [
         stylers: [
             {
                 color: "#7dcdcd"
+            }
+        ]
+    },
+    {
+        featureType: "administrative",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off" // Remove administrative labels
+            }
+        ]
+    },
+    {
+        featureType: "road.local",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off" // Remove local road labels
+            }
+        ]
+    },
+    {
+        featureType: "transit",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off" // Remove transit labels
             }
         ]
     }
@@ -347,6 +389,150 @@ export const mapStyle2 = [
         stylers: [
             {
                 color: "#3490d0"
+            },
+            {
+                visibility: "on"
+            }
+        ]
+    },
+    {
+        featureType: "water",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    }
+]
+
+export const mapStyleWithoutText = [
+    {
+        featureType: "administrative",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    },
+    {
+        featureType: "landscape",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    },
+    {
+        featureType: "landscape.natural",
+        elementType: "geometry.fill",
+        stylers: [
+            {
+                visibility: "on"
+            },
+            {
+                color: "#e0efef"
+            }
+        ]
+    },
+    {
+        featureType: "poi",
+        elementType: "all",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    },
+    {
+        featureType: "poi",
+        elementType: "geometry.fill",
+        stylers: [
+            {
+                visibility: "on"
+            },
+            {
+                color: "#c0e8e8"
+            }
+        ]
+    },
+    {
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    },
+    {
+        featureType: "road",
+        elementType: "all",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    },
+    {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [
+            {
+                lightness: 100
+            },
+            {
+                visibility: "simplified"
+            }
+        ]
+    },
+    {
+        featureType: "road",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    },
+    {
+        featureType: "transit",
+        elementType: "all",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    },
+    {
+        featureType: "transit.line",
+        elementType: "geometry",
+        stylers: [
+            {
+                visibility: "on"
+            },
+            {
+                lightness: 700
+            }
+        ]
+    },
+    {
+        featureType: "transit.line",
+        elementType: "labels",
+        stylers: [
+            {
+                visibility: "off"
+            }
+        ]
+    },
+    {
+        featureType: "water",
+        elementType: "all",
+        stylers: [
+            {
+                color: "#7dcdcd"
             },
             {
                 visibility: "on"

@@ -3,6 +3,8 @@ import {Roboto} from "next/font/google"
 import "./globals.css"
 import {UserLocationProvider} from "./providers/useUserLocation"
 import ToastProvider from "./providers/ToastProvider"
+import Head from "next/head"
+import {UIProvider} from "./providers/UIProvider"
 
 const roboto = Roboto({
     subsets: ["latin"],
@@ -10,8 +12,8 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-    title: "Los - Gamified Travel with Rewards!",
-    description: "Los - Gamified Travel with Rewards!"
+    title: "Los - Gamified Experiences with Rewards!",
+    description: "Los - Experiences Travel with Rewards!"
 }
 
 export default function RootLayout({
@@ -21,6 +23,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
+            <Head>
+                <link rel='icon' href='/favicon.png' />
+            </Head>
             <body className={roboto.className}>
                 <ToastProvider>
                     <UserLocationProvider>{children}</UserLocationProvider>

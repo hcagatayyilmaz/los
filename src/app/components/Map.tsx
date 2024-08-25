@@ -16,9 +16,9 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     })
 
     const {userLocation} = useUserLocation()
-    const {setSelectedLocation} = useSelectedItem()
+    const {setSelectedLocation, selectedLocation} = useSelectedItem()
     const [map, setMap] = useState<google.maps.Map | null>(null)
-    const [distances, setDistances] = useState<Record<string, number>>({})
+    const [isCentered, setIsCentered] = useState(false) // Track if the map has been centered
 
     const mapContainerStyle = useMemo(
         () => ({
@@ -28,65 +28,57 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
         []
     )
 
+    const tübingenCoordinates = {lat: 48.5216, lng: 9.0576} // Tübingen coordinates
+
     const initialCenter = useMemo(() => {
         if (userLocation) {
             return {lat: userLocation.lat, lng: userLocation.lng}
-        } else {
+        } else if (locations.length > 0) {
             const firstLocation = locations[0]
             return {lat: firstLocation.latitude, lng: firstLocation.longitude}
+        } else {
+            return tübingenCoordinates // Default to Tübingen if no user location or locations are provided
         }
     }, [userLocation, locations])
-
-    const [center, setCenter] = useState(initialCenter)
 
     const onMapLoad = useCallback(
         (map: google.maps.Map) => {
             setMap(map)
 
-            if (userLocation) {
+            if (userLocation && !isCentered) {
                 map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
-            } else {
-                const bounds = new window.google.maps.LatLngBounds()
-                locations.forEach((location) => {
-                    bounds.extend(
-                        new window.google.maps.LatLng(location.latitude, location.longitude)
-                    )
-                })
-                map.fitBounds(bounds)
+                map.setZoom(16)
+                setIsCentered(true) // Mark the map as centered
+            } else if (locations.length > 0 && !isCentered) {
+                const firstLocation = locations[0]
+                map.setCenter({lat: firstLocation.latitude, lng: firstLocation.longitude})
+                map.setZoom(16)
+                setIsCentered(true) // Mark the map as centered
+            } else if (!isCentered) {
+                map.setCenter(tübingenCoordinates)
+                map.setZoom(14) // Default zoom for Tübingen
+                setIsCentered(true) // Mark the map as centered
             }
         },
-        [userLocation, locations]
+        [userLocation, isCentered, locations, tübingenCoordinates]
     )
 
+    // This effect will run when the userLocation changes, but will only center the map if it hasn't been centered yet.
     useEffect(() => {
-        if (userLocation && map && window.google) {
-            const userLatLng = new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
-
-            const newDistances: Record<string, number> = {}
-            let closest: Location | null = null
-            let closestDistance = Infinity
-
-            locations.forEach((location) => {
-                const locationLatLng = new window.google.maps.LatLng(
-                    location.latitude,
-                    location.longitude
-                )
-                const distance = window.google.maps.geometry.spherical.computeDistanceBetween(
-                    userLatLng,
-                    locationLatLng
-                )
-
-                newDistances[location.name] = distance
-
-                if (distance < closestDistance) {
-                    closest = location
-                    closestDistance = distance
-                }
-            })
-
-            setDistances(newDistances)
+        if (map && userLocation && !isCentered) {
+            map.setCenter(new window.google.maps.LatLng(userLocation.lat, userLocation.lng))
+            map.setZoom(16)
+            setIsCentered(true) // Mark the map as centered
         }
-    }, [userLocation, map, locations])
+    }, [map, userLocation, isCentered])
+
+    // Pan to the selected location whenever it changes
+    useEffect(() => {
+        if (selectedLocation && map) {
+            const {latitude, longitude} = selectedLocation
+            map.panTo({lat: latitude, lng: longitude})
+        }
+    }, [selectedLocation, map])
 
     if (loadError) return <div>Error loading maps</div>
     if (!isLoaded) return <div>Loading maps</div>
@@ -94,9 +86,8 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
     return (
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            center={center}
-            zoom={14}
             onLoad={onMapLoad}
+            zoom={15}
             options={{
                 mapTypeControl: false,
                 fullscreenControl: false,
@@ -116,7 +107,10 @@ const Map: React.FC<{locations: Location[]}> = ({locations}) => {
                     mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                 >
                     <div onClick={() => setSelectedLocation(location)}>
-                        <ItemPin location={location} />
+                        <ItemPin
+                            location={location}
+                            isSelected={selectedLocation?.id === location.id}
+                        />
                     </div>
                 </OverlayView>
             ))}
