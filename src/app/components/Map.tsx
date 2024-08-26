@@ -28,6 +28,7 @@ const Map: React.FC<{locations: Location[]; isMapPage?: boolean}> = ({
     useSelectedItem()
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [isCentered, setIsCentered] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState(15)
 
   const mapContainerStyle = useMemo(
     () => ({
@@ -76,6 +77,7 @@ const Map: React.FC<{locations: Location[]; isMapPage?: boolean}> = ({
         setIsCentered(true)
       }
     },
+
     [userLocation, isCentered, locations, tübingenCoordinates, isMapPage]
   )
 
@@ -133,6 +135,11 @@ const Map: React.FC<{locations: Location[]; isMapPage?: boolean}> = ({
       mapContainerStyle={mapContainerStyle}
       onLoad={onMapLoad}
       zoom={isMapPage ? 4 : 15}
+      onZoomChanged={() => {
+        if (map) {
+          setZoomLevel(map.getZoom() || 15)
+        }
+      }}
       options={{
         mapTypeControl: false,
         fullscreenControl: false,
@@ -155,6 +162,7 @@ const Map: React.FC<{locations: Location[]; isMapPage?: boolean}> = ({
             <ItemPin
               location={location}
               isSelected={selectedLocation?.id === location.id}
+              zoomLevel={zoomLevel}
             />
           </div>
         </OverlayView>

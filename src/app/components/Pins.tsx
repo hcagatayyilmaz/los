@@ -4,87 +4,99 @@ import Image from "next/image"
 // border-white or border-black for live location pin
 
 export const LiveLocationPin = () => (
-    <div className='relative group'>
-        <div className='absolute w-6 h-6 bg-[#FF1493] border-dashed rounded-full border-4 border-white shadow-2xl shadow-[#FF1493]/50 group-hover:scale-150 transition-transform duration-200'></div>
-        <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75 group-hover:scale-150 transition-transform duration-200'></div>
-    </div>
+  <div className='relative group'>
+    <div className='absolute w-6 h-6 bg-[#FF1493] border-dashed rounded-full border-4 border-white shadow-2xl shadow-[#FF1493]/50 group-hover:scale-150 transition-transform duration-200'></div>
+    <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75 group-hover:scale-150 transition-transform duration-200'></div>
+  </div>
 )
 
-export const ItemPin: React.FC<{location: Location; isSelected: boolean}> = ({
-    location,
-    isSelected
-}) => {
-    if (location.checkedIn === true) {
-        return (
-            <div className='relative group w-6 h-6'>
-                <div
-                    className={`absolute w-6 h-6 rounded-full border-4 border-black bg-green-400 transition-transform duration-200`}
-                >
-                    <span></span>
-                </div>
-            </div>
-        )
-    } else if (location.isTheme) {
-        return (
-            <div className='relative group w-10 h-10'>
-                <Image
-                    src='/holderlin.png'
-                    alt='Theme Pin'
-                    fill
-                    objectFit='contain'
-                    className='absolute transition-transform duration-200'
-                />
-            </div>
-        )
-    } else if (location.pin !== null) {
-        return (
-            <div className='relative group w-8 h-8'>
-                <Image
-                    src={location.pin}
-                    alt='Location Pin'
-                    fill
-                    objectFit='contain'
-                    className='absolute transition-transform duration-200'
-                />
-            </div>
-        )
+export const ItemPin: React.FC<{
+  location: Location
+  isSelected: boolean
+  zoomLevel?: number
+}> = ({location, isSelected, zoomLevel}) => {
+  const getSize = () => {
+    if (zoomLevel) {
+      if (zoomLevel < 14) return "w-8 h-8"
+      if (zoomLevel < 18) return "w-10 h-10"
+    } else {
+      return "w-12 h-12"
     }
+  }
 
-    let bgColor = ""
+  const size = getSize()
 
-    switch (location.taxonomy) {
-        case "ATTRACTION":
-            bgColor = "#FFFFFF"
-            break
-        case "EVENT":
-            bgColor = "#FFFFED"
-            break
-        case "EXPERIENCE":
-            bgColor = "#FFD1DF"
-            break
-        case "LIMITED_TIME":
-            bgColor = "#C9FFCE"
-            break
-        case "REWARD":
-            bgColor = "#C9FFCE"
-            break
-        default:
-            bgColor = "#FFFFFF" // default color if type is not recognized
-    }
-
-    if (isSelected) {
-        bgColor = "#FF1493" // pink color for selected pin
-    }
-
+  if (location.checkedIn === true) {
     return (
-        <div className='relative group w-8 h-8'>
-            <Image
-                src={"/poi.png"}
-                alt='Location Pin'
-                fill
-                objectFit='contain'
-                className='absolute transition-transform duration-200'
-            />
+      <div className={`relative group ${size}`}>
+        <div
+          className={`absolute ${size} rounded-full border-4 border-black bg-green-400 transition-transform duration-200`}
+        >
+          <span></span>
         </div>
+      </div>
     )
+  } else if (location.isTheme) {
+    return (
+      <div className={`relative group ${size}`}>
+        <Image
+          src='/holderlin.png'
+          alt='Theme Pin'
+          fill
+          objectFit='contain'
+          className='absolute transition-transform duration-200'
+        />
+      </div>
+    )
+  } else if (location.pin !== null) {
+    return (
+      <div className={`relative group ${size}`}>
+        <Image
+          src={location.pin}
+          alt='Location Pin'
+          fill
+          objectFit='contain'
+          className='absolute transition-transform duration-200'
+        />
+      </div>
+    )
+  }
+
+  let bgColor = ""
+
+  switch (location.taxonomy) {
+    case "ATTRACTION":
+      bgColor = "#FFFFFF"
+      break
+    case "EVENT":
+      bgColor = "#FFFFED"
+      break
+    case "EXPERIENCE":
+      bgColor = "#FFD1DF"
+      break
+    case "LIMITED_TIME":
+      bgColor = "#C9FFCE"
+      break
+    case "REWARD":
+      bgColor = "#C9FFCE"
+      break
+    default:
+      bgColor = "#FFFFFF" // default color if type is not recognized
+  }
+
+  if (isSelected) {
+    bgColor = "#FF1493" // pink color for selected pin
+  }
+
+  return (
+    <div className={`relative group ${size}`}>
+      <Image
+        src={"/poi.png"}
+        alt='Location Pin'
+        fill
+        objectFit='contain'
+        className='absolute transition-transform duration-200'
+      />
+    </div>
+  )
 }
