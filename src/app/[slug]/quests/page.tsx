@@ -12,6 +12,7 @@ import HideAndSeek from "@/app/components/HideAndSeek"
 import PopQuiz from "@/app/components/PopQuiz"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import AddLocation from "../../components/AddLocation"
+import Image from "next/image"
 import CityBadge from "../../components/CityBadge"
 import {getCityBadgeByCityName} from "@/app/server/data"
 type QuestsPageParams = {
@@ -44,10 +45,16 @@ async function QuestsPage({params}: QuestsPageParams) {
             style={{border: "1px dashed white"}}
           >
             <h1 className='text-3xl flex items-end font-medium text-center'>
-              <span className={`text-black ${museumModerno.className}`}>
-                Los
-              </span>
-              <div className='w-[12px] h-[12px] bg-customYellow border border-white border-dashed rounded-full ml-[2px] mb-2'></div>
+              <Image
+                src='/logo-text-2.png'
+                alt='Los'
+                width={100}
+                height={50}
+                className={`text-black ${museumModerno.className}`}
+              />
+              {/* <div className='ml-[-4px] mb-[10px]'>
+                <Image src='/logo.png' alt='Logo' width={16} height={16} />
+              </div> */}
             </h1>
             <div className='flex items-end justify-end mt-2'>
               <h2 className='text-md font-semibold text-customYellow'></h2>

@@ -47,21 +47,39 @@ export default async function Home() {
               Explore
             </span>
             <span> the city</span>
-            <span className='inline-block ml-1 h-3 w-3 rounded-full bg-customYellow border-dashed border'></span>
+            <Image
+              src='/logo.png'
+              alt='Logo'
+              width={12}
+              height={12}
+              className='inline-block ml-1'
+            />
           </div>
           <div>
             <span className={`${museoModerno.className} text-4xl font-bold`}>
               Collect
             </span>
             <span> the points</span>
-            <span className='inline-block ml-1 h-3 w-3 rounded-full border-dashed bg-customYellow border'></span>
+            <Image
+              src='/logo.png'
+              alt='Logo'
+              width={12}
+              height={12}
+              className='inline-block ml-1'
+            />
           </div>
           <div>
             <span className={`${museoModerno.className} text-4xl font-bold`}>
               Win
             </span>
             <span> the rewards</span>
-            <span className='inline-block ml-1 h-3 border-dashed w-3 rounded-full bg-customYellow border'></span>
+            <Image
+              src='/logo.png'
+              alt='Logo'
+              width={12}
+              height={12}
+              className='inline-block ml-1'
+            />
           </div>
         </div>
         <h2
