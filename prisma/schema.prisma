@@ -72,6 +72,9 @@ model Badge {
   updatedAt      DateTime          @updatedAt
   users          UserBadge[]
   attractions    BadgeAttraction[] // Many-to-many relationship with Attraction through BadgeAttraction
+  isCityBadge    Boolean           @default(false)
+  cityId         String?
+  city           City?             @relation(fields: [cityId], references: [id], onDelete: Cascade)
 }
 
 model BadgeAttraction {
@@ -111,6 +114,7 @@ model City {
   slug        String       @unique
   meta        Json?
   attractions Attraction[]
+  Badge       Badge[]
 }
 
 model Reward {

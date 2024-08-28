@@ -171,7 +171,8 @@ export async function getBadge() {
   try {
     const badges = await prisma.badge.findFirst({
       where: {
-        isActive: true
+        isActive: true,
+        isCityBadge: false
       },
       include: {
         attractions: {
@@ -270,4 +271,40 @@ export async function getPlaceDetails(placeId: string) {
   }
 
   return place
+}
+
+export async function getCityBadgeByCityName(cityName: string) {
+  const {getUser} = getKindeServerSession()
+  const user = await getUser()
+  const cityBadge = await prisma.badge.findFirst({
+    where: {
+      city: {
+        slug: cityName
+      }
+    },
+    include: {
+      city: true
+    }
+  })
+
+  if (!cityBadge) {
+    return null
+  }
+
+  let totalCheckIns = 0
+  if (user) {
+    totalCheckIns = await prisma.checkIn.count({
+      where: {
+        attraction: {
+          cityId: cityBadge.cityId ?? ""
+        },
+        userId: user.id
+      }
+    })
+  }
+
+  return {
+    ...cityBadge,
+    totalCheckIns
+  }
 }

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Badge" ALTER COLUMN "cityId" DROP NOT NULL;

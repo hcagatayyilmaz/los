@@ -27,7 +27,7 @@ type CityPageParams = {
 export const revalidate = 3600
 
 export async function generateStaticParams() {
-  unstable_noStore()
+  //unstable_noStore()
   const cities = await prisma.city.findMany()
   return cities.map((city) => ({
     slug: city.slug
@@ -35,7 +35,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({params}: CityPageParams) {
-  unstable_noStore()
+  //unstable_noStore()
   const city = await prisma.city.findUnique({
     where: {
       slug: params.slug
@@ -84,7 +84,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
             </div>
             <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
               <Header user={user} name={city.name} />
-              <Navbar />
+              <Navbar isMapPage={false} />
               <ActionsButtons slug={city.slug} />
               {/* <Banner /> */}
             </div>

@@ -83,7 +83,7 @@ export async function obtainBadge(badgeId: string) {
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Please login to obtain badge")
+    throw new Error("Login to obtain badge.")
   }
 
   const badge = await prisma.badge.findUnique({
@@ -106,7 +106,7 @@ export async function obtainBadge(badgeId: string) {
   })
 
   if (userHasBadge) {
-    throw new Error("User already has this badge")
+    throw new Error("Great! You already have this badge.")
   }
 
   const checkIns = await prisma.checkIn.findMany({
@@ -166,7 +166,7 @@ export async function foundHideAndSeek({
 
   if (!user) {
     console.error("User not authenticated")
-    throw new Error("Please login to play hide and seek")
+    throw new Error("Login to play Hide & Seek.")
   }
 
   const hideAndSeek = await prisma.hideAndSeek.findUnique({
@@ -233,7 +233,7 @@ export async function submitQuiz({
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Please login to submit answers.")
+    throw new Error("Login to submit answers.")
   }
   const quiz = await prisma.quiz.findUnique({
     where: {id: quizId}
@@ -307,7 +307,7 @@ export async function redeemReward(rewardId: string) {
     : null
   console.log("Reward ID:", rewardId)
   if (!user) {
-    throw new Error("Please login to redeem rewards")
+    throw new Error("Login to redeem rewards")
   }
 
   const reward = await prisma.reward.findUnique({
@@ -371,9 +371,8 @@ export async function addLocation({
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Please login to add checkpoint")
+    throw new Error("Login to add checkpoint")
   }
-  console.log("User_id:", user.id)
 
   const location = await prisma.attraction.create({
     data: {
@@ -407,8 +406,6 @@ export async function applyForPartnership({
   email: string
 }) {
   "use server"
-
-  console.log("Applying for partnership:", name, description, amount, email)
 
   const partnership = await prisma.partnership.create({
     data: {

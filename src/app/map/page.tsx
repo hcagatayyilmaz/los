@@ -3,15 +3,12 @@ import prisma from "@/app/lib/db"
 import Header from "@/app/components/Header"
 import Navbar from "@/app/components/Navbar"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
-
 import {SelectedItemProvider} from "@/app/providers/useSelectedItem"
 import {getAllPlaces, getDBUser} from "@/app/server/data"
-import {unstable_noStore} from "next/cache"
 import LocationPermissionButton from "../components/LocationPermissionButton"
 import TotalPoints from "../components/TotalPoints"
 import ActionsButtons from "../components/ActionsButtons"
-import ClosestPlace from "../components/ClosestPlace"
-import {UIProvider} from "@/app/providers/UIProvider" // Ensure this is the correct path
+import {UIProvider} from "@/app/providers/UIProvider"
 import Map from "../components/Map"
 import MapItemWrapper from "../components/MapItemWrapper"
 
@@ -47,7 +44,7 @@ const CityPage = async ({searchParams}: MapPageParams) => {
           </div>
           <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
             <Header user={user} isMap={true} />
-            <Navbar />
+            <Navbar isMapPage={true} />
             <ActionsButtons slug={"map"} />
             {/* <Banner /> */}
           </div>

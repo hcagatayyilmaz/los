@@ -15,87 +15,69 @@ export const ItemPin: React.FC<{
   isSelected: boolean
   zoomLevel?: number
 }> = ({location, isSelected, zoomLevel}) => {
-  const getSize = () => {
-    if (zoomLevel) {
-      if (zoomLevel < 14) return "w-8 h-8"
-      if (zoomLevel < 18) return "w-10 h-10"
-    } else {
-      return "w-12 h-12"
-    }
-  }
-
-  const size = getSize()
+  const scaleClass = isSelected ? "scale-150" : ""
+  const baseClassName = `relative group transition-transform duration-200 ${scaleClass}`
 
   if (location.checkedIn === true) {
     return (
-      <div className={`relative group ${size}`}>
-        <div
-          className={`absolute ${size} rounded-full border-4 border-black bg-green-400 transition-transform duration-200`}
-        >
+      <div className={`${baseClassName} w-6 h-6`}>
+        <div className='absolute w-6 h-6 rounded-full border-4 border-black bg-green-400'>
           <span></span>
         </div>
       </div>
     )
   } else if (location.isTheme) {
     return (
-      <div className={`relative group ${size}`}>
+      <div className={`${baseClassName} w-12 h-12`}>
         <Image
           src='/holderlin.png'
           alt='Theme Pin'
           fill
           objectFit='contain'
-          className='absolute transition-transform duration-200'
+          className='absolute'
         />
       </div>
     )
   } else if (location.pin !== null) {
     return (
-      <div className={`relative group ${size}`}>
+      <div className={`${baseClassName} w-8 h-8`}>
         <Image
           src={location.pin}
           alt='Location Pin'
           fill
           objectFit='contain'
-          className='absolute transition-transform duration-200'
+          className='absolute'
         />
       </div>
     )
   }
 
-  let bgColor = ""
+  let bgColor = isSelected ? "#FF1493" : "#FFFFFF"
 
   switch (location.taxonomy) {
     case "ATTRACTION":
-      bgColor = "#FFFFFF"
+      bgColor = isSelected ? "#FF1493" : "#FFFFFF"
       break
     case "EVENT":
-      bgColor = "#FFFFED"
+      bgColor = isSelected ? "#FF1493" : "#FFFFED"
       break
     case "EXPERIENCE":
-      bgColor = "#FFD1DF"
+      bgColor = isSelected ? "#FF1493" : "#FFD1DF"
       break
     case "LIMITED_TIME":
-      bgColor = "#C9FFCE"
-      break
     case "REWARD":
-      bgColor = "#C9FFCE"
+      bgColor = isSelected ? "#FF1493" : "#C9FFCE"
       break
-    default:
-      bgColor = "#FFFFFF" // default color if type is not recognized
-  }
-
-  if (isSelected) {
-    bgColor = "#FF1493" // pink color for selected pin
   }
 
   return (
-    <div className={`relative group ${size}`}>
+    <div className={`${baseClassName} w-8 h-8`}>
       <Image
         src={"/poi.png"}
         alt='Location Pin'
         fill
         objectFit='contain'
-        className='absolute transition-transform duration-200'
+        className='absolute'
       />
     </div>
   )

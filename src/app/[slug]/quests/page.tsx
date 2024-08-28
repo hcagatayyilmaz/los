@@ -12,107 +12,120 @@ import HideAndSeek from "@/app/components/HideAndSeek"
 import PopQuiz from "@/app/components/PopQuiz"
 import {CoinIcon} from "@/app/lib/CustomIcons"
 import AddLocation from "../../components/AddLocation"
-import StreakParent from "../../components/StreakParent"
-
+import CityBadge from "../../components/CityBadge"
+import {getCityBadgeByCityName} from "@/app/server/data"
 type QuestsPageParams = {
-    params: {
-        slug: string
-    }
+  params: {
+    slug: string
+  }
 }
 
 const museumModerno = MuseoModerno({
-    subsets: ["latin"]
+  subsets: ["latin"]
 })
 
 async function QuestsPage({params}: QuestsPageParams) {
-    const quiz = await getPopQuiz()
-    const hideAndSeek = await getHideAndSeek()
-    const badge = await getBadge()
-    const rewards = await getAllRewards()
-    console.log("Rewards:", rewards)
+  const {slug} = params
 
-    return (
-        <div className='max-w-xl mx-auto pt-2  font-sans border rounded-lg'>
-            <div className={`flex items-center justify-center bg-white border-b `}>
-                <Link href={"/tuebingen"}>
-                    <div
-                        className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
-                        style={{border: "1px dashed white"}}
-                    >
-                        <h1 className='text-3xl flex items-end font-medium text-center'>
-                            <span className={`text-black ${museumModerno.className}`}>Los</span>
-                            <div className='w-[12px] h-[12px] bg-customYellow border border-white border-dashed rounded-full ml-[2px] mb-2'></div>
-                        </h1>
-                        <div className='flex items-end justify-end mt-2'>
-                            <h2 className='text-md font-semibold text-customYellow'>Tübingen</h2>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-            <h1 className={`text-4xl font-semibold my-4 px-4 ${museumModerno.className}`}>
-                Quests
+  const hideAndSeek = await getHideAndSeek()
+
+  const quiz = await getPopQuiz()
+  const cityBadge = await getCityBadgeByCityName(slug)
+  const badge = await getBadge()
+  const rewards = await getAllRewards()
+  console.log("City Badge:", cityBadge)
+
+  return (
+    <div className='max-w-xl mx-auto pt-2  font-sans border rounded-lg'>
+      <div className={`flex items-center justify-center bg-white border-b `}>
+        <Link href={"/tuebingen"}>
+          <div
+            className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
+            style={{border: "1px dashed white"}}
+          >
+            <h1 className='text-3xl flex items-end font-medium text-center'>
+              <span className={`text-black ${museumModerno.className}`}>
+                Los
+              </span>
+              <div className='w-[12px] h-[12px] bg-customYellow border border-white border-dashed rounded-full ml-[2px] mb-2'></div>
             </h1>
-            <div className='px-4 my-2'>
-                <p className={`my-1 text-sm ${museumModerno.className} mb-1`}>
-                    Choose any quests to earn points while having fun and experience more in your
-                    city. Start ranking in the city to get some rewards!
-                </p>
+            <div className='flex items-end justify-end mt-2'>
+              <h2 className='text-md font-semibold text-customYellow'></h2>
             </div>
+          </div>
+        </Link>
+      </div>
+      <h1
+        className={`text-4xl text-center font-semibold my-4 px-4 ${museumModerno.className}`}
+      >
+        Quests
+      </h1>
+      <div className='px-4 my-2'>
+        <p className={`my-1 text-sm ${museumModerno.className} mb-1`}>
+          Choose any quests to earn points while having fun and experience more
+          in your city. Start ranking in the city to get some rewards!
+        </p>
+      </div>
 
-            <div>
-                <StreakParent />
-                {badge && <Badge data={badge} />}
-                {/* BADGE COMPONENT */}
-                {/* STREAK COMPONENT */}
-                {/* <AddLocation /> */}
-                {/* ADD PLACE COMPONENT */}
+      <div>
+        {cityBadge && (
+          <CityBadge
+            name={cityBadge.name}
+            description={cityBadge.description_en}
+            image={cityBadge.pinName ?? ""}
+            numberOfCheckIn={cityBadge.totalCheckIns}
+            points={cityBadge.points}
+          />
+        )}
+        {badge && <Badge data={badge} />}
 
-                {/* STREAK COMPONENT */}
-                {/* POP QUIZ COMPONENT */}
-                {/* {quiz && <PopQuiz quiz={quiz} />} */}
-                {/* POP QUIZ COMPONENT */}
-                {/* HIDE & SEEK COMPONENT */}
-                {/* {hideAndSeek && <HideAndSeek quest={hideAndSeek} />} */}
-                {/* HIDE & SEEK COMPONENT */}
-                {/* ADD PLACE COMPONENT */}
-            </div>
+        {quiz && <PopQuiz quiz={quiz} />}
 
-            <div>
-                <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
-                    Rewards
-                </h1>
+        {hideAndSeek && <HideAndSeek quest={hideAndSeek} />}
 
-                <div className='flex item-center justify-center px-6'>
-                    <div className='flex flex-col justify-center items-center'>
-                        <RankingIcon number={2} />
-                        <span>You are level 4!</span>
-                        <span className='text-customYellow font-bold'>120/250</span>
-                        <span
-                            className={`${museumModerno.className} font-normal mb-4 text-xl text-center`}
-                        >
-                            You can unlock rewards when you reach level 5!
-                        </span>
-                    </div>
-                </div>
+        {/* <AddLocation /> */}
+      </div>
 
-                <p className={`px-6 mb-2 ${museumModerno.className} `}>
-                    Use your points to get free experiences in your city! If there is no reward in
-                    market, use and support us to reach more rewards!
-                </p>
-                <div className='px-4'>
-                    {rewards.map((reward) => (
-                        <RewardCard key={reward.id} reward={reward} />
-                    ))}
-                </div>
-                <h1 className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}>
-                    My Rewards
-                </h1>
-                <div className='px-4'>
-                    <MyRewards />
-                </div>
-            </div>
+      <div>
+        <h1
+          className={`text-4xl font-semibold my-2 text-center px-6 ${museumModerno.className}`}
+        >
+          Rewards
+        </h1>
+
+        <div className='flex item-center justify-center px-6'>
+          <div className='flex flex-col justify-center items-center'>
+            <RankingIcon number={2} />
+            <span>You are level 4!</span>
+            <span className='text-customYellow font-bold'>120/250</span>
+            <span
+              className={`${museumModerno.className} font-normal mb-4 text-xl text-center`}
+            >
+              You can unlock rewards when you reach level 5!
+            </span>
+          </div>
         </div>
-    )
+
+        <p className={`px-6 mb-2 ${museumModerno.className} `}>
+          Use your points to get free experiences in your city! If there is no
+          reward in market, use and support us to reach more rewards!
+        </p>
+        <div className='px-4'>
+          {rewards.map((reward) => (
+            <RewardCard key={reward.id} reward={reward} />
+          ))}
+        </div>
+        <h1
+          className={`text-4xl text-center font-semibold my-2 px-6 ${museumModerno.className}`}
+        >
+          My Rewards
+        </h1>
+        <div className='px-4'>
+          <MyRewards />
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default QuestsPage

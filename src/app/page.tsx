@@ -126,7 +126,7 @@ export default async function Home() {
 
       <div className='py-2  mt-4 w-full max-w-md bg-black text-white border-black px-3 flex justify-between items-center'>
         <a
-          href='mailto:tuebingen@los.city'
+          href='mailto:support@los.city'
           className='border-2 rounded border-black px-2 cursor-pointer'
         >
           Contact
