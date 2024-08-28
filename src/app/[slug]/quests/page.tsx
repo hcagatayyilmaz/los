@@ -44,18 +44,17 @@ async function QuestsPage({params}: QuestsPageParams) {
             className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
             style={{border: "1px dashed white"}}
           >
-            <h1 className='text-3xl flex items-end font-medium text-center'>
-              <Image
-                src='/logo-text-2.png'
-                alt='Los'
-                width={100}
-                height={50}
-                className={`text-black ${museumModerno.className}`}
-              />
-              {/* <div className='ml-[-4px] mb-[10px]'>
+            <Image
+              src='/logo-text-2.png'
+              alt='Los'
+              width={120}
+              height={100}
+              className={`text-black ${museumModerno.className}`}
+            />
+            {/* <div className='ml-[-4px] mb-[10px]'>
                 <Image src='/logo.png' alt='Logo' width={16} height={16} />
               </div> */}
-            </h1>
+
             <div className='flex items-end justify-end mt-2'>
               <h2 className='text-md font-semibold text-customYellow'></h2>
             </div>
@@ -63,7 +62,7 @@ async function QuestsPage({params}: QuestsPageParams) {
         </Link>
       </div>
       <h1
-        className={`text-4xl text-center font-semibold my-4 px-4 ${museumModerno.className}`}
+        className={`text-4xl  font-medium my-4 underline underline-offset-6 px-4 ${museumModerno.className}`}
       >
         Quests
       </h1>
@@ -95,7 +94,7 @@ async function QuestsPage({params}: QuestsPageParams) {
 
       <div>
         <h1
-          className={`text-4xl font-semibold my-2 text-center px-6 ${museumModerno.className}`}
+          className={`text-4xl font-semibold my-2  px-6 underline underline-offset-6 ${museumModerno.className}`}
         >
           Rewards
         </h1>
@@ -123,7 +122,7 @@ async function QuestsPage({params}: QuestsPageParams) {
           ))}
         </div>
         <h1
-          className={`text-4xl text-center font-semibold my-2 px-6 ${museumModerno.className}`}
+          className={`text-4xl underline underline-offset-6 font-semibold my-2 px-6 ${museumModerno.className}`}
         >
           My Rewards
         </h1>
