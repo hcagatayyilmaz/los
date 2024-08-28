@@ -23,11 +23,12 @@ function Page() {
           </p>
           <h2 className='text-xl font-bold mt-6'>1. Introduction</h2>
           <p>
-            Welcome to Los ("we," "our," or "us"). These Terms of Use govern
-            your access to and use of the Los application and website
-            (collectively, the "Service"). By using the Service, you agree to be
-            bound by these Terms. If you disagree with any part of the terms,
-            then you may not access the Service.
+            Welcome to Los (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;).
+            These Terms of Use govern your access to and use of the Los
+            application and website (collectively, the &quot;Service&quot;). By
+            using the Service, you agree to be bound by these Terms. If you
+            disagree with any part of the terms, then you may not access the
+            Service.
           </p>
 
           <h2 className='text-xl font-bold mt-6'>2. Who We Are</h2>
@@ -101,8 +102,8 @@ function Page() {
           <h2 className='text-xl font-bold mt-6'>10. Changes to Terms</h2>
           <p>
             We reserve the right to modify or replace these Terms at any time.
-            If a revision is material, we will try to provide at least 30 days'
-            notice prior to any new terms taking effect.
+            If a revision is material, we will try to provide at least 30
+            days&apos; notice prior to any new terms taking effect.
           </p>
 
           <h2 className='text-xl font-bold mt-6'>11. Third-Party Services</h2>
