@@ -249,13 +249,13 @@ export const getAllPlaces = unstable_cache(
   async () => {
     const locations = await prisma.attraction.findMany({
       where: {
-        isActive: true // Assuming you want only active places
+        isActive: true
       }
     })
     return locations
   },
   ["all-places"],
-  {revalidate: 600} // 10 minutes
+  {revalidate: 600}
 )
 
 export async function getPlaceDetails(placeId: string) {

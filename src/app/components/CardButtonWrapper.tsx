@@ -17,7 +17,7 @@ function CardButtonWrapper({points, locations}: CardButtonWrapperProps) {
   if (isListView) return null
 
   return (
-    <div className='flex mx-4 mb-1 justify-between items-center'>
+    <div className='flex mx-4 mb-2 justify-between items-center'>
       <TotalPoints points={points} />
       <div className='flex gap-1'>
         <ClosestPlace locations={locations} />
