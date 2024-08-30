@@ -12,11 +12,16 @@ export const LiveLocationPin = () => (
 )
 
 const colors = [
-  {text: "#000000", background: "#ffffff"},
-  {text: "#ff00ff", background: "#ffffff"},
-  {text: "#2cff05", background: "#ffffff"},
-  {text: "#FFD700", background: "#ffffff"},
-  {text: "#00CED1", background: "#ffffff"}
+  {background: "#dc2626", text: "#ffffff"}, // Red-600
+  {background: "#2563eb", text: "#ffffff"}, // Blue-600
+  {background: "#16a34a", text: "#ffffff"}, // Green-600
+  {background: "#ca8a04", text: "#ffffff"}, // Yellow-600
+  {background: "#7e22ce", text: "#ffffff"}, // Purple-600
+  {background: "#f97316", text: "#ffffff"}, // Orange-600
+  {background: "#d97706", text: "#ffffff"}, // Amber-600
+  {background: "#0891b2", text: "#ffffff"}, // Cyan-600
+  {background: "#0d9488", text: "#ffffff"}, // Teal-600
+  {background: "#9333ea", text: "#ffffff"} // Violet-600
 ]
 
 export const ItemPin: React.FC<{
@@ -41,8 +46,7 @@ export const ItemPin: React.FC<{
       <div
         className={`${baseClassName} w-6 h-6 rounded-full flex items-center justify-center border-2 `}
         style={{
-          backgroundColor: syntheticColor.background,
-          borderColor: syntheticColor.text
+          backgroundColor: syntheticColor.background
         }}
       >
         <FaStar style={{color: syntheticColor.text}} size={12} />
