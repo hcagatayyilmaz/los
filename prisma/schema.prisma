@@ -113,6 +113,8 @@ model City {
   name        String       @unique
   slug        String       @unique
   meta        Json?
+  centerLat   Float?
+  centerLng   Float?
   attractions Attraction[]
   Badge       Badge[]
 }

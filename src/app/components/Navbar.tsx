@@ -17,10 +17,13 @@ export default function Navbar({isMapPage}: {isMapPage: boolean}) {
   return (
     <div className='flex justify-between px-2 items-center bg-transparent mt-1 text-sm'>
       {isMapPage ? (
-        <Link href={"/leaderboard"}>
+        <Link href={"/"}>
           <div className='flex gap-2 items-center text-muted-foreground bg-white px-2 py-1 rounded border text-sm border-gray-300 shadow-md'>
-            <MdOutlineLeaderboard className='w-5 h-5 ' />
-            <span>Leaderboard</span>
+            {/* <MdOutlineLeaderboard className='w-5 h-5 ' /> */}
+
+            {/* Soon it will be Stats */}
+            <CiMap className='w-5 h-5 text-customYellow' />
+            <span>Map</span>
           </div>
         </Link>
       ) : (

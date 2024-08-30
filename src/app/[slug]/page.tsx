@@ -67,7 +67,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
       taxonomy: searchParams.taxonomy
     }
 
-    const attractions = await getAttractions(city.id, filter)
+    const {attractions, syntheticData} = await getAttractions(city.id, filter)
     const {getUser} = getKindeServerSession()
 
     const kindeUser = await getUser()
@@ -79,7 +79,10 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
           <main className='h-dvh w-full max-w-md mx-auto relative'>
             <div className='absolute inset-0 pointer-events-none'>
               <div className='h-full w-full pointer-events-auto'>
-                <MainLayout locations={attractions} />
+                <MainLayout
+                  locations={attractions}
+                  syntheticData={syntheticData}
+                />
               </div>
             </div>
             <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>

@@ -14,10 +14,11 @@ import {LiveLocationPin, ItemPin} from "./Pins"
 
 const libraries: Libraries = ["places", "geometry"]
 
-const Map: React.FC<{locations: Location[]; isMapPage?: boolean}> = ({
-  locations,
-  isMapPage
-}) => {
+const Map: React.FC<{
+  locations: Location[]
+  isMapPage?: boolean
+  syntheticData: Location[]
+}> = ({locations, isMapPage, syntheticData}) => {
   const {isLoaded, loadError} = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
     libraries
@@ -152,7 +153,7 @@ const Map: React.FC<{locations: Location[]; isMapPage?: boolean}> = ({
         }
       }}
     >
-      {locations.map((location, index) => (
+      {[...locations, ...syntheticData].map((location, index) => (
         <OverlayView
           key={index}
           position={{lat: location.latitude, lng: location.longitude}}
@@ -163,6 +164,7 @@ const Map: React.FC<{locations: Location[]; isMapPage?: boolean}> = ({
               location={location}
               isSelected={selectedLocation?.id === location.id}
               zoomLevel={zoomLevel}
+              isSynthetic={location.isSynthetic}
             />
           </div>
         </OverlayView>

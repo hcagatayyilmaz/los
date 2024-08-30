@@ -3,6 +3,7 @@
 import {unstable_cache} from "next/cache"
 import {PrismaClient} from "@prisma/client"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
+import {faker} from "@faker-js/faker"
 
 const prisma = new PrismaClient()
 
@@ -65,8 +66,10 @@ export async function getAttractions(cityId: string, filter: any) {
     where: whereClause
   })
 
+  // Generate synthetic data
+  const syntheticData = await generateSyntheticPlaces(cityId)
+
   if (user) {
-    // Fetch all check-ins for the current user
     const checkIns = await prisma.checkIn.findMany({
       where: {
         userId: user.id,
@@ -79,13 +82,11 @@ export async function getAttractions(cityId: string, filter: any) {
       checkIns.map((checkIn) => checkIn.attractionId)
     )
 
-    // Add checkedIn flag to each attraction
     attractions = attractions.map((attraction) => ({
       ...attraction,
       checkedIn: checkedInAttractionIds.has(attraction.id)
     }))
   } else {
-    // If no user, set checkedIn to false for all attractions
     attractions = attractions.map((attraction) => ({
       ...attraction,
       checkedIn: false
@@ -93,8 +94,9 @@ export async function getAttractions(cityId: string, filter: any) {
   }
 
   console.log("Attractions:", attractions)
+  console.log("Synthetic Data:", syntheticData)
 
-  return attractions
+  return {attractions, syntheticData}
 }
 
 export async function getDBUser(userId: string) {
@@ -308,3 +310,48 @@ export async function getCityBadgeByCityName(cityName: string) {
     totalCheckIns
   }
 }
+
+const generateSyntheticPlaces = unstable_cache(
+  async (cityId: string) => {
+    const city = await prisma.city.findUnique({
+      where: {id: cityId},
+      select: {centerLat: true, centerLng: true}
+    })
+
+    if (!city || !city.centerLat || !city.centerLng) {
+      console.log(
+        "City not found or missing coordinates. Skipping synthetic data generation."
+      )
+      return []
+    }
+
+    const radius = 0.02 // Approximately 10km radius
+    return Array.from({length: 50}, () => {
+      const angle = Math.random() * 2 * Math.PI
+      const distance = Math.sqrt(Math.random()) * radius
+      const lat = city.centerLat && city.centerLat + distance * Math.cos(angle)
+      const lng = city.centerLng && city.centerLng + distance * Math.sin(angle)
+
+      return {
+        id: faker.string.uuid(),
+        name_en: faker.company.name(),
+        name_de: faker.company.name(),
+        latitude: parseFloat(lat!.toFixed(6)),
+        longitude: parseFloat(lng!.toFixed(6)),
+        points: 10,
+        cityId: cityId,
+        description_en: faker.lorem.sentence(),
+        description_de: faker.lorem.sentence(),
+        isActive: true,
+        taxonomy: faker.helpers.arrayElement([
+          "ATTRACTION",
+          "EVENT",
+          "EXPERIENCE"
+        ]),
+        isSynthetic: true
+      }
+    })
+  },
+  ["synthetic-places"],
+  {revalidate: 86400} // 24 hours in seconds
+)

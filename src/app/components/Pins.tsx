@@ -1,6 +1,7 @@
 import {Location} from "../lib/types"
 import Image from "next/image"
-
+import {FaStar} from "react-icons/fa"
+import {useMemo} from "react"
 // border-white or border-black for live location pin
 
 export const LiveLocationPin = () => (
@@ -10,13 +11,44 @@ export const LiveLocationPin = () => (
   </div>
 )
 
+const colors = [
+  {text: "#000000", background: "#ffffff"},
+  {text: "#ff00ff", background: "#ffffff"},
+  {text: "#2cff05", background: "#ffffff"},
+  {text: "#FFD700", background: "#ffffff"},
+  {text: "#00CED1", background: "#ffffff"}
+]
+
 export const ItemPin: React.FC<{
   location: Location
   isSelected: boolean
   zoomLevel?: number
-}> = ({location, isSelected, zoomLevel}) => {
+  isSynthetic?: boolean
+}> = ({location, isSelected, zoomLevel, isSynthetic}) => {
   const scaleClass = isSelected ? "scale-150" : ""
   const baseClassName = `relative group transition-transform duration-200 ${scaleClass}`
+
+  const syntheticColor = useMemo(() => {
+    if (isSynthetic) {
+      const colorIndex = parseInt(location.id, 36) % colors.length
+      return colors[colorIndex]
+    }
+    return null
+  }, [isSynthetic, location.id])
+
+  if (isSynthetic && syntheticColor) {
+    return (
+      <div
+        className={`${baseClassName} w-6 h-6 rounded-full flex items-center justify-center border-2 `}
+        style={{
+          backgroundColor: syntheticColor.background,
+          borderColor: syntheticColor.text
+        }}
+      >
+        <FaStar style={{color: syntheticColor.text}} size={12} />
+      </div>
+    )
+  }
 
   if (location.checkedIn === true) {
     return (
