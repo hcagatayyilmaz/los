@@ -17,7 +17,7 @@ const libraries: Libraries = ["places", "geometry"]
 const Map: React.FC<{
   locations: Location[]
   isMapPage?: boolean
-  syntheticData: Location[]
+  syntheticData?: Location[]
 }> = ({locations, isMapPage, syntheticData}) => {
   const {isLoaded, loadError} = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
@@ -153,22 +153,24 @@ const Map: React.FC<{
         }
       }}
     >
-      {[...locations, ...syntheticData].map((location, index) => (
-        <OverlayView
-          key={index}
-          position={{lat: location.latitude, lng: location.longitude}}
-          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-        >
-          <div onClick={() => handlePinClick(location)}>
-            <ItemPin
-              location={location}
-              isSelected={selectedLocation?.id === location.id}
-              zoomLevel={zoomLevel}
-              isSynthetic={location.isSynthetic}
-            />
-          </div>
-        </OverlayView>
-      ))}
+      {[...(locations || []), ...(syntheticData || [])].map(
+        (location, index) => (
+          <OverlayView
+            key={index}
+            position={{lat: location.latitude, lng: location.longitude}}
+            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+          >
+            <div onClick={() => handlePinClick(location)}>
+              <ItemPin
+                location={location}
+                isSelected={selectedLocation?.id === location.id}
+                zoomLevel={zoomLevel}
+                isSynthetic={location.isSynthetic}
+              />
+            </div>
+          </OverlayView>
+        )
+      )}
       {userLocation && (
         <OverlayView
           position={userLocation}
