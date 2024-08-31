@@ -355,3 +355,35 @@ const generateSyntheticPlaces = unstable_cache(
   ["synthetic-places"],
   {revalidate: 86400} // 24 hours in seconds
 )
+
+export const generateSyntheticMapPlaces = unstable_cache(
+  async (userLat: number, userLng: number) => {
+    const radius = 0.025 // Approximately 2.5km radius
+    return Array.from({length: 20}, () => {
+      const angle = Math.random() * 2 * Math.PI
+      const distance = Math.sqrt(Math.random()) * radius
+      const lat = userLat + distance * Math.cos(angle)
+      const lng = userLng + distance * Math.sin(angle)
+
+      return {
+        id: faker.string.uuid(),
+        name_en: faker.company.name(),
+        name_de: faker.company.name(),
+        latitude: parseFloat(lat.toFixed(6)),
+        longitude: parseFloat(lng.toFixed(6)),
+        points: 10,
+        description_en: faker.lorem.sentence(),
+        description_de: faker.lorem.sentence(),
+        isActive: true,
+        taxonomy: faker.helpers.arrayElement([
+          "ATTRACTION",
+          "EVENT",
+          "EXPERIENCE"
+        ]),
+        isSynthetic: true
+      }
+    })
+  },
+  ["synthetic-map-places"],
+  {revalidate: 3600} // 1 hour in seconds
+)

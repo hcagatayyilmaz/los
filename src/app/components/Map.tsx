@@ -11,6 +11,7 @@ import mapStyle from "../lib/style"
 import {Location} from "../lib/types"
 import {useSelectedItem} from "@/app/providers/useSelectedItem"
 import {LiveLocationPin, ItemPin} from "./Pins"
+import {generateSyntheticMapPlaces} from "../server/data" // Import the function
 
 const libraries: Libraries = ["places", "geometry"]
 
@@ -30,6 +31,7 @@ const Map: React.FC<{
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [isCentered, setIsCentered] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(15)
+  const [syntheticMapData, setSyntheticMapData] = useState<Location[]>([])
 
   const mapContainerStyle = useMemo(
     () => ({
@@ -120,6 +122,23 @@ const Map: React.FC<{
     }
   }, [map, userLocation])
 
+  useEffect(() => {
+    if (isMapPage && userLocation) {
+      const fetchSyntheticData = async () => {
+        try {
+          const data = await generateSyntheticMapPlaces(
+            userLocation.lat,
+            userLocation.lng
+          )
+          setSyntheticMapData(data as Location[])
+        } catch (error) {
+          console.error("Error fetching synthetic map data:", error)
+        }
+      }
+      fetchSyntheticData()
+    }
+  }, [isMapPage, userLocation])
+
   const handlePinClick = (location: Location) => {
     if (isMapPage) {
       updateSelectedLocation(location.id)
@@ -153,24 +172,25 @@ const Map: React.FC<{
         }
       }}
     >
-      {[...(locations || []), ...(syntheticData || [])].map(
-        (location, index) => (
-          <OverlayView
-            key={index}
-            position={{lat: location.latitude, lng: location.longitude}}
-            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-          >
-            <div onClick={() => handlePinClick(location)}>
-              <ItemPin
-                location={location}
-                isSelected={selectedLocation?.id === location.id}
-                zoomLevel={zoomLevel}
-                isSynthetic={location.isSynthetic}
-              />
-            </div>
-          </OverlayView>
-        )
-      )}
+      {[
+        ...(locations || []),
+        ...(isMapPage ? syntheticMapData : syntheticData || [])
+      ].map((location, index) => (
+        <OverlayView
+          key={index}
+          position={{lat: location.latitude, lng: location.longitude}}
+          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+        >
+          <div onClick={() => handlePinClick(location)}>
+            <ItemPin
+              location={location}
+              isSelected={selectedLocation?.id === location.id}
+              zoomLevel={zoomLevel}
+              isSynthetic={location.isSynthetic}
+            />
+          </div>
+        </OverlayView>
+      ))}
       {userLocation && (
         <OverlayView
           position={userLocation}
