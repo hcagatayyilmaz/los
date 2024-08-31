@@ -16,6 +16,7 @@ import ClosestPlace from "../components/ClosestPlace"
 import {UIProvider} from "@/app/providers/UIProvider" // Ensure this is the correct path
 import MainLayout from "../components/MainLayout"
 import SliderWrapper from "../components/SliderWrapper"
+import MapItemWrapper from "../components/MapItemWrapper"
 
 type CityPageParams = {
   params: {
@@ -97,7 +98,8 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                 points={user ? user.points : 0}
                 locations={attractions}
               />
-              <SliderWrapper locations={attractions} />
+              {/* <SliderWrapper locations={attractions} /> */}
+              <MapItemWrapper />
             </div>
           </main>
         </SelectedItemProvider>

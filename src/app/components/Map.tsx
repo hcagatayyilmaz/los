@@ -140,11 +140,7 @@ const Map: React.FC<{
   }, [isMapPage, userLocation])
 
   const handlePinClick = (location: Location) => {
-    if (isMapPage) {
-      updateSelectedLocation(location.id)
-    } else {
-      setSelectedLocation(location)
-    }
+    updateSelectedLocation(location)
   }
 
   if (loadError) return <div>Error loading maps</div>

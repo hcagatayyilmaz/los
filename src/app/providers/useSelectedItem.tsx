@@ -6,7 +6,7 @@ import {getPlaceDetails} from "../server/data"
 type SelectedItemContextType = {
   selectedLocation: Location | null
   setSelectedLocation: (location: Location | null) => void
-  updateSelectedLocation: (id: string | null) => void
+  updateSelectedLocation: (location: Location) => void
 }
 
 const SelectedItemContext = createContext<SelectedItemContextType | undefined>(
@@ -24,19 +24,8 @@ export const SelectedItemProvider = ({
     initialLocation
   )
 
-  // Function to fetch details by ID and update the selected location
-  const updateSelectedLocation = async (id: string | null) => {
-    if (!id) return
-    try {
-      const locationData = await getPlaceDetails(id)
-      if (locationData) {
-        setSelectedLocation(locationData)
-      } else {
-        console.error("Location not found")
-      }
-    } catch (error) {
-      console.error("Failed to fetch location details", error)
-    }
+  const updateSelectedLocation = (location: Location) => {
+    setSelectedLocation(location)
   }
 
   return (

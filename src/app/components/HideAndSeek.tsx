@@ -79,8 +79,10 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
             >
               Hint
             </h2>
-            <p className='text-gray-800 text-sm px-2'>{quest.description_en}</p>
-            <button
+            <p className='text-gray-800 text-sm px-2 pb-4'>
+              {quest.description_en}
+            </p>
+            {/* <button
               className={`text-customYellow py-2 px-2 rounded-xl transition duration-200 w-full  ${museumModerno.className}`}
               onClick={() => setIsMapVisible(!isMapVisible)}
             >
@@ -93,7 +95,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
                   longitude={quest.attraction.longitude}
                 />
               </div>
-            )}
+            )} */}
             <button
               className='bg-customYellow text-white py-2 px-4 rounded-xl hover:bg-black transition duration-200 w-full'
               onClick={handleHideAndSeek}

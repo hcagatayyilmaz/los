@@ -15,6 +15,7 @@ import AddLocation from "../../components/AddLocation"
 import Image from "next/image"
 import CityBadge from "../../components/CityBadge"
 import {getCityBadgeByCityName} from "@/app/server/data"
+import Navbar from "../../components/Navbar"
 type QuestsPageParams = {
   params: {
     slug: string
@@ -38,7 +39,9 @@ async function QuestsPage({params}: QuestsPageParams) {
 
   return (
     <div className='max-w-xl mx-auto pt-2  font-sans border rounded-lg'>
-      <div className={`flex items-center justify-center bg-white border-b `}>
+      <div
+        className={`flex flex-col items-center justify-center bg-white border-b `}
+      >
         <Link href={"/tuebingen"}>
           <div
             className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
@@ -51,15 +54,10 @@ async function QuestsPage({params}: QuestsPageParams) {
               height={100}
               className={`text-black ${museumModerno.className}`}
             />
-            {/* <div className='ml-[-4px] mb-[10px]'>
-                <Image src='/logo.png' alt='Logo' width={16} height={16} />
-              </div> */}
-
-            <div className='flex items-end justify-end mt-2'>
-              <h2 className='text-md font-semibold text-customYellow'></h2>
-            </div>
           </div>
         </Link>
+
+        <Navbar isMapPage={false} />
       </div>
       <h1
         className={`text-4xl  font-medium my-4 underline underline-offset-6 px-4 ${museumModerno.className}`}
