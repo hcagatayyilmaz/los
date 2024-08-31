@@ -11,6 +11,7 @@ import ActionsButtons from "../components/ActionsButtons"
 import {UIProvider} from "@/app/providers/UIProvider"
 import Map from "../components/Map"
 import MapItemWrapper from "../components/MapItemWrapper"
+import Banner from "../components/Banner"
 
 type MapPageParams = {
   params: {
@@ -21,7 +22,7 @@ type MapPageParams = {
 
 export const revalidate = 3600
 
-const CityPage = async ({searchParams}: MapPageParams) => {
+const MapPage = async ({searchParams}: MapPageParams) => {
   const filter = searchParams && {
     date: searchParams.date,
     taxonomy: searchParams.taxonomy
@@ -42,6 +43,7 @@ const CityPage = async ({searchParams}: MapPageParams) => {
               <Map locations={attractions} isMapPage={true} />
             </div>
           </div>
+          <Banner />
           <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
             <Header user={user} isMap={true} />
             <Navbar isMapPage={true} />
@@ -63,4 +65,4 @@ const CityPage = async ({searchParams}: MapPageParams) => {
   )
 }
 
-export default CityPage
+export default MapPage

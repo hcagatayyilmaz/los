@@ -3,7 +3,7 @@ import prisma from "@/app/lib/db"
 import Header from "@/app/components/Header"
 import Navbar from "@/app/components/Navbar"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
-
+import Banner from "@/app/components/Banner"
 import CardButtonWrapper from "../components/CardButtonWrapper"
 
 import {SelectedItemProvider} from "@/app/providers/useSelectedItem"
@@ -85,6 +85,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                 />
               </div>
             </div>
+            <Banner />
             <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
               <Header user={user} name={city.name} />
               <Navbar isMapPage={false} />
