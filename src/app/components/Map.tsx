@@ -137,7 +137,7 @@ const Map: React.FC<{
       }
       fetchSyntheticData()
     }
-  }, [isMapPage, userLocation])
+  }, [isMapPage])
 
   const handlePinClick = (location: Location) => {
     updateSelectedLocation(location)
