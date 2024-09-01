@@ -4,12 +4,14 @@ import {FaStar} from "react-icons/fa"
 import React, {useMemo} from "react"
 // border-white or border-black for live location pin
 
-export const LiveLocationPin = React.memo(() => (
+export const LiveLocationPin: React.FC = React.memo(() => (
   <div className='relative group'>
     <div className='absolute w-6 h-6 bg-[#FF1493] border-dashed rounded-full border-4 border-white shadow-2xl shadow-[#FF1493]/50 group-hover:scale-150 transition-transform duration-200'></div>
     <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75 group-hover:scale-150 transition-transform duration-200'></div>
   </div>
 ))
+
+LiveLocationPin.displayName = "LiveLocationPin"
 
 const colors = [
   {background: "#ffffff", text: "#FF1493"}, // gold
