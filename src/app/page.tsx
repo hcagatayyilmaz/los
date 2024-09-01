@@ -19,13 +19,18 @@ export default async function Home() {
         <div
           className={`flex items-center bg-white py-1 rounded-3xl text-center space-x-2 ${museoModerno.className}`}
         >
-          <Image
-            src='/logo-text-2.png'
-            alt='Los'
-            width={100}
-            height={80}
-            className={`text-black ${museoModerno.className}`}
-          />
+          <div className='relative'>
+            <Image
+              src='/logo-text-2.png'
+              alt='Los'
+              width={100}
+              height={80}
+              className={`text-black ${museoModerno.className}`}
+            />
+            <div className='absolute top-0 -right-8 bg-[#2cff05] text-black px-2 py-1 text-[8px] rounded-full'>
+              BETA
+            </div>
+          </div>
           <div className='flex items-end justify-end mt-2'></div>
         </div>
         <div className='flex items-center gap-2'>

@@ -1,7 +1,5 @@
-"use client"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
-import {CoinIcon} from "../lib/CustomIcons"
 import Image from "next/image"
 
 const museumModerno = MuseoModerno({
@@ -24,13 +22,18 @@ export default function Header({name, user, isMap}: LogoProps) {
           className={`flex items-center bg-white px-4  text-center space-x-2 ${museumModerno.className}`}
           style={{border: "1px dashed white"}}
         >
-          <Image
-            src='/logo-text-2.png'
-            alt='Los'
-            width={80}
-            height={60}
-            className={`text-black ${museumModerno.className}`}
-          />
+          <div className='relative'>
+            <Image
+              src='/logo-text-2.png'
+              alt='Los'
+              width={80}
+              height={60}
+              className={`text-black ${museumModerno.className}`}
+            />
+            <div className='absolute top-0 -right-8 bg-[#2cff05] text-black px-2 py-1 text-[8px] rounded-full'>
+              BETA
+            </div>
+          </div>
           <div className='flex items-end justify-end mt-2'>
             {/* {!isMap && (
               <h2 className='text-md font-semibold text-customYellow'>
