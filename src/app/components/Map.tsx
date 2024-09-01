@@ -1,5 +1,5 @@
 "use client"
-import React, {useState, useEffect, useMemo, useCallback} from "react"
+import React, {useState, useEffect, useRef, useMemo, useCallback} from "react"
 import {
   GoogleMap,
   useLoadScript,
@@ -32,6 +32,7 @@ const Map: React.FC<{
   const [isCentered, setIsCentered] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(15)
   const [syntheticMapData, setSyntheticMapData] = useState<Location[]>([])
+  const hasFetchedSyntheticData = useRef(false)
 
   const mapContainerStyle = useMemo(
     () => ({
@@ -123,7 +124,7 @@ const Map: React.FC<{
   }, [map, userLocation])
 
   useEffect(() => {
-    if (isMapPage && userLocation) {
+    if (isMapPage && userLocation && !hasFetchedSyntheticData.current) {
       const fetchSyntheticData = async () => {
         try {
           const data = await generateSyntheticMapPlaces(
@@ -131,13 +132,14 @@ const Map: React.FC<{
             userLocation.lng
           )
           setSyntheticMapData(data as Location[])
+          hasFetchedSyntheticData.current = true
         } catch (error) {
           console.error("Error fetching synthetic map data:", error)
         }
       }
       fetchSyntheticData()
     }
-  }, [isMapPage])
+  }, [isMapPage, userLocation])
 
   const handlePinClick = (location: Location) => {
     updateSelectedLocation(location)

@@ -11,7 +11,17 @@ const museoModerno = MuseoModerno({
 
 function Banner() {
   const {userLocation, requestLocationPermission} = useUserLocation()
-  const [showBanner, setShowBanner] = useState(true)
+  const [showBanner, setShowBanner] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!userLocation) {
+        setShowBanner(true)
+      }
+    }, 5000)
+
+    return () => clearTimeout(timer)
+  }, [userLocation])
 
   useEffect(() => {
     if (userLocation) {

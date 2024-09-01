@@ -400,5 +400,5 @@ export const generateSyntheticMapPlaces = unstable_cache(
     })
   },
   ["synthetic-map-places"],
-  {revalidate: 3600} // 1 hour in seconds
+  {revalidate: 86400} // 1 hour in seconds
 )
