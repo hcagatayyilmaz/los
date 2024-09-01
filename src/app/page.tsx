@@ -97,13 +97,13 @@ export default async function Home() {
           <ImageSlider />
         </div>
         <div className=''>
-          <Link href={"/map"}>
+          {/* <Link href={"/map"}>
             <button
               className={`${museoModerno.className} bg-customYellow text-xl rounded-full text-white font-medium py-3 px-4 mb-2 border w-full`}
             >
               MAP
             </button>
-          </Link>
+          </Link> */}
         </div>
         <div className='py-4'>
           <h1 className={`${museoModerno.className} text-4xl font-medium`}>

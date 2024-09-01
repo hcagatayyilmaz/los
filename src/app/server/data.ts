@@ -5,6 +5,8 @@ import {PrismaClient} from "@prisma/client"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {faker} from "@faker-js/faker"
 import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
+import mongoose from "mongoose"
+import SyntheticPlaceSchema from "../../../mongodb/schema"
 
 const prisma = new PrismaClient()
 
@@ -410,3 +412,84 @@ export const generateSyntheticMapPlaces = unstable_cache(
   ["synthetic-map-places"],
   {revalidate: 86400} // 1 hour in seconds
 )
+
+const RADIUS = 2500 // 2.5km in meters
+const PLACES_COUNT = 20
+
+// export const generateSyntheticMapPlaces2 = async (
+//   userLat: number,
+//   userLng: number
+// ): Promise<Location[]> => {
+//   // Ensure MongoDB connection
+//   if (mongoose.connection.readyState !== 1) {
+//     await mongoose.connect(process.env.MONGODB_URI as string)
+//   }
+
+//   try {
+//     // Find existing places within the radius
+//     let nearbyPlaces = await SyntheticPlaceSchema.find({
+//       location: {
+//         $near: {
+//           $geometry: {
+//             type: "Point",
+//             coordinates: [userLng, userLat]
+//           },
+//           $maxDistance: RADIUS
+//         }
+//       }
+//     }).limit(PLACES_COUNT)
+
+//     // If we don't have enough places, generate new ones
+//     if (nearbyPlaces.length < PLACES_COUNT) {
+//       const newPlacesCount = PLACES_COUNT - nearbyPlaces.length
+//       const newPlaces = Array.from({length: newPlacesCount}, () => {
+//         const angle = Math.random() * 2 * Math.PI
+//         const distance = Math.sqrt(Math.random()) * RADIUS
+//         const lat = userLat + (distance / 111300) * Math.cos(angle)
+//         const lng =
+//           userLng +
+//           (distance / (111300 * Math.cos((userLat * Math.PI) / 180))) *
+//             Math.sin(angle)
+
+//         return new SyntheticPlace({
+//           name_en: faker.company.name(),
+//           name_de: faker.company.name(),
+//           location: {
+//             type: "Point",
+//             coordinates: [lng, lat]
+//           },
+//           points: 10,
+//           description_en: faker.lorem.sentence(),
+//           description_de: faker.lorem.sentence(),
+//           isActive: true,
+//           taxonomy: faker.helpers.arrayElement([
+//             "ATTRACTION",
+//             "EVENT",
+//             "EXPERIENCE"
+//           ]),
+//           isSynthetic: true
+//         })
+//       })
+
+//       await SyntheticPlaceSchema.insertMany(newPlaces)
+//       nearbyPlaces = [...nearbyPlaces, ...newPlaces]
+//     }
+
+//     return nearbyPlaces.map((place:any) => ({
+//       id: place._id.toString(),
+//       name_en: place.name_en,
+//       name_de: place.name_de,
+//       latitude: place.location.coordinates[1],
+//       longitude: place.location.coordinates[0],
+//       points: place.points,
+//       description_en: place.description_en,
+//       description_de: place.description_de,
+//       isActive: place.isActive,
+//       taxonomy: place.taxonomy,
+//       isSynthetic: place.isSynthetic
+//     }))
+//   } catch (error) {
+//     console.error("Error generating synthetic places:", error)
+//     throw error
+//   }
+// }
