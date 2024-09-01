@@ -124,7 +124,7 @@ const Map: React.FC<{
   }, [map, userLocation])
 
   useEffect(() => {
-    if (isMapPage && userLocation && !hasFetchedSyntheticData.current) {
+    if (isMapPage && userLocation) {
       const fetchSyntheticData = async () => {
         try {
           const data = await generateSyntheticMapPlaces(
@@ -132,14 +132,13 @@ const Map: React.FC<{
             userLocation.lng
           )
           setSyntheticMapData(data as Location[])
-          hasFetchedSyntheticData.current = true
         } catch (error) {
           console.error("Error fetching synthetic map data:", error)
         }
       }
       fetchSyntheticData()
     }
-  }, [isMapPage, userLocation])
+  }, [isMapPage])
 
   const handlePinClick = (location: Location) => {
     updateSelectedLocation(location)

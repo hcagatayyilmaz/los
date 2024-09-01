@@ -12,19 +12,13 @@ export const LiveLocationPin = React.memo(() => (
 ))
 
 const colors = [
-  {background: "#4d470e", text: "#ffed29"}, // gold
-  {background: "#e0bc00", text: "#ffde21"}, //neon green
-  {background: "#612400", text: "#ff5c00"}, //pink
-  {background: "#000000", text: "#FFD700"} // black
+  {background: "#ffffff", text: "#FF1493"}, // gold
+  {background: "#ffffff", text: "#FF1493"}, //neon green
+  {background: "#ffffff", text: "#FF1493"}, //pink
+  {background: "#ffffff", text: "#FF1493"} // black
 ]
 
-const EventDateDisplay: React.FC<{date: string; zoomLevel?: number}> = ({
-  date,
-  zoomLevel
-}) => {
-  if (zoomLevel && zoomLevel <= 12) return null
-
-  console.log(zoomLevel)
+const EventDateDisplay: React.FC<{date: string}> = ({date}) => {
   const dateObj = new Date(date)
   const month = dateObj
     .toLocaleString("default", {month: "short"})
@@ -32,10 +26,10 @@ const EventDateDisplay: React.FC<{date: string; zoomLevel?: number}> = ({
   const day = dateObj.getDate().toString().padStart(2, "0")
   return (
     <div className='absolute -top-6 -right-4 text-white text-xs flex flex-col items-center justify-center w-6 h-6  rounded-full'>
-      <p className='text-[8px] uppercase font-bold bg-customRed w-full text-center rounded-t-md'>
+      <p className='text-[7px] uppercase font-bold bg-customRed w-full text-center'>
         {month}
       </p>
-      <p className='text-[8px] text-black bg-white w-full text-center font-extrabold rounded-b-md'>
+      <p className='text-[7px] text-black bg-white w-full text-center font-extrabold'>
         {day}
       </p>
     </div>
@@ -62,12 +56,16 @@ export const ItemPin: React.FC<{
   if (isSynthetic && syntheticColor) {
     return (
       <div
-        className={`${baseClassName} w-4 h-4 rounded-full flex items-center justify-center border border-black`}
+        className={`${baseClassName} w-[18px] h-[18px] rounded-full flex items-center justify-center border-2 border-black`}
         style={{
           backgroundColor: syntheticColor.background
         }}
       >
-        <FaStar style={{color: syntheticColor.text}} size={8} />
+        <FaStar
+          style={{color: syntheticColor.text}}
+          size={8}
+          className='text-center'
+        />
       </div>
     )
   }
@@ -97,9 +95,9 @@ export const ItemPin: React.FC<{
     location.pin &&
     location.endDate
   ) {
-    console.log("event location", location)
+    const endDate = new Date(location.endDate) // Ensure endDate is a Date object
     return (
-      <div className={`${baseClassName} w-8 h-8 relative `}>
+      <div className={`${baseClassName} w-8 h-8 relative`}>
         <Image
           src={location.pin}
           alt='Location Pin'
@@ -107,10 +105,7 @@ export const ItemPin: React.FC<{
           objectFit='contain'
           className='absolute'
         />
-        <EventDateDisplay
-          date={location.endDate.toISOString()}
-          zoomLevel={zoomLevel}
-        />
+        <EventDateDisplay date={endDate.toISOString()} />
       </div>
     )
   } else if (location.pin) {

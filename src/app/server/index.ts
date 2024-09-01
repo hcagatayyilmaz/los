@@ -5,6 +5,7 @@ import {PrismaClient} from "@prisma/client"
 import {calculateDistance3} from "@/app/lib/utils"
 import {revalidatePath} from "next/cache"
 import {redirect} from "next/navigation"
+import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
 
 const prisma = new PrismaClient()
 
@@ -42,6 +43,81 @@ export async function checkIn({
   )
   if (distance <= 20) {
     // 25 meters threshold
+    const checkIn = await prisma.checkIn.create({
+      data: {
+        userId: user.id,
+        attractionId: placeId
+      }
+    })
+
+    await prisma.user.update({
+      where: {id: user.id},
+      data: {points: {increment: place.points}}
+    })
+
+    await prisma.transaction.create({
+      data: {
+        userId: user.id,
+        points: place.points,
+        details: `checkin_id:${checkIn.id}`,
+        type: "EARN_POINTS"
+      }
+    })
+
+    return {
+      success: true,
+      message: "Checked in successfully",
+      points: place.points
+    }
+  } else {
+    return {
+      success: false,
+      message: "You are too far from the place to check in"
+    }
+  }
+}
+
+export async function checkInSyntheticLocation({
+  placeId,
+  userLat,
+  userLng
+}: {
+  placeId: string
+  userLat: number
+  userLng: number
+}) {
+  "use server"
+
+  const {getUser} = getKindeServerSession()
+  const user = await getUser()
+
+  if (!user) {
+    throw new Error("Please login to check in")
+  }
+
+  const redisClient = await getRedisClient()
+  let place
+  try {
+    const syntheticData = await redisClient.get(`synthetic-places:${placeId}`)
+    if (!syntheticData) {
+      throw new Error("Synthetic place not found")
+    }
+    place = JSON.parse(syntheticData)
+  } catch (error) {
+    console.error("Error fetching synthetic place:", error)
+    throw new Error("Error fetching synthetic place")
+  } finally {
+    await closeRedisConnection()
+  }
+
+  const distance = await calculateDistance3(
+    userLat,
+    userLng,
+    place.latitude,
+    place.longitude
+  )
+  if (distance <= 40) {
+    // 40 meters threshold for synthetic places
     const checkIn = await prisma.checkIn.create({
       data: {
         userId: user.id,

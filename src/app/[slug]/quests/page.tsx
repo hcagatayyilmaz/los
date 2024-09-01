@@ -55,8 +55,6 @@ async function QuestsPage({params}: QuestsPageParams) {
             />
           </div>
         </Link>
-
-        <Navbar isMapPage={false} />
       </div>
       <h1
         className={`text-4xl  font-medium my-4 underline underline-offset-6 px-4 ${museumModerno.className}`}

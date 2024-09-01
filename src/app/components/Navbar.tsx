@@ -22,7 +22,7 @@ export default function Navbar({isMapPage}: {isMapPage: boolean}) {
             {/* <MdOutlineLeaderboard className='w-5 h-5 ' /> */}
 
             {/* Soon it will be Stats */}
-            <CiMap className='w-5 h-5 text-customYellow' />
+            <CiMap className='w-5 h-5 text-black' />
             <span>Map</span>
           </div>
         </Link>
