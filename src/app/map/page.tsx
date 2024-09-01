@@ -12,6 +12,7 @@ import {UIProvider} from "@/app/providers/UIProvider"
 import Map from "../components/Map"
 import MapItemWrapper from "../components/MapItemWrapper"
 import Banner from "../components/Banner"
+import {redirect} from "next/navigation"
 
 type MapPageParams = {
   params: {
@@ -33,7 +34,10 @@ const MapPage = async ({searchParams}: MapPageParams) => {
 
   const kindeUser = await getUser()
   const user = kindeUser ? await getDBUser(kindeUser.id) : null
-
+  if (!user) {
+    // Redirect to Kinde login page
+    redirect("/api/auth/login")
+  }
   return (
     <UIProvider>
       <SelectedItemProvider initialLocation={attractions[0]}>
