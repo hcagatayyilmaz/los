@@ -4,7 +4,7 @@ import {unstable_cache} from "next/cache"
 import {PrismaClient} from "@prisma/client"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {faker} from "@faker-js/faker"
-import {getRedisClient} from "../../../redis/redis"
+import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
 
 const prisma = new PrismaClient()
 
@@ -29,16 +29,15 @@ export async function getAttractions(cityId: string, filter: any) {
     isActive: true,
     OR: [
       {
-        startDate: {
-          lte: now
-        },
-        endDate: {
-          gte: now
-        }
+        AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
       },
       {
         startDate: null,
         endDate: null
+      },
+      {
+        startDate: null,
+        endDate: {gte: now}
       }
     ]
   }
@@ -49,16 +48,15 @@ export async function getAttractions(cityId: string, filter: any) {
     const date = new Date(filter.date)
     whereClause.OR = [
       {
-        startDate: {
-          lte: date
-        },
-        endDate: {
-          gte: date
-        }
+        AND: [{startDate: {lte: date}}, {endDate: {gte: date}}]
       },
       {
         startDate: null,
         endDate: null
+      },
+      {
+        startDate: null,
+        endDate: {gte: date}
       }
     ]
   }
@@ -94,8 +92,8 @@ export async function getAttractions(cityId: string, filter: any) {
     }))
   }
 
-  console.log("Attractions:", attractions)
-  console.log("Synthetic Data:", syntheticData)
+  // console.log("Attractions:", attractions)
+  // console.log("Synthetic Data:", syntheticData)
 
   return {attractions, syntheticData}
 }
@@ -313,62 +311,72 @@ export async function getCityBadgeByCityName(cityName: string) {
 }
 
 export async function generateSyntheticPlaces(cityId: string) {
-  const redisClient = await getRedisClient()
-  const cacheKey = `synthetic-places:${cityId}`
+  let redisClient = null
+  try {
+    redisClient = await getRedisClient()
+    const cacheKey = `synthetic-places:${cityId}`
 
-  // Try to get data from Redis
-  let syntheticData = await redisClient.get(cacheKey)
+    // Try to get data from Redis
+    let syntheticData = await redisClient.get(cacheKey)
 
-  if (syntheticData) {
-    return JSON.parse(syntheticData)
-  }
-
-  // If not in cache, generate new data
-  const city = await prisma.city.findUnique({
-    where: {id: cityId},
-    select: {centerLat: true, centerLng: true}
-  })
-
-  if (!city || !city.centerLat || !city.centerLng) {
-    console.log(
-      "City not found or missing coordinates. Skipping synthetic data generation."
-    )
-    return []
-  }
-
-  const radius = 0.02 // Approximately 10km radius
-  const newSyntheticData = Array.from({length: 50}, () => {
-    const angle = Math.random() * 2 * Math.PI
-    const distance = Math.sqrt(Math.random()) * radius
-    const lat = city.centerLat! + distance * Math.cos(angle)
-    const lng = city.centerLng! + distance * Math.sin(angle)
-
-    return {
-      id: faker.string.uuid(),
-      name_en: faker.company.name(),
-      name_de: faker.company.name(),
-      latitude: parseFloat(lat.toFixed(6)),
-      longitude: parseFloat(lng.toFixed(6)),
-      points: 10,
-      cityId: cityId,
-      description_en: faker.lorem.sentence(),
-      description_de: faker.lorem.sentence(),
-      isActive: true,
-      taxonomy: faker.helpers.arrayElement([
-        "ATTRACTION",
-        "EVENT",
-        "EXPERIENCE"
-      ]),
-      isSynthetic: true
+    if (syntheticData) {
+      return JSON.parse(syntheticData)
     }
-  })
 
-  // Store in Redis with expiration
-  await redisClient.set(cacheKey, JSON.stringify(newSyntheticData), {
-    EX: 86400 // 24 hours in seconds
-  })
+    // If not in cache, generate new data
+    const city = await prisma.city.findUnique({
+      where: {id: cityId},
+      select: {centerLat: true, centerLng: true}
+    })
 
-  return newSyntheticData
+    if (!city || !city.centerLat || !city.centerLng) {
+      console.log(
+        "City not found or missing coordinates. Skipping synthetic data generation."
+      )
+      return []
+    }
+
+    const radius = 0.02 // Approximately 10km radius
+    const newSyntheticData = Array.from({length: 20}, () => {
+      const angle = Math.random() * 2 * Math.PI
+      const distance = Math.sqrt(Math.random()) * radius
+      const lat = city.centerLat! + distance * Math.cos(angle)
+      const lng = city.centerLng! + distance * Math.sin(angle)
+
+      return {
+        id: faker.string.uuid(),
+        name_en: faker.company.name(),
+        name_de: faker.company.name(),
+        latitude: parseFloat(lat.toFixed(6)),
+        longitude: parseFloat(lng.toFixed(6)),
+        points: 10,
+        cityId: cityId,
+        description_en: faker.lorem.sentence(),
+        description_de: faker.lorem.sentence(),
+        isActive: true,
+        taxonomy: faker.helpers.arrayElement([
+          "ATTRACTION",
+          "EVENT",
+          "EXPERIENCE"
+        ]),
+        isSynthetic: true
+      }
+    })
+
+    // Store in Redis with expiration
+    await redisClient.set(cacheKey, JSON.stringify(newSyntheticData), {
+      EX: 86400 // 24 hours in seconds
+    })
+
+    return newSyntheticData
+  } catch (error) {
+    console.error("Error in generateSyntheticPlaces:", error)
+    throw error
+  } finally {
+    if (redisClient) {
+      await closeRedisConnection()
+    }
+  }
 }
 
 export const generateSyntheticMapPlaces = unstable_cache(

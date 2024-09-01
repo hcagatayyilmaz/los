@@ -32,7 +32,7 @@ const LocationPermissionButton: React.FC = () => {
       onClick={handleClick}
       className='flex justify-center items-center gap-2 bg-white p-[6px] rounded-full shadow-md cursor-pointer border-2 border-customYellow'
     >
-      <MdGpsFixed className='text-black text-2xl' />
+      <MdGpsFixed className='text-black text-2xl ' />
       {userLocation ? (
         "Center Map"
       ) : (

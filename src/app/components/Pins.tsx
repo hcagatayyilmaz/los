@@ -1,28 +1,46 @@
 import {Location} from "../lib/types"
 import Image from "next/image"
 import {FaStar} from "react-icons/fa"
-import {useMemo} from "react"
+import React, {useMemo} from "react"
 // border-white or border-black for live location pin
 
-export const LiveLocationPin = () => (
+export const LiveLocationPin = React.memo(() => (
   <div className='relative group'>
     <div className='absolute w-6 h-6 bg-[#FF1493] border-dashed rounded-full border-4 border-white shadow-2xl shadow-[#FF1493]/50 group-hover:scale-150 transition-transform duration-200'></div>
     <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75 group-hover:scale-150 transition-transform duration-200'></div>
   </div>
-)
+))
 
 const colors = [
-  {background: "#dc2626", text: "#ffffff"}, // Red-600
-  {background: "#2563eb", text: "#ffffff"}, // Blue-600
-  {background: "#16a34a", text: "#ffffff"}, // Green-600
-  {background: "#ca8a04", text: "#ffffff"}, // Yellow-600
-  {background: "#7e22ce", text: "#ffffff"}, // Purple-600
-  {background: "#f97316", text: "#ffffff"}, // Orange-600
-  {background: "#d97706", text: "#ffffff"}, // Amber-600
-  {background: "#0891b2", text: "#ffffff"}, // Cyan-600
-  {background: "#0d9488", text: "#ffffff"}, // Teal-600
-  {background: "#9333ea", text: "#ffffff"} // Violet-600
+  {background: "#4d470e", text: "#ffed29"}, // gold
+  {background: "#e0bc00", text: "#ffde21"}, //neon green
+  {background: "#612400", text: "#ff5c00"}, //pink
+  {background: "#000000", text: "#FFD700"} // black
 ]
+
+const EventDateDisplay: React.FC<{date: string; zoomLevel?: number}> = ({
+  date,
+  zoomLevel
+}) => {
+  if (zoomLevel && zoomLevel <= 12) return null
+
+  console.log(zoomLevel)
+  const dateObj = new Date(date)
+  const month = dateObj
+    .toLocaleString("default", {month: "short"})
+    .toUpperCase()
+  const day = dateObj.getDate().toString().padStart(2, "0")
+  return (
+    <div className='absolute -top-6 -right-4 text-white text-xs flex flex-col items-center justify-center w-6 h-6  rounded-full'>
+      <p className='text-[8px] uppercase font-bold bg-customRed w-full text-center rounded-t-md'>
+        {month}
+      </p>
+      <p className='text-[8px] text-black bg-white w-full text-center font-extrabold rounded-b-md'>
+        {day}
+      </p>
+    </div>
+  )
+}
 
 export const ItemPin: React.FC<{
   location: Location
@@ -44,12 +62,12 @@ export const ItemPin: React.FC<{
   if (isSynthetic && syntheticColor) {
     return (
       <div
-        className={`${baseClassName} w-6 h-6 rounded-full flex items-center justify-center border-2 `}
+        className={`${baseClassName} w-4 h-4 rounded-full flex items-center justify-center border border-black`}
         style={{
           backgroundColor: syntheticColor.background
         }}
       >
-        <FaStar style={{color: syntheticColor.text}} size={12} />
+        <FaStar style={{color: syntheticColor.text}} size={8} />
       </div>
     )
   }
@@ -74,9 +92,30 @@ export const ItemPin: React.FC<{
         />
       </div>
     )
-  } else if (location.pin !== null) {
+  } else if (
+    location.taxonomy === "EVENT" &&
+    location.pin &&
+    location.endDate
+  ) {
+    console.log("event location", location)
     return (
-      <div className={`${baseClassName} w-8 h-8`}>
+      <div className={`${baseClassName} w-8 h-8 relative `}>
+        <Image
+          src={location.pin}
+          alt='Location Pin'
+          fill
+          objectFit='contain'
+          className='absolute'
+        />
+        <EventDateDisplay
+          date={location.endDate.toISOString()}
+          zoomLevel={zoomLevel}
+        />
+      </div>
+    )
+  } else if (location.pin) {
+    return (
+      <div className={`${baseClassName} w-8 h-8 relative`}>
         <Image
           src={location.pin}
           alt='Location Pin'
@@ -86,24 +125,6 @@ export const ItemPin: React.FC<{
         />
       </div>
     )
-  }
-
-  let bgColor = isSelected ? "#FF1493" : "#FFFFFF"
-
-  switch (location.taxonomy) {
-    case "ATTRACTION":
-      bgColor = isSelected ? "#FF1493" : "#FFFFFF"
-      break
-    case "EVENT":
-      bgColor = isSelected ? "#FF1493" : "#FFFFED"
-      break
-    case "EXPERIENCE":
-      bgColor = isSelected ? "#FF1493" : "#FFD1DF"
-      break
-    case "LIMITED_TIME":
-    case "REWARD":
-      bgColor = isSelected ? "#FF1493" : "#C9FFCE"
-      break
   }
 
   return (

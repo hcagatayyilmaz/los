@@ -35,7 +35,6 @@ async function QuestsPage({params}: QuestsPageParams) {
   const cityBadge = await getCityBadgeByCityName(slug)
   const badge = await getBadge()
   const rewards = await getAllRewards()
-  console.log("City Badge:", cityBadge)
 
   return (
     <div className='max-w-xl mx-auto pt-2  font-sans border rounded-lg'>
