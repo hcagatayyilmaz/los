@@ -33,8 +33,8 @@ function Page() {
 
           <h2 className='text-xl font-bold mt-6'>2. Who We Are</h2>
           <p>
-            Los is operated by Jimmy Pop, located in Tübingen, Germany. For any
-            questions regarding these Terms, please contact us at
+            Los is operated by Cagatay Yilmaz, located in Tübingen, Germany. For
+            any questions regarding these Terms, please contact us at
             support@los.city.
           </p>
 
