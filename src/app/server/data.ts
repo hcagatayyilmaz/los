@@ -5,7 +5,7 @@ import {PrismaClient} from "@prisma/client"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {faker} from "@faker-js/faker"
 import mongoose from "mongoose"
-import SyntheticPlace from "../../../mongodb/schema"
+import SyntheticPlaceSchema from "../../../mongodb/schema"
 import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
 
 const prisma = new PrismaClient()
@@ -344,7 +344,7 @@ export async function generateSyntheticPlaces(cityId: string) {
     }
 
     // Check if we already have synthetic places for this city
-    let syntheticPlaces = await SyntheticPlace.find({cityId})
+    let syntheticPlaces = await SyntheticPlaceSchema.find({cityId})
 
     if (syntheticPlaces.length > 0) {
       // Convert MongoDB documents to plain JavaScript objects and serialize fields
@@ -403,7 +403,7 @@ export async function generateSyntheticPlaces(cityId: string) {
       const lat = city.centerLat! + distance * Math.cos(angle)
       const lng = city.centerLng! + distance * Math.sin(angle)
 
-      return new SyntheticPlace({
+      return new SyntheticPlaceSchema({
         cityId: cityId,
         name_en: faker.company.name(),
         name_de: faker.company.name(),
@@ -426,7 +426,7 @@ export async function generateSyntheticPlaces(cityId: string) {
     })
 
     // Save the new synthetic places to MongoDB
-    await SyntheticPlace.insertMany(newSyntheticData)
+    await SyntheticPlaceSchema.insertMany(newSyntheticData)
 
     // Convert MongoDB documents to plain JavaScript objects and serialize fields
     return newSyntheticData.map((place) => {
@@ -440,6 +440,7 @@ export async function generateSyntheticPlaces(cityId: string) {
         isActive: boolean
         taxonomy: string
         isSynthetic: boolean
+        checkedIn: boolean
         cityId: string
         createdAt: Date
         location: {
@@ -457,6 +458,7 @@ export async function generateSyntheticPlaces(cityId: string) {
         taxonomy: plainObject.taxonomy,
         isSynthetic: plainObject.isSynthetic,
         cityId: plainObject.cityId,
+        checkedIn: plainObject.checkedIn,
         createdAt: plainObject.createdAt.toISOString(),
         latitude: plainObject.location.coordinates[1],
         longitude: plainObject.location.coordinates[0]
