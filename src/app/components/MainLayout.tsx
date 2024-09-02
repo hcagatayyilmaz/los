@@ -24,11 +24,13 @@ const MainLayout: React.FC<LayoutProps> = ({
   return (
     <>
       {!isListView ? (
-        <Map
-          locations={locations}
-          syntheticData={syntheticData}
-          cityCenter={cityCenter}
-        />
+        <div className='w-full h-full overflow-y-hidden'>
+          <Map
+            locations={locations}
+            syntheticData={syntheticData}
+            cityCenter={cityCenter}
+          />
+        </div>
       ) : (
         <List locations={locations} />
       )}

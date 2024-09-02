@@ -189,6 +189,7 @@ export async function getHideAndSeek({slug}: {slug: string}) {
 export async function getBadge({slug}: {slug: string}) {
   const {getUser} = await getKindeServerSession()
   const user = await getUser()
+
   const city = await prisma.city.findUnique({
     where: {
       slug: slug
