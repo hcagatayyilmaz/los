@@ -3,7 +3,7 @@ import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
 import {getPopQuiz, getHideAndSeek, getBadge} from "../../server/data"
 import Badge from "../../components/Badge"
-import {getAllRewards} from "../../server/data"
+import {getRewardsByCity} from "../../server/data"
 import RewardCard from "../../components/RewardCard"
 import MyRewards from "../../components/MyRewards"
 import {RankingIcon} from "../../lib/CustomIcons"
@@ -29,12 +29,12 @@ const museumModerno = MuseoModerno({
 async function QuestsPage({params}: QuestsPageParams) {
   const {slug} = params
 
-  const hideAndSeek = await getHideAndSeek()
+  const hideAndSeek = await getHideAndSeek({slug})
 
-  const quiz = await getPopQuiz()
+  const quiz = await getPopQuiz({slug})
   const cityBadge = await getCityBadgeByCityName(slug)
-  const badge = await getBadge()
-  const rewards = await getAllRewards()
+  const badge = await getBadge({slug})
+  const rewards = await getRewardsByCity(slug)
 
   return (
     <div className='max-w-xl mx-auto pt-2  font-sans border rounded-lg'>
@@ -94,7 +94,7 @@ async function QuestsPage({params}: QuestsPageParams) {
           Rewards
         </h1>
 
-        <div className='flex item-center justify-center px-6'>
+        {/* <div className='flex item-center justify-center px-6'>
           <div className='flex flex-col justify-center items-center'>
             <RankingIcon number={2} />
             <span>You are level 4!</span>
@@ -105,7 +105,7 @@ async function QuestsPage({params}: QuestsPageParams) {
               You can unlock rewards when you reach level 5!
             </span>
           </div>
-        </div>
+        </div> */}
 
         <p className={`px-6 mb-2 ${museumModerno.className} `}>
           Use your points to get free experiences in your city! If there is no

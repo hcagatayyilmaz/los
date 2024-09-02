@@ -3,6 +3,7 @@ import React, {useState} from "react"
 import {useUserLocation} from "../providers/useUserLocation"
 import {MdGpsFixed} from "react-icons/md"
 import toast from "react-hot-toast"
+import CustomToast from "./CustomToast"
 
 const LocationPermissionButton: React.FC = () => {
   const {userLocation, requestLocationPermission} = useUserLocation()
@@ -22,7 +23,12 @@ const LocationPermissionButton: React.FC = () => {
         }
       } catch (error) {
         console.error("Error getting location permission:", error)
-        toast.error("Error getting location. Please try again.")
+        toast.custom(
+          <CustomToast
+            message='Error getting location. Please try again.'
+            type='error'
+          />
+        )
       }
     }
   }

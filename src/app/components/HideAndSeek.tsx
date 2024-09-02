@@ -22,7 +22,9 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
 
   const handleHideAndSeek = async () => {
     if (!userLocation) {
-      toast.error("Unable to get your location.")
+      toast.custom(
+        <CustomToast message='Unable to get your location.' type='error' />
+      )
       return
     }
 
@@ -41,7 +43,9 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
           position: "top-center"
         })
       } else {
-        toast.error("An unknown error occurred.")
+        toast.custom(
+          <CustomToast message='An unknown error occurred.' type='error' />
+        )
       }
     }
   }

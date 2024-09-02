@@ -1,6 +1,6 @@
 // src/app/rewards/page.tsx
 import React from "react"
-import {getAllRewards} from "../../server/data"
+import {getRewardsByCity} from "../../server/data"
 import RewardCard from "../../components/RewardCard"
 import {MuseoModerno} from "next/font/google"
 import Link from "next/link"
@@ -11,8 +11,8 @@ const museumModerno = MuseoModerno({
   subsets: ["latin"]
 })
 
-const RewardsPage = async () => {
-  const rewards = await getAllRewards()
+const RewardsPage = async ({params}: {params: {slug: string}}) => {
+  const rewards = await getRewardsByCity(params.slug)
 
   return (
     <div className='max-w-2xl mx-auto bg-white rounded-lg flex flex-col gap-2'>
@@ -43,7 +43,7 @@ const RewardsPage = async () => {
         Rewards
       </h1>
 
-      <div className='flex item-center justify-center px-6'>
+      {/* <div className='flex item-center justify-center px-6'>
         <div className='flex flex-col justify-center items-center'>
           <RankingIcon number={2} />
           <span>You are level 2!</span>
@@ -53,7 +53,7 @@ const RewardsPage = async () => {
             You can unlock rewards when you reach level 5!
           </span>
         </div>
-      </div>
+      </div> */}
 
       <p className={`px-6 mb-2 ${museumModerno.className} `}>
         Use your points to get free experiences in your city! If there is no

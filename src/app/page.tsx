@@ -3,6 +3,7 @@ import {MuseoModerno} from "next/font/google"
 import ImageSlider from "./components/ImageSlider"
 import Link from "next/link"
 import Image from "next/image"
+import {getAllActiveCities} from "./server/data"
 
 const museoModerno = MuseoModerno({
   subsets: ["latin"]
@@ -12,6 +13,16 @@ export default async function Home() {
   const {getUser} = getKindeServerSession()
   const user = await getUser()
   const language = "EN"
+
+  // Fetch all active cities
+  const cities = await getAllActiveCities()
+
+  // Ensure Tübingen is listed first
+  const sortedCities = cities.sort((a, b) => {
+    if (a.name === "Tübingen") return -1
+    if (b.name === "Tübingen") return 1
+    return 0
+  })
 
   return (
     <main className='min-h-dvh w-screen flex flex-col items-center'>
@@ -111,38 +122,15 @@ export default async function Home() {
           </h1>
         </div>
         <div className='grid grid-cols-2 gap-2 '>
-          <Link href={"/tuebingen"}>
-            <button
-              className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
-            >
-              Tübingen
-            </button>
-          </Link>
-          <button
-            className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
-          >
-            Berlin
-          </button>
-          <button
-            className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
-          >
-            Hamburg
-          </button>
-          <button
-            className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
-          >
-            Münich
-          </button>
-          <button
-            className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
-          >
-            Stuttgart
-          </button>
-          <button
-            className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
-          >
-            New York
-          </button>
+          {sortedCities.map((city) => (
+            <Link key={city.id} href={`/${city.slug}`}>
+              <button
+                className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
+              >
+                {city.name}
+              </button>
+            </Link>
+          ))}
         </div>
       </div>
 

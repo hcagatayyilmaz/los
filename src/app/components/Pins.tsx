@@ -2,6 +2,7 @@ import {Location} from "../lib/types"
 import Image from "next/image"
 import {FaStar} from "react-icons/fa"
 import React, {useMemo} from "react"
+import {FaCheck} from "react-icons/fa"
 // border-white or border-black for live location pin
 
 export const LiveLocationPin: React.FC = React.memo(() => (
@@ -20,18 +21,25 @@ const colors = [
   {background: "#ffffff", text: "#FF1493"} // black
 ]
 
-const EventDateDisplay: React.FC<{date: string}> = ({date}) => {
+const EventDateDisplay: React.FC<{date: string; zoomLevel?: number}> = ({
+  date,
+  zoomLevel
+}) => {
+  if (zoomLevel && zoomLevel < 14) {
+    return null
+  }
+
   const dateObj = new Date(date)
   const month = dateObj
     .toLocaleString("default", {month: "short"})
     .toUpperCase()
   const day = dateObj.getDate().toString().padStart(2, "0")
   return (
-    <div className='absolute -top-6 -right-4 text-white text-xs flex flex-col items-center justify-center w-6 h-6  rounded-full'>
-      <p className='text-[7px] uppercase font-bold bg-customRed w-full text-center'>
+    <div className='absolute -top-6 -right-4 text-white text-xs flex flex-col items-center justify-center w-7 h-7  rounded-full'>
+      <p className='text-[8px] uppercase font-bold bg-customYellow w-full text-center rounded-t-lg'>
         {month}
       </p>
-      <p className='text-[7px] text-black bg-white w-full text-center font-extrabold'>
+      <p className='text-[8px] text-black bg-white w-full text-center font-extrabold rounded-b-lg'>
         {day}
       </p>
     </div>
@@ -58,7 +66,7 @@ export const ItemPin: React.FC<{
   if (isSynthetic && syntheticColor) {
     return (
       <div
-        className={`${baseClassName} w-[18px] h-[18px] rounded-full flex items-center justify-center border-2 border-black`}
+        className={`${baseClassName} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black`}
         style={{
           backgroundColor: syntheticColor.background
         }}
@@ -75,8 +83,10 @@ export const ItemPin: React.FC<{
   if (location.checkedIn === true) {
     return (
       <div className={`${baseClassName} w-6 h-6`}>
-        <div className='absolute w-6 h-6 rounded-full border-4 border-black bg-green-400'>
-          <span></span>
+        <div className='absolute  w-[18px] h-[18px] rounded-full border-2 border-black bg-green-400'>
+          <span className='flex items-center justify-center w-full h-full'>
+            <FaCheck className='text-black' />
+          </span>
         </div>
       </div>
     )
@@ -107,7 +117,7 @@ export const ItemPin: React.FC<{
           objectFit='contain'
           className='absolute'
         />
-        <EventDateDisplay date={endDate.toISOString()} />
+        <EventDateDisplay date={endDate.toISOString()} zoomLevel={zoomLevel} />
       </div>
     )
   } else if (location.pin) {

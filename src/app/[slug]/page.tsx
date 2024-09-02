@@ -83,6 +83,10 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
                 <MainLayout
                   locations={attractions}
                   syntheticData={syntheticData}
+                  cityCenter={{
+                    lat: city.centerLat ?? 48.520770613433,
+                    lng: city.centerLng ?? 9.057862627849184
+                  }}
                 />
               </div>
             </div>

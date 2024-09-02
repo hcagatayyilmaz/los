@@ -14,6 +14,7 @@ const SyntheticPlaceSchema = new mongoose.Schema({
       required: true
     }
   },
+
   points: Number,
   description_en: String,
   description_de: String,
@@ -22,10 +23,19 @@ const SyntheticPlaceSchema = new mongoose.Schema({
     type: String,
     enum: ["ATTRACTION", "EVENT", "EXPERIENCE"]
   },
-  isSynthetic: Boolean
+  isSynthetic: Boolean,
+  cityId: String,
+  createdAt: {type: Date, default: Date.now, expires: "24h"}
 })
 
+// Create a 2dsphere index on the location field
 SyntheticPlaceSchema.index({location: "2dsphere"})
 
-export default mongoose.models.SyntheticPlace ||
-  mongoose.model("SyntheticPlaceSchema", SyntheticPlaceSchema)
+// Create an index on cityId for faster queries
+SyntheticPlaceSchema.index({cityId: 1})
+
+const SyntheticPlace =
+  mongoose.models.SyntheticPlace ||
+  mongoose.model("SyntheticPlace", SyntheticPlaceSchema)
+
+export default SyntheticPlace

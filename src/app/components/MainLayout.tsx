@@ -8,15 +8,27 @@ import List from "./List"
 type LayoutProps = {
   locations: Location[] // Import the Location type accordingly
   syntheticData: any
+  cityCenter?: {
+    lat: number
+    lng: number
+  }
 }
 
-const MainLayout: React.FC<LayoutProps> = ({locations, syntheticData}) => {
+const MainLayout: React.FC<LayoutProps> = ({
+  locations,
+  syntheticData,
+  cityCenter
+}) => {
   const {isListView} = useUIContext()
 
   return (
     <>
       {!isListView ? (
-        <Map locations={locations} syntheticData={syntheticData} />
+        <Map
+          locations={locations}
+          syntheticData={syntheticData}
+          cityCenter={cityCenter}
+        />
       ) : (
         <List locations={locations} />
       )}

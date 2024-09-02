@@ -109,14 +109,18 @@ model CheckIn {
 }
 
 model City {
-  id          String       @id @default(cuid())
-  name        String       @unique
-  slug        String       @unique
-  meta        Json?
-  centerLat   Float?
-  centerLng   Float?
-  attractions Attraction[]
-  Badge       Badge[]
+  id           String        @id @default(cuid())
+  name         String        @unique
+  slug         String        @unique
+  meta         Json?
+  centerLat    Float?
+  centerLng    Float?
+  isActive     Boolean       @default(true)
+  attractions  Attraction[]
+  Badge        Badge[]
+  hideAndSeeks HideAndSeek[]
+  quizzes      Quiz[]
+  rewards      Reward[]
 }
 
 model Reward {
@@ -132,6 +136,8 @@ model Reward {
   startAt        DateTime?
   endAt          DateTime?
   userRewards    UserReward[]
+  cityId         String?
+  city           City?         @relation(fields: [cityId], references: [id])
 }
 
 model UserReward {
@@ -177,6 +183,8 @@ model HideAndSeek {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   userHideAndSeeks UserHideAndSeek[]
+  cityId           String?
+  city             City?             @relation(fields: [cityId], references: [id])
 }
 
 model UserHideAndSeek {
@@ -199,6 +207,8 @@ model Quiz {
   createdAt   DateTime   @default(now())
   endDate     DateTime?
   QuizAnswers UserQuiz[]
+  cityId      String?
+  city        City?      @relation(fields: [cityId], references: [id])
 }
 
 model UserQuiz {

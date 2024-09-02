@@ -4,16 +4,22 @@ import {unstable_cache} from "next/cache"
 import {PrismaClient} from "@prisma/client"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {faker} from "@faker-js/faker"
-import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
 import mongoose from "mongoose"
-import SyntheticPlaceSchema from "../../../mongodb/schema"
+import SyntheticPlace from "../../../mongodb/schema"
+import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
 
 const prisma = new PrismaClient()
 
-export async function getAllRewards() {
+export async function getRewardsByCity(slug: string) {
+  const city = await prisma.city.findUnique({
+    where: {
+      slug: slug
+    }
+  })
   const rewards = await prisma.reward.findMany({
     where: {
-      available: true
+      available: true,
+      cityId: city?.id
     }
   })
   return rewards
@@ -123,11 +129,18 @@ export async function getMyRewards(id: string) {
   return myRewards
 }
 
-export async function getPopQuiz() {
+export async function getPopQuiz({slug}: {slug: string}) {
   const currentDate = new Date()
+
+  const city = await prisma.city.findUnique({
+    where: {
+      slug: slug
+    }
+  })
 
   const quiz = await prisma.quiz.findFirst({
     where: {
+      cityId: city?.id,
       AND: [
         {
           endDate: {
@@ -144,11 +157,17 @@ export async function getPopQuiz() {
   return quiz
 }
 
-export async function getHideAndSeek() {
+export async function getHideAndSeek({slug}: {slug: string}) {
   const currentDate = new Date()
+  const city = await prisma.city.findUnique({
+    where: {
+      slug: slug
+    }
+  })
 
   const hideAndSeek = await prisma.hideAndSeek.findFirst({
     where: {
+      cityId: city?.id,
       AND: [
         {
           endDate: {
@@ -167,15 +186,21 @@ export async function getHideAndSeek() {
   return hideAndSeek
 }
 
-export async function getBadge() {
+export async function getBadge({slug}: {slug: string}) {
   const {getUser} = await getKindeServerSession()
   const user = await getUser()
+  const city = await prisma.city.findUnique({
+    where: {
+      slug: slug
+    }
+  })
 
   try {
     const badges = await prisma.badge.findFirst({
       where: {
         isActive: true,
-        isCityBadge: false
+        isCityBadge: false,
+        cityId: city?.id
       },
       include: {
         attractions: {
@@ -313,19 +338,37 @@ export async function getCityBadgeByCityName(cityName: string) {
 }
 
 export async function generateSyntheticPlaces(cityId: string) {
-  let redisClient = null
   try {
-    redisClient = await getRedisClient()
-    const cacheKey = `synthetic-places:${cityId}`
-
-    // Try to get data from Redis
-    let syntheticData = await redisClient.get(cacheKey)
-
-    if (syntheticData) {
-      return JSON.parse(syntheticData)
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(process.env.MONGODB_URI as string)
     }
 
-    // If not in cache, generate new data
+    // Check if we already have synthetic places for this city
+    let syntheticPlaces = await SyntheticPlace.find({cityId})
+
+    if (syntheticPlaces.length > 0) {
+      // Convert MongoDB documents to plain JavaScript objects and serialize fields
+      return syntheticPlaces.map((place) => {
+        const plainObject = place.toObject()
+        return {
+          id: plainObject._id.toString(), // Normalize the id field
+          name_en: plainObject.name_en,
+          name_de: plainObject.name_de,
+          points: plainObject.points,
+          description_en: plainObject.description_en,
+          description_de: plainObject.description_de,
+          isActive: plainObject.isActive,
+          taxonomy: plainObject.taxonomy,
+          isSynthetic: plainObject.isSynthetic,
+          cityId: plainObject.cityId,
+          createdAt: plainObject.createdAt.toISOString(),
+          latitude: plainObject.location.coordinates[1],
+          longitude: plainObject.location.coordinates[0]
+        }
+      })
+    }
+
+    // If not, generate new synthetic places
     const city = await prisma.city.findUnique({
       where: {id: cityId},
       select: {centerLat: true, centerLng: true}
@@ -345,14 +388,15 @@ export async function generateSyntheticPlaces(cityId: string) {
       const lat = city.centerLat! + distance * Math.cos(angle)
       const lng = city.centerLng! + distance * Math.sin(angle)
 
-      return {
-        id: faker.string.uuid(),
+      return new SyntheticPlace({
+        cityId: cityId,
         name_en: faker.company.name(),
         name_de: faker.company.name(),
-        latitude: parseFloat(lat.toFixed(6)),
-        longitude: parseFloat(lng.toFixed(6)),
+        location: {
+          type: "Point",
+          coordinates: [parseFloat(lng.toFixed(6)), parseFloat(lat.toFixed(6))]
+        },
         points: 10,
-        cityId: cityId,
         description_en: faker.lorem.sentence(),
         description_de: faker.lorem.sentence(),
         isActive: true,
@@ -361,135 +405,51 @@ export async function generateSyntheticPlaces(cityId: string) {
           "EVENT",
           "EXPERIENCE"
         ]),
-        isSynthetic: true
+        isSynthetic: true,
+        createdAt: new Date() // This field is used for TTL
+      })
+    })
+
+    // Save the new synthetic places to MongoDB
+    await SyntheticPlace.insertMany(newSyntheticData)
+
+    // Convert MongoDB documents to plain JavaScript objects and serialize fields
+    return newSyntheticData.map((place) => {
+      const plainObject = place.toObject()
+      return {
+        id: plainObject._id.toString(), // Normalize the id field
+        name_en: plainObject.name_en,
+        name_de: plainObject.name_de,
+        points: plainObject.points,
+        description_en: plainObject.description_en,
+        description_de: plainObject.description_de,
+        isActive: plainObject.isActive,
+        taxonomy: plainObject.taxonomy,
+        isSynthetic: plainObject.isSynthetic,
+        cityId: plainObject.cityId,
+        createdAt: plainObject.createdAt.toISOString(),
+        latitude: plainObject.location.coordinates[1],
+        longitude: plainObject.location.coordinates[0]
       }
     })
-
-    // Store in Redis with expiration
-    await redisClient.set(cacheKey, JSON.stringify(newSyntheticData), {
-      EX: 86400 // 24 hours in seconds
-    })
-
-    return newSyntheticData
   } catch (error) {
     console.error("Error in generateSyntheticPlaces:", error)
-    throw error
-  } finally {
-    if (redisClient) {
-      await closeRedisConnection()
-    }
+    return [] // Return an empty array if any error occurs
   }
 }
 
-export const generateSyntheticMapPlaces = unstable_cache(
-  async (userLat: number, userLng: number) => {
-    const radius = 0.025 // Approximately 2.5km radius
-    return Array.from({length: 20}, () => {
-      const angle = Math.random() * 2 * Math.PI
-      const distance = Math.sqrt(Math.random()) * radius
-      const lat = userLat + distance * Math.cos(angle)
-      const lng = userLng + distance * Math.sin(angle)
-
-      return {
-        id: faker.string.uuid(),
-        name_en: faker.company.name(),
-        name_de: faker.company.name(),
-        latitude: parseFloat(lat.toFixed(6)),
-        longitude: parseFloat(lng.toFixed(6)),
-        points: 10,
-        description_en: faker.lorem.sentence(),
-        description_de: faker.lorem.sentence(),
-        isActive: true,
-        taxonomy: faker.helpers.arrayElement([
-          "ATTRACTION",
-          "EVENT",
-          "EXPERIENCE"
-        ]),
-        isSynthetic: true
+export const getAllActiveCities = unstable_cache(
+  async () => {
+    const cities = await prisma.city.findMany({
+      where: {
+        isActive: true
+      },
+      orderBy: {
+        name: "asc" // Order by name or any other field if needed
       }
     })
+    return cities
   },
-  ["synthetic-map-places"],
-  {revalidate: 86400} // 1 hour in seconds
+  ["all-active-cities"],
+  {revalidate: 86400} // Revalidate every 24 hours
 )
-
-const RADIUS = 2500 // 2.5km in meters
-const PLACES_COUNT = 20
-
-// export const generateSyntheticMapPlaces2 = async (
-//   userLat: number,
-//   userLng: number
-// ): Promise<Location[]> => {
-//   // Ensure MongoDB connection
-//   if (mongoose.connection.readyState !== 1) {
-//     await mongoose.connect(process.env.MONGODB_URI as string)
-//   }
-
-//   try {
-//     // Find existing places within the radius
-//     let nearbyPlaces = await SyntheticPlaceSchema.find({
-//       location: {
-//         $near: {
-//           $geometry: {
-//             type: "Point",
-//             coordinates: [userLng, userLat]
-//           },
-//           $maxDistance: RADIUS
-//         }
-//       }
-//     }).limit(PLACES_COUNT)
-
-//     // If we don't have enough places, generate new ones
-//     if (nearbyPlaces.length < PLACES_COUNT) {
-//       const newPlacesCount = PLACES_COUNT - nearbyPlaces.length
-//       const newPlaces = Array.from({length: newPlacesCount}, () => {
-//         const angle = Math.random() * 2 * Math.PI
-//         const distance = Math.sqrt(Math.random()) * RADIUS
-//         const lat = userLat + (distance / 111300) * Math.cos(angle)
-//         const lng =
-//           userLng +
-//           (distance / (111300 * Math.cos((userLat * Math.PI) / 180))) *
-//             Math.sin(angle)
-
-//         return new SyntheticPlace({
-//           name_en: faker.company.name(),
-//           name_de: faker.company.name(),
-//           location: {
-//             type: "Point",
-//             coordinates: [lng, lat]
-//           },
-//           points: 10,
-//           description_en: faker.lorem.sentence(),
-//           description_de: faker.lorem.sentence(),
-//           isActive: true,
-//           taxonomy: faker.helpers.arrayElement([
-//             "ATTRACTION",
-//             "EVENT",
-//             "EXPERIENCE"
-//           ]),
-//           isSynthetic: true
-//         })
-//       })
-
-//       await SyntheticPlaceSchema.insertMany(newPlaces)
-//       nearbyPlaces = [...nearbyPlaces, ...newPlaces]
-//     }
-
-//     return nearbyPlaces.map((place:any) => ({
-//       id: place._id.toString(),
-//       name_en: place.name_en,
-//       name_de: place.name_de,
-//       latitude: place.location.coordinates[1],
-//       longitude: place.location.coordinates[0],
-//       points: place.points,
-//       description_en: place.description_en,
-//       description_de: place.description_de,
-//       isActive: place.isActive,
-//       taxonomy: place.taxonomy,
-//       isSynthetic: place.isSynthetic
-//     }))
-//   } catch (error) {
-//     console.error("Error generating synthetic places:", error)
-//     throw error
-//   }
-// }
