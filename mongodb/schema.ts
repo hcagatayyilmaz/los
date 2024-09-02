@@ -1,8 +1,25 @@
-import mongoose from "mongoose"
+import mongoose, {Document, Model} from "mongoose"
+
+export interface ISyntheticPlace extends Document {
+  name_en: string
+  name_de: string
+  location: {
+    type: string
+    coordinates: [number, number]
+  }
+  points: number
+  description_en: string
+  description_de: string
+  isActive: boolean
+  taxonomy: "ATTRACTION" | "EVENT" | "EXPERIENCE"
+  isSynthetic: boolean
+  cityId: string
+  createdAt: Date
+}
 
 const SyntheticPlaceSchema = new mongoose.Schema({
-  name_en: String,
-  name_de: String,
+  name_en: {type: String, required: true},
+  name_de: {type: String, required: true},
   location: {
     type: {
       type: String,
@@ -14,17 +31,17 @@ const SyntheticPlaceSchema = new mongoose.Schema({
       required: true
     }
   },
-
-  points: Number,
-  description_en: String,
-  description_de: String,
-  isActive: Boolean,
+  points: {type: Number, required: true},
+  description_en: {type: String, required: true},
+  description_de: {type: String, required: true},
+  isActive: {type: Boolean, required: true},
   taxonomy: {
     type: String,
-    enum: ["ATTRACTION", "EVENT", "EXPERIENCE"]
+    enum: ["ATTRACTION", "EVENT", "EXPERIENCE"],
+    required: true
   },
-  isSynthetic: Boolean,
-  cityId: String,
+  isSynthetic: {type: Boolean, required: true},
+  cityId: {type: String, required: true},
   createdAt: {type: Date, default: Date.now, expires: "24h"}
 })
 
@@ -34,8 +51,8 @@ SyntheticPlaceSchema.index({location: "2dsphere"})
 // Create an index on cityId for faster queries
 SyntheticPlaceSchema.index({cityId: 1})
 
-const SyntheticPlace =
+const SyntheticPlace: Model<ISyntheticPlace> =
   mongoose.models.SyntheticPlace ||
-  mongoose.model("SyntheticPlace", SyntheticPlaceSchema)
+  mongoose.model<ISyntheticPlace>("SyntheticPlace", SyntheticPlaceSchema)
 
 export default SyntheticPlace

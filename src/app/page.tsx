@@ -19,8 +19,8 @@ export default async function Home() {
 
   // Ensure Tübingen is listed first
   const sortedCities = cities.sort((a, b) => {
-    if (a.name === "Tübingen") return -1
-    if (b.name === "Tübingen") return 1
+    if (a.slug === "tuebingen") return -1
+    if (b.slug === "tuebingen") return 1
     return 0
   })
 

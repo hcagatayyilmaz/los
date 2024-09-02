@@ -109,18 +109,19 @@ model CheckIn {
 }
 
 model City {
-  id           String        @id @default(cuid())
-  name         String        @unique
-  slug         String        @unique
-  meta         Json?
-  centerLat    Float?
-  centerLng    Float?
-  isActive     Boolean       @default(true)
-  attractions  Attraction[]
-  Badge        Badge[]
-  hideAndSeeks HideAndSeek[]
-  quizzes      Quiz[]
-  rewards      Reward[]
+  id             String        @id @default(cuid())
+  name           String        @unique
+  slug           String        @unique
+  meta           Json?
+  centerLat      Float?
+  centerLng      Float?
+  numberOfPoints Int?
+  isActive       Boolean       @default(true)
+  attractions    Attraction[]
+  Badge          Badge[]
+  hideAndSeeks   HideAndSeek[]
+  quizzes        Quiz[]
+  rewards        Reward[]
 }
 
 model Reward {

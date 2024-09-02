@@ -5,7 +5,12 @@ import {PrismaClient} from "@prisma/client"
 import {calculateDistance3} from "@/app/lib/utils"
 import {revalidatePath} from "next/cache"
 import {redirect} from "next/navigation"
-import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
+import mongoose from "mongoose"
+import SyntheticPlaceSchema from "../../../mongodb/schema"
+import {ISyntheticPlace} from "../../../mongodb/schema"
+import dbConnect from "../../../mongodb/mongodb"
+
+//import { getRedisClient, closeRedisConnection } from "../../../redis/redis"
 
 const prisma = new PrismaClient()
 
@@ -95,26 +100,25 @@ export async function checkInSyntheticLocation({
     throw new Error("Please login to check in")
   }
 
-  const redisClient = await getRedisClient()
-  let place
+  await dbConnect()
+
+  let place: ISyntheticPlace | null
   try {
-    const syntheticData = await redisClient.get(`synthetic-places:${placeId}`)
-    if (!syntheticData) {
+    const result = await SyntheticPlaceSchema.findById(placeId).lean()
+    place = result as ISyntheticPlace
+    if (!place) {
       throw new Error("Synthetic place not found")
     }
-    place = JSON.parse(syntheticData)
   } catch (error) {
     console.error("Error fetching synthetic place:", error)
     throw new Error("Error fetching synthetic place")
-  } finally {
-    await closeRedisConnection()
   }
 
   const distance = await calculateDistance3(
     userLat,
     userLng,
-    place.latitude,
-    place.longitude
+    place.location.coordinates[1],
+    place.location.coordinates[0]
   )
   if (distance <= 40) {
     // 40 meters threshold for synthetic places

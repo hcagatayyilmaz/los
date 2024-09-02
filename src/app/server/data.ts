@@ -349,7 +349,22 @@ export async function generateSyntheticPlaces(cityId: string) {
     if (syntheticPlaces.length > 0) {
       // Convert MongoDB documents to plain JavaScript objects and serialize fields
       return syntheticPlaces.map((place) => {
-        const plainObject = place.toObject()
+        const plainObject = place.toObject() as {
+          _id: string
+          name_en: string
+          name_de: string
+          points: number
+          description_en: string
+          description_de: string
+          isActive: boolean
+          taxonomy: string
+          isSynthetic: boolean
+          cityId: string
+          createdAt: Date
+          location: {
+            coordinates: [number, number]
+          }
+        }
         return {
           id: plainObject._id.toString(), // Normalize the id field
           name_en: plainObject.name_en,
@@ -397,8 +412,8 @@ export async function generateSyntheticPlaces(cityId: string) {
           coordinates: [parseFloat(lng.toFixed(6)), parseFloat(lat.toFixed(6))]
         },
         points: 10,
-        description_en: faker.lorem.sentence(),
-        description_de: faker.lorem.sentence(),
+        description_en: faker.hacker.phrase(),
+        description_de: faker.hacker.phrase(),
         isActive: true,
         taxonomy: faker.helpers.arrayElement([
           "ATTRACTION",
@@ -415,7 +430,22 @@ export async function generateSyntheticPlaces(cityId: string) {
 
     // Convert MongoDB documents to plain JavaScript objects and serialize fields
     return newSyntheticData.map((place) => {
-      const plainObject = place.toObject()
+      const plainObject = place.toObject() as {
+        _id: string
+        name_en: string
+        name_de: string
+        points: number
+        description_en: string
+        description_de: string
+        isActive: boolean
+        taxonomy: string
+        isSynthetic: boolean
+        cityId: string
+        createdAt: Date
+        location: {
+          coordinates: [number, number]
+        }
+      }
       return {
         id: plainObject._id.toString(), // Normalize the id field
         name_en: plainObject.name_en,
