@@ -120,7 +120,7 @@ export async function checkInSyntheticLocation({
     place.location.coordinates[1],
     place.location.coordinates[0]
   )
-  if (distance <= 40) {
+  if (distance <= 200) {
     // 40 meters threshold for synthetic places
     const checkIn = await prisma.checkIn.create({
       data: {
@@ -142,6 +142,14 @@ export async function checkInSyntheticLocation({
         type: "EARN_POINTS"
       }
     })
+
+    // Update the synthetic place document to set checkedIn to true
+    try {
+      await SyntheticPlaceSchema.findByIdAndUpdate(placeId, {checkedIn: true})
+    } catch (error) {
+      console.error("Error updating synthetic place:", error)
+      throw new Error("Error updating synthetic place")
+    }
 
     return {
       success: true,

@@ -16,7 +16,7 @@ export default async function Home() {
 
   // Fetch all active cities
   const cities = await getAllActiveCities()
-
+  console.log(cities)
   // Ensure Tübingen is listed first
   const sortedCities = cities.sort((a, b) => {
     if (a.slug === "tuebingen") return -1

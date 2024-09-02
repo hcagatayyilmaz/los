@@ -36,7 +36,8 @@ const Map: React.FC<{
   const [isCentered, setIsCentered] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(15)
 
-  console.log("synhetic data: ", syntheticData?.length)
+  console.log("synhetic data: ", syntheticData)
+
   const mapContainerStyle = useMemo(
     () => ({
       width: "100%",

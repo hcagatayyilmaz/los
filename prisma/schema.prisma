@@ -103,6 +103,7 @@ model CheckIn {
   attractionId String? // Nullable to allow check-ins without specific attraction
   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   attraction   Attraction? @relation(fields: [attractionId], references: [id], onDelete: SetNull)
+  isSynthetic  Boolean?    @default(false)
   createdAt    DateTime    @default(now())
 
   @@unique([userId, attractionId])

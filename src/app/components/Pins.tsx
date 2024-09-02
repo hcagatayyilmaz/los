@@ -55,31 +55,6 @@ export const ItemPin: React.FC<{
   const scaleClass = isSelected ? "scale-150" : ""
   const baseClassName = `relative group transition-transform duration-200 ${scaleClass}`
 
-  const syntheticColor = useMemo(() => {
-    if (isSynthetic) {
-      const colorIndex = parseInt(location.id, 36) % colors.length
-      return colors[colorIndex]
-    }
-    return null
-  }, [isSynthetic, location.id])
-
-  if (isSynthetic && syntheticColor) {
-    return (
-      <div
-        className={`${baseClassName} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black`}
-        style={{
-          backgroundColor: syntheticColor.background
-        }}
-      >
-        <FaStar
-          style={{color: syntheticColor.text}}
-          size={8}
-          className='text-center'
-        />
-      </div>
-    )
-  }
-
   if (location.checkedIn === true) {
     return (
       <div className={`${baseClassName} w-6 h-6`}>
@@ -90,7 +65,19 @@ export const ItemPin: React.FC<{
         </div>
       </div>
     )
-  } else if (location.isTheme) {
+  }
+
+  if (isSynthetic) {
+    return (
+      <div
+        className={`${baseClassName} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black`}
+      >
+        <FaStar size={8} className='text-center text-customYellow' />
+      </div>
+    )
+  }
+
+  if (location.isTheme) {
     return (
       <div className={`${baseClassName} w-12 h-12`}>
         <Image

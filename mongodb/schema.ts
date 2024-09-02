@@ -13,6 +13,7 @@ export interface ISyntheticPlace extends Document {
   isActive: boolean
   taxonomy: "ATTRACTION" | "EVENT" | "EXPERIENCE"
   isSynthetic: boolean
+  checkedIn: boolean
   cityId: string
   createdAt: Date
 }
@@ -40,6 +41,7 @@ const SyntheticPlaceSchema = new mongoose.Schema({
     enum: ["ATTRACTION", "EVENT", "EXPERIENCE"],
     required: true
   },
+  checkedIn: {type: Boolean, default: false, required: true},
   isSynthetic: {type: Boolean, required: true},
   cityId: {type: String, required: true},
   createdAt: {type: Date, default: Date.now, expires: "24h"}

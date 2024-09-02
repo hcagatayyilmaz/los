@@ -39,7 +39,8 @@ export async function generateMetadata({params}: CityPageParams) {
   //unstable_noStore()
   const city = await prisma.city.findUnique({
     where: {
-      slug: params.slug
+      slug: params.slug,
+      isActive: true
     }
   })
   return {
@@ -77,7 +78,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
     return (
       <UIProvider>
         <SelectedItemProvider initialLocation={attractions[0]}>
-          <main className='h-dvh w-full max-w-md mx-auto relative'>
+          <main className='h-dvh w-full max-w-md mx-auto relative overflow-y-hidden'>
             <div className='absolute inset-0 pointer-events-none'>
               <div className='h-full w-full pointer-events-auto'>
                 <MainLayout
