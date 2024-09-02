@@ -24,7 +24,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
             type='error'
           />
         ),
-        {id: "auth-error"}
+        {id: "auth-error", position: "top-center", duration: 5000}
       )
       return
     }
@@ -49,13 +49,15 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
                 type='success'
               />
             ),
-            {id: "checkin-success"}
+            {id: "checkin-success", position: "top-center", duration: 3000}
           )
         } else {
           toast.custom(
             (t) => <CustomToast message={result.message} type='error' />,
             {
-              id: "checkin-error"
+              id: "checkin-error",
+              position: "top-center",
+              duration: 3000
             }
           )
         }
@@ -67,7 +69,11 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
               type='error'
             />
           ),
-          {id: "checkin-error"}
+          {
+            id: "checkin-error",
+            position: "top-center",
+            duration: 3000
+          }
         )
       }
     } else {
@@ -78,7 +84,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
             type='error'
           />
         ),
-        {id: "location-error"}
+        {id: "location-error", position: "top-center", duration: 3000}
       )
     }
   }
