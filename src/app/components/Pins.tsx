@@ -68,7 +68,15 @@ export const ItemPin: React.FC<{
   }
 
   if (isSynthetic) {
-    return (
+    return location.checkedIn ? (
+      <div className={`${baseClassName} w-6 h-6`}>
+        <div className='absolute w-[18px] h-[18px] rounded-full border-2 border-black bg-green-400'>
+          <span className='flex items-center justify-center w-full h-full'>
+            <FaCheck className='text-black' />
+          </span>
+        </div>
+      </div>
+    ) : (
       <div
         className={`${baseClassName} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black`}
       >

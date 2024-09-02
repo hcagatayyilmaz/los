@@ -360,6 +360,7 @@ export async function generateSyntheticPlaces(cityId: string) {
           isActive: boolean
           taxonomy: string
           isSynthetic: boolean
+          checkedIn: boolean
           cityId: string
           createdAt: Date
           location: {
@@ -376,6 +377,7 @@ export async function generateSyntheticPlaces(cityId: string) {
           isActive: plainObject.isActive,
           taxonomy: plainObject.taxonomy,
           isSynthetic: plainObject.isSynthetic,
+          checkedIn: plainObject.checkedIn,
           cityId: plainObject.cityId,
           createdAt: plainObject.createdAt.toISOString(),
           latitude: plainObject.location.coordinates[1],
@@ -422,6 +424,7 @@ export async function generateSyntheticPlaces(cityId: string) {
           "EXPERIENCE"
         ]),
         isSynthetic: true,
+        checkedIn: false,
         createdAt: new Date() // This field is used for TTL
       })
     })
