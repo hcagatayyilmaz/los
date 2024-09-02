@@ -3,15 +3,17 @@ import React from "react"
 import TotalPoints from "./TotalPoints"
 import ClosestPlace from "./ClosestPlace"
 import LocationPermissionButton from "./LocationPermissionButton"
-import {Location} from "../lib/types"
+import {useSelectedItem} from "../providers/useSelectedItem"
 import {useUIContext} from "../providers/UIProvider"
+import {Location} from "../lib/types"
 
 type CardButtonWrapperProps = {
   points: number
-  locations: Location[]
+  location: Location
 }
 
-function CardButtonWrapper({points, locations}: CardButtonWrapperProps) {
+function CardButtonWrapper({points, location}: CardButtonWrapperProps) {
+  const {selectedLocation} = useSelectedItem()
   const {isListView} = useUIContext()
 
   if (isListView) return null
@@ -20,7 +22,7 @@ function CardButtonWrapper({points, locations}: CardButtonWrapperProps) {
     <div className='flex mx-4 mb-2 justify-between items-center'>
       <TotalPoints points={points} />
       <div className='flex gap-1'>
-        <ClosestPlace locations={locations} />
+        <ClosestPlace location={selectedLocation || location} />
         <LocationPermissionButton />
       </div>
     </div>

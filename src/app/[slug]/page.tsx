@@ -100,7 +100,7 @@ const CityPage = async ({params, searchParams}: CityPageParams) => {
             <div className='absolute bottom-0 left-0 w-full z-1'>
               <CardButtonWrapper
                 points={user ? user.points : 0}
-                locations={attractions}
+                location={attractions[0]}
               />
               {/* <SliderWrapper locations={attractions} /> */}
               <MapItemWrapper />
