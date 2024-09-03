@@ -125,7 +125,8 @@ export async function checkInSyntheticLocation({
     const checkIn = await prisma.checkIn.create({
       data: {
         userId: user.id,
-        isSynthetic: true
+        isSynthetic: true,
+        syntheticPlaceId: placeId
       }
     })
 

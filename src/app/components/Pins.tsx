@@ -78,7 +78,7 @@ export const ItemPin: React.FC<{
       </div>
     ) : (
       <div
-        className={`${baseClassName} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black`}
+        className={`${baseClassName} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black bg-white`}
       >
         <FaStar size={8} className='text-center text-customYellow' />
       </div>

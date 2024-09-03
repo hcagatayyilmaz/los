@@ -19,6 +19,7 @@ export interface ISyntheticPlace extends Document {
 }
 
 const SyntheticPlaceSchema = new mongoose.Schema({
+  _id: mongoose.Types.ObjectId,
   name_en: {type: String, required: true},
   name_de: {type: String, required: true},
   location: {

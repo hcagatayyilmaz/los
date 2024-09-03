@@ -5,7 +5,7 @@ import {PrismaClient} from "@prisma/client"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {faker} from "@faker-js/faker"
 import mongoose from "mongoose"
-import SyntheticPlaceSchema from "../../../mongodb/schema"
+import SyntheticPlaceSchema, {ISyntheticPlace} from "../../../mongodb/schema"
 import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
 
 const prisma = new PrismaClient()
@@ -74,7 +74,7 @@ export async function getAttractions(cityId: string, filter: any) {
   })
 
   // Generate synthetic data
-  const syntheticData = await generateSyntheticPlaces(cityId)
+  const syntheticData = await generateSyntheticPlaces(cityId, user?.id)
 
   if (user) {
     const checkIns = await prisma.checkIn.findMany({
@@ -338,7 +338,7 @@ export async function getCityBadgeByCityName(cityName: string) {
   }
 }
 
-export async function generateSyntheticPlaces(cityId: string) {
+export async function generateSyntheticPlaces(cityId: string, userId?: string) {
   try {
     if (mongoose.connection.readyState !== 1) {
       await mongoose.connect(process.env.MONGODB_URI as string)
@@ -347,28 +347,30 @@ export async function generateSyntheticPlaces(cityId: string) {
     // Check if we already have synthetic places for this city
     let syntheticPlaces = await SyntheticPlaceSchema.find({cityId})
 
+    // If user is logged in, fetch their check-ins
+    let userCheckIns: Set<string> = new Set()
+    if (userId) {
+      const checkIns = await prisma.checkIn.findMany({
+        where: {
+          userId: userId,
+          isSynthetic: true
+        },
+        select: {syntheticPlaceId: true}
+      })
+      userCheckIns = new Set(
+        checkIns.map((checkIn) => checkIn.syntheticPlaceId!).filter(Boolean)
+      )
+    }
+
     if (syntheticPlaces.length > 0) {
       // Convert MongoDB documents to plain JavaScript objects and serialize fields
       return syntheticPlaces.map((place) => {
-        const plainObject = place.toObject() as {
-          _id: string
-          name_en: string
-          name_de: string
-          points: number
-          description_en: string
-          description_de: string
-          isActive: boolean
-          taxonomy: string
-          isSynthetic: boolean
-          checkedIn: boolean
-          cityId: string
-          createdAt: Date
-          location: {
-            coordinates: [number, number]
-          }
+        const plainObject = place.toObject() as ISyntheticPlace & {
+          _id: mongoose.Types.ObjectId
         }
+
         return {
-          id: plainObject._id.toString(), // Normalize the id field
+          id: plainObject._id.toString(),
           name_en: plainObject.name_en,
           name_de: plainObject.name_de,
           points: plainObject.points,
@@ -377,7 +379,9 @@ export async function generateSyntheticPlaces(cityId: string) {
           isActive: plainObject.isActive,
           taxonomy: plainObject.taxonomy,
           isSynthetic: plainObject.isSynthetic,
-          checkedIn: plainObject.checkedIn,
+          checkedIn: userId
+            ? userCheckIns.has(plainObject._id.toString())
+            : false,
           cityId: plainObject.cityId,
           createdAt: plainObject.createdAt.toISOString(),
           latitude: plainObject.location.coordinates[1],
@@ -424,7 +428,6 @@ export async function generateSyntheticPlaces(cityId: string) {
           "EXPERIENCE"
         ]),
         isSynthetic: true,
-        checkedIn: false,
         createdAt: new Date() // This field is used for TTL
       })
     })
@@ -434,25 +437,12 @@ export async function generateSyntheticPlaces(cityId: string) {
 
     // Convert MongoDB documents to plain JavaScript objects and serialize fields
     return newSyntheticData.map((place) => {
-      const plainObject = place.toObject() as {
-        _id: string
-        name_en: string
-        name_de: string
-        points: number
-        description_en: string
-        description_de: string
-        isActive: boolean
-        taxonomy: string
-        isSynthetic: boolean
-        checkedIn: boolean
-        cityId: string
-        createdAt: Date
-        location: {
-          coordinates: [number, number]
-        }
+      const plainObject = place.toObject() as ISyntheticPlace & {
+        _id: mongoose.Types.ObjectId
       }
+
       return {
-        id: plainObject._id.toString(), // Normalize the id field
+        id: plainObject._id.toString(),
         name_en: plainObject.name_en,
         name_de: plainObject.name_de,
         points: plainObject.points,
@@ -461,8 +451,8 @@ export async function generateSyntheticPlaces(cityId: string) {
         isActive: plainObject.isActive,
         taxonomy: plainObject.taxonomy,
         isSynthetic: plainObject.isSynthetic,
+        checkedIn: false, // New places are always unchecked
         cityId: plainObject.cityId,
-        checkedIn: plainObject.checkedIn,
         createdAt: plainObject.createdAt.toISOString(),
         latitude: plainObject.location.coordinates[1],
         longitude: plainObject.location.coordinates[0]
@@ -487,5 +477,5 @@ export const getAllActiveCities = unstable_cache(
     return cities
   },
   ["all-active-cities"],
-  {revalidate: 86400} // Revalidate every 24 hours
+  {revalidate: 3600} // Revalidate every 24 hours
 )
