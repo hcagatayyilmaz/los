@@ -19,10 +19,20 @@ const PopQuizActions = ({
   const handlePopQuiz = async (answer: string) => {
     try {
       const response = await submitQuiz({quizId, submitted_answer: answer})
-      toast.custom(<CustomToast message={response.message} type='success' />, {
-        position: "top-center",
-        duration: 3000
-      })
+      if (response.success === false) {
+        toast.custom(<CustomToast message={response.message} type='error' />, {
+          position: "top-center",
+          duration: 3000
+        })
+      } else {
+        toast.custom(
+          <CustomToast message={response.message} type='success' />,
+          {
+            position: "top-center",
+            duration: 3000
+          }
+        )
+      }
     } catch (error: any) {
       toast.custom(<CustomToast message={error.message} type='error' />, {
         position: "top-center",

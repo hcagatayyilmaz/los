@@ -474,7 +474,11 @@ export async function addLocation({
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Login to add checkpoint")
+    console.error("User not authenticated")
+    return {
+      success: false,
+      message: "Please login to add a checkpoint."
+    }
   }
 
   const location = await prisma.attraction.create({
