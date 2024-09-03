@@ -15,7 +15,8 @@ const config: Config = {
       },
       colors: {
         customYellow: "#FF1493",
-        customRed: "#ff0000"
+        customRed: "#ff0000",
+        neonGreen: "#2cff05"
       }
     }
   },

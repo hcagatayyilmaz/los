@@ -165,7 +165,7 @@ const Map: React.FC<{
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
       onLoad={onMapLoad}
-      zoom={isMapPage ? 4 : 15}
+      zoom={isMapPage ? 4 : 12}
       onZoomChanged={() => {
         if (map) {
           setZoomLevel(map.getZoom() || 15)

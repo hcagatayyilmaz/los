@@ -120,12 +120,13 @@ export async function checkInSyntheticLocation({
     place.location.coordinates[1],
     place.location.coordinates[0]
   )
-  if (distance <= 400) {
+  if (distance <= 20) {
     // 40 meters threshold for synthetic places
     const checkIn = await prisma.checkIn.create({
       data: {
         userId: user.id,
-        isSynthetic: true
+        isSynthetic: true,
+        syntheticPlaceId: placeId
       }
     })
 
@@ -180,7 +181,10 @@ export async function obtainBadge(badgeId: string) {
   })
 
   if (!badge) {
-    throw new Error("Badge not found")
+    return {
+      success: false,
+      message: "Badge is not found."
+    }
   }
 
   // Check if the user already has the badge
@@ -194,7 +198,10 @@ export async function obtainBadge(badgeId: string) {
   })
 
   if (userHasBadge) {
-    throw new Error("Great! You already have this badge.")
+    return {
+      success: false,
+      message: "Great! You already have this badge."
+    }
   }
 
   const checkIns = await prisma.checkIn.findMany({
@@ -209,7 +216,10 @@ export async function obtainBadge(badgeId: string) {
   })
 
   if (checkIns.length !== badge.attractions.length) {
-    throw new Error("User has not checked into all required attractions")
+    return {
+      success: false,
+      message: "Please check in all places to get the badge!"
+    }
   }
 
   // Add badge to user
@@ -254,7 +264,10 @@ export async function foundHideAndSeek({
 
   if (!user) {
     console.error("User not authenticated")
-    throw new Error("Login to play Hide & Seek.")
+    return {
+      success: false,
+      message: "Please login to find the hidden location."
+    }
   }
 
   const hideAndSeek = await prisma.hideAndSeek.findUnique({
@@ -341,7 +354,10 @@ export async function submitQuiz({
   })
 
   if (previousAnswer) {
-    throw new Error("You have already submitted an answer for this quiz")
+    return {
+      success: false,
+      message: "You already submitted an answer for this quiz"
+    }
   }
 
   const userQuiz = await prisma.userQuiz.create({
@@ -459,7 +475,11 @@ export async function addLocation({
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Login to add checkpoint")
+    console.error("User not authenticated")
+    return {
+      success: false,
+      message: "Please login to add a checkpoint."
+    }
   }
 
   const location = await prisma.attraction.create({

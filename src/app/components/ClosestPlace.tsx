@@ -13,10 +13,26 @@ const ClosestPlace: React.FC<ClosestPlaceProps> = ({location}) => {
   const closestDistance = useClosestLocation(location)
 
   return (
-    <div className='flex items-center px-1 bg-white rounded-full border-2 border-customYellow'>
-      <FaCrosshairs className='text-md' />
-      <span className='ml-1 text-xs'>
-        {closestDistance !== null ? `${closestDistance}m` : "No location"}
+    <div
+      className={`flex items-center px-1 rounded-full border-2 ${
+        closestDistance !== null && closestDistance < 30
+          ? "bg-neonGreen text-black px-3 border-black "
+          : "bg-white border-customYellow"
+      }`}
+    >
+      {closestDistance !== null && closestDistance >= 30 && (
+        <FaCrosshairs className='text-md' />
+      )}
+      <span
+        className={`${
+          closestDistance !== null && closestDistance >= 30 ? "ml-1" : ""
+        } text-xs`}
+      >
+        {closestDistance !== null
+          ? closestDistance < 30
+            ? "Reached"
+            : `${closestDistance}m`
+          : "No location"}
       </span>
     </div>
   )

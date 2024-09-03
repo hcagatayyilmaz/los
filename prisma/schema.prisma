@@ -98,13 +98,14 @@ model UserBadge {
 }
 
 model CheckIn {
-  id           String      @id @default(cuid())
-  userId       String
-  attractionId String? // Nullable to allow check-ins without specific attraction
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  attraction   Attraction? @relation(fields: [attractionId], references: [id], onDelete: SetNull)
-  isSynthetic  Boolean?    @default(false)
-  createdAt    DateTime    @default(now())
+  id               String      @id @default(cuid())
+  userId           String
+  attractionId     String? // Nullable to allow check-ins without specific attraction
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attraction       Attraction? @relation(fields: [attractionId], references: [id], onDelete: SetNull)
+  isSynthetic      Boolean?    @default(false)
+  syntheticPlaceId String?
+  createdAt        DateTime    @default(now())
 
   @@unique([userId, attractionId])
 }
