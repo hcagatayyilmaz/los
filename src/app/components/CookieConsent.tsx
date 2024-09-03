@@ -31,9 +31,9 @@ const CookieConsent: React.FC = () => {
 
   return (
     <div className='fixed bottom-0 left-0 right-0 bg-white px-4 shadow-md '>
-      <div className='w-full max-w-md mx-auto flex p-4 flex-col sm:flex-row items-center justify-between order-2 border-black'>
+      <div className='w-full max-w-md mx-auto flex p-4 flex-col sm:flex-row items-center justify-between border-2 rounded border-black'>
         <p
-          className={`${museoModerno.className} text-sm text-gray-800 mb-4 sm:mb-0`}
+          className={`${museoModerno.className} text-sm text-gray-800 mb-4 mr-4 sm:mb-0`}
         >
           We use cookies to enhance your experience. By continuing to visit this
           site you agree to our use of cookies.
@@ -44,12 +44,6 @@ const CookieConsent: React.FC = () => {
             className={`${museoModerno.className} bg-customYellow text-white px-4 py-2 rounded-full hover:bg-black transition duration-300`}
           >
             Accept
-          </button>
-          <button
-            onClick={handleDecline}
-            className={`${museoModerno.className} bg-gray-200 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-300 transition duration-300`}
-          >
-            Decline
           </button>
         </div>
       </div>
