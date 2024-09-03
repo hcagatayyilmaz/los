@@ -5,32 +5,36 @@ import {UserLocationProvider} from "./providers/useUserLocation"
 import ToastProvider from "./providers/ToastProvider"
 import Head from "next/head"
 import {UIProvider} from "./providers/UIProvider"
+import CookieConsent from "../app/components/CookieConsent"
 
 const roboto = Roboto({
-    subsets: ["latin"],
-    weight: ["400", "500", "700"]
+  subsets: ["latin"],
+  weight: ["400", "500", "700"]
 })
 
 export const metadata: Metadata = {
-    title: "Los - Gamified Experiences with Rewards!",
-    description: "Los - Experiences Travel with Rewards!"
+  title: "Los - Gamified Experiences with Rewards!",
+  description: "Los - Experiences Travel with Rewards!"
 }
 
 export default function RootLayout({
-    children
+  children
 }: Readonly<{
-    children: React.ReactNode
+  children: React.ReactNode
 }>) {
-    return (
-        <html lang='en'>
-            <Head>
-                <link rel='icon' href='/favicon.png' />
-            </Head>
-            <body className={roboto.className}>
-                <ToastProvider>
-                    <UserLocationProvider>{children}</UserLocationProvider>
-                </ToastProvider>
-            </body>
-        </html>
-    )
+  return (
+    <html lang='en'>
+      <Head>
+        <link rel='icon' href='/favicon.png' />
+      </Head>
+      <body className={roboto.className}>
+        <ToastProvider>
+          <UserLocationProvider>
+            {children}
+            <CookieConsent />
+          </UserLocationProvider>
+        </ToastProvider>
+      </body>
+    </html>
+  )
 }
