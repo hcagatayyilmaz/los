@@ -72,6 +72,9 @@ model Badge {
   updatedAt      DateTime          @updatedAt
   users          UserBadge[]
   attractions    BadgeAttraction[] // Many-to-many relationship with Attraction through BadgeAttraction
+  isCityBadge    Boolean           @default(false)
+  cityId         String?
+  city           City?             @relation(fields: [cityId], references: [id], onDelete: Cascade)
 }
 
 model BadgeAttraction {
@@ -100,17 +103,26 @@ model CheckIn {
   attractionId String? // Nullable to allow check-ins without specific attraction
   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   attraction   Attraction? @relation(fields: [attractionId], references: [id], onDelete: SetNull)
+  isSynthetic  Boolean?    @default(false)
   createdAt    DateTime    @default(now())
 
   @@unique([userId, attractionId])
 }
 
 model City {
-  id          String       @id @default(cuid())
-  name        String       @unique
-  slug        String       @unique
-  meta        Json?
-  attractions Attraction[]
+  id             String        @id @default(cuid())
+  name           String        @unique
+  slug           String        @unique
+  meta           Json?
+  centerLat      Float?
+  centerLng      Float?
+  numberOfPoints Int?
+  isActive       Boolean       @default(true)
+  attractions    Attraction[]
+  Badge          Badge[]
+  hideAndSeeks   HideAndSeek[]
+  quizzes        Quiz[]
+  rewards        Reward[]
 }
 
 model Reward {
@@ -126,6 +138,8 @@ model Reward {
   startAt        DateTime?
   endAt          DateTime?
   userRewards    UserReward[]
+  cityId         String?
+  city           City?         @relation(fields: [cityId], references: [id])
 }
 
 model UserReward {
@@ -171,6 +185,8 @@ model HideAndSeek {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   userHideAndSeeks UserHideAndSeek[]
+  cityId           String?
+  city             City?             @relation(fields: [cityId], references: [id])
 }
 
 model UserHideAndSeek {
@@ -193,6 +209,8 @@ model Quiz {
   createdAt   DateTime   @default(now())
   endDate     DateTime?
   QuizAnswers UserQuiz[]
+  cityId      String?
+  city        City?      @relation(fields: [cityId], references: [id])
 }
 
 model UserQuiz {

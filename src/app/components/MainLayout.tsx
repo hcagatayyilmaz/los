@@ -6,13 +6,36 @@ import {Location} from "../lib/types"
 import List from "./List"
 
 type LayoutProps = {
-    locations: Location[] // Import the Location type accordingly
+  locations: Location[] // Import the Location type accordingly
+  syntheticData: any
+  cityCenter?: {
+    lat: number
+    lng: number
+  }
 }
 
-const MainLayout: React.FC<LayoutProps> = ({locations}) => {
-    const {isListView} = useUIContext()
+const MainLayout: React.FC<LayoutProps> = ({
+  locations,
+  syntheticData,
+  cityCenter
+}) => {
+  const {isListView} = useUIContext()
 
-    return <>{!isListView ? <Map locations={locations} /> : <List locations={locations} />}</>
+  return (
+    <>
+      {!isListView ? (
+        <div className='w-full h-full overflow-y-hidden'>
+          <Map
+            locations={locations}
+            syntheticData={syntheticData}
+            cityCenter={cityCenter}
+          />
+        </div>
+      ) : (
+        <List locations={locations} />
+      )}
+    </>
+  )
 }
 
 export default MainLayout
