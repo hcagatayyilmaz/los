@@ -4,12 +4,15 @@ import ImageSlider from "./components/ImageSlider"
 import Link from "next/link"
 import Image from "next/image"
 import {getAllActiveCities} from "./server/data"
+import {revalidatePath} from "next/cache"
 
 const museoModerno = MuseoModerno({
   subsets: ["latin"]
 })
 
 export default async function Home() {
+  revalidatePath("/")
+
   const {getUser} = getKindeServerSession()
   const user = await getUser()
   const language = "EN"
