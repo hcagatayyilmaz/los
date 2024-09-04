@@ -29,7 +29,11 @@ export async function checkIn({
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Plesae login to check in")
+    console.error("User not authenticated")
+    return {
+      success: false,
+      message: "Please login to check in"
+    }
   }
 
   const place = await prisma.attraction.findUnique({
@@ -37,7 +41,11 @@ export async function checkIn({
   })
 
   if (!place) {
-    throw new Error("Place not found")
+    console.error("Place not found")
+    return {
+      success: false,
+      message: "Place not found"
+    }
   }
 
   const distance = await calculateDistance3(
@@ -97,7 +105,11 @@ export async function checkInSyntheticLocation({
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Please login to check in")
+    console.error("User not authenticated")
+    return {
+      success: false,
+      message: "Please login to check in"
+    }
   }
 
   await dbConnect()
@@ -107,11 +119,18 @@ export async function checkInSyntheticLocation({
     const result = await SyntheticPlaceSchema.findById(placeId).lean()
     place = result as ISyntheticPlace
     if (!place) {
-      throw new Error("Synthetic place not found")
+      console.error("Synthetic place not found")
+      return {
+        success: false,
+        message: "Place not found. Please reach the support."
+      }
     }
   } catch (error) {
     console.error("Error fetching synthetic place:", error)
-    throw new Error("Error fetching synthetic place")
+    return {
+      success: false,
+      message: "Place not found. Please reach the support."
+    }
   }
 
   const distance = await calculateDistance3(
@@ -149,7 +168,10 @@ export async function checkInSyntheticLocation({
       await SyntheticPlaceSchema.findByIdAndUpdate(placeId, {checkedIn: true})
     } catch (error) {
       console.error("Error updating synthetic place:", error)
-      throw new Error("Error updating synthetic place")
+      return {
+        success: false,
+        message: "Place not found. Please reach the support."
+      }
     }
 
     return {
@@ -172,7 +194,11 @@ export async function obtainBadge(badgeId: string) {
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Login to obtain badge.")
+    console.error("User not authenticated")
+    return {
+      success: false,
+      message: "Please login to obtain badge."
+    }
   }
 
   const badge = await prisma.badge.findUnique({
@@ -181,6 +207,7 @@ export async function obtainBadge(badgeId: string) {
   })
 
   if (!badge) {
+    console.error("Badge not found")
     return {
       success: false,
       message: "Badge is not found."
@@ -318,7 +345,10 @@ export async function foundHideAndSeek({
       "HideAndSeek or attraction data not found for ID:",
       hideAndSeekId
     )
-    throw new Error("HideAndSeek or attraction data not found")
+    return {
+      success: false,
+      message: "HideAndSeek or attraction data not found"
+    }
   }
 }
 
@@ -334,13 +364,21 @@ export async function submitQuiz({
   const user = await getUser()
 
   if (!user) {
-    throw new Error("Login to submit answers.")
+    console.error("User not authenticated")
+    return {
+      success: false,
+      message: "Please login to submit answers."
+    }
   }
   const quiz = await prisma.quiz.findUnique({
     where: {id: quizId}
   })
   if (!quiz) {
-    throw new Error("Quiz not found")
+    console.error("Quiz not found")
+    return {
+      success: false,
+      message: "Quiz not found"
+    }
   }
 
   // Check if the user has already submitted an answer for this quiz
@@ -354,6 +392,7 @@ export async function submitQuiz({
   })
 
   if (previousAnswer) {
+    console.error("User already submitted an answer for this quiz")
     return {
       success: false,
       message: "You already submitted an answer for this quiz"
@@ -396,7 +435,11 @@ export async function checkReward({rewardId}: {rewardId: string}) {
   })
 
   if (!reward) {
-    throw new Error("Reward not found")
+    console.error("Reward not found")
+    return {
+      success: false,
+      message: "Reward not found"
+    }
   }
 
   return reward
@@ -411,7 +454,11 @@ export async function redeemReward(rewardId: string) {
     : null
   console.log("Reward ID:", rewardId)
   if (!user) {
-    throw new Error("Login to redeem rewards")
+    console.error("User not authenticated")
+    return {
+      success: false,
+      message: "Please login to redeem rewards"
+    }
   }
 
   const reward = await prisma.reward.findUnique({
@@ -419,11 +466,19 @@ export async function redeemReward(rewardId: string) {
   })
 
   if (!reward) {
-    throw new Error("Reward not found")
+    console.error("Reward not found")
+    return {
+      success: false,
+      message: "Reward not found"
+    }
   }
 
   if (user.points < reward.points) {
-    throw new Error("Insufficient points")
+    console.error("Insufficient points")
+    return {
+      success: false,
+      message: "Insufficient points"
+    }
   }
 
   await prisma.user.update({
@@ -530,14 +585,23 @@ export async function confirmRewardUsage(formData: FormData) {
 
   const rewardId = formData.get("rewardId") as string
   if (!rewardId) {
-    throw new Error("Reward ID is required")
+    console.error("Reward ID is required")
+    return {
+      success: false,
+      message:
+        "Error occured while confirming reward usage. Please reach support."
+    }
   }
 
   const {getUser} = getKindeServerSession()
   const user = await getUser()
 
   if (!user) {
-    throw new Error("User not authenticated")
+    console.error("User not authenticated")
+    return {
+      success: false,
+      message: "Please login to confirm reward usage."
+    }
   }
 
   const userReward = await prisma.userReward.findFirst({
@@ -545,11 +609,22 @@ export async function confirmRewardUsage(formData: FormData) {
       userId: user.id,
       rewardId: rewardId,
       isUsed: false
+    },
+    include: {
+      reward: {
+        include: {
+          city: true
+        }
+      }
     }
   })
 
   if (!userReward) {
-    throw new Error("Reward not found or already used")
+    console.error("Reward not found or already used")
+    return {
+      success: false,
+      message: "Reward is already used"
+    }
   }
 
   await prisma.userReward.update({
@@ -558,5 +633,5 @@ export async function confirmRewardUsage(formData: FormData) {
   })
 
   revalidatePath("/rewards")
-  redirect("/rewards")
+  redirect(`/${userReward.reward.city?.slug || ""}/quests`)
 }

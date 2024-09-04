@@ -77,7 +77,7 @@ const Map: React.FC<{
         map.setCenter(
           new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
         )
-        map.setZoom(16)
+        map.setZoom(13)
         setIsCentered(true)
       } else if (locations.length > 0 && !isCentered) {
         const firstLocation = locations[0]
@@ -85,11 +85,11 @@ const Map: React.FC<{
           lat: firstLocation.latitude,
           lng: firstLocation.longitude
         })
-        map.setZoom(16)
+        map.setZoom(13)
         setIsCentered(true)
       } else if (!isCentered) {
         map.setCenter(tübingenCoordinates)
-        map.setZoom(14)
+        map.setZoom(13)
         setIsCentered(true)
       }
     },
