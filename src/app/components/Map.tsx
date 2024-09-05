@@ -71,6 +71,23 @@ const Map: React.FC<{
     (map: google.maps.Map) => {
       setMap(map)
 
+      // Add event listeners for zoom controls
+      const zoomInButton = map.getDiv().querySelector('button[title="Zoom in"]')
+      const zoomOutButton = map
+        .getDiv()
+        .querySelector('button[title="Zoom out"]')
+
+      if (zoomInButton) {
+        zoomInButton.addEventListener("click", () =>
+          console.log("User clicked zoom in")
+        )
+      }
+      if (zoomOutButton) {
+        zoomOutButton.addEventListener("click", () =>
+          console.log("User clicked zoom out")
+        )
+      }
+
       if (isMapPage) {
         map.setZoom(4)
       } else if (userLocation && !isCentered) {
@@ -155,6 +172,7 @@ const Map: React.FC<{
   // }, [isMapPage, userLocation]) // Update dependencies
 
   const handlePinClick = (location: Location) => {
+    console.log(zoomLevel)
     updateSelectedLocation(location)
   }
 
@@ -168,7 +186,9 @@ const Map: React.FC<{
       zoom={isMapPage ? 4 : 12}
       onZoomChanged={() => {
         if (map) {
-          setZoomLevel(map.getZoom() || 15)
+          const newZoom = map.getZoom() || 15
+          console.log(`Zoom changed to: ${newZoom}`)
+          setZoomLevel(newZoom)
         }
       }}
       options={{
