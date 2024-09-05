@@ -205,17 +205,25 @@ export async function getBadge({slug}: {slug: string}) {
       },
       include: {
         attractions: {
+          where: {
+            attraction: {
+              isActive: true
+            }
+          },
           include: {
-            attraction: true // Include attraction details, but no check-ins or user-based data
+            attraction: true
           }
         }
       }
     })
 
-    if (user) {
+    if (user && badges) {
       const userCheckIns = await prisma.checkIn.findMany({
         where: {
-          userId: user.id
+          userId: user.id,
+          attractionId: {
+            in: badges.attractions.map((attr) => attr.attractionId)
+          }
         },
         select: {
           attractionId: true
@@ -226,12 +234,10 @@ export async function getBadge({slug}: {slug: string}) {
         userCheckIns.map((checkIn) => checkIn.attractionId)
       )
 
-      if (badges && badges.attractions) {
-        badges.attractions = badges.attractions.map((attraction) => ({
-          ...attraction,
-          checkedIn: checkedInAttractionIds.has(attraction.attractionId)
-        }))
-      }
+      badges.attractions = badges.attractions.map((attraction) => ({
+        ...attraction,
+        checkedIn: checkedInAttractionIds.has(attraction.attractionId)
+      }))
     }
 
     return badges
