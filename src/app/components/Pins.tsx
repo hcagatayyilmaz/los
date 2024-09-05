@@ -52,7 +52,7 @@ export const ItemPin: React.FC<{
   zoomLevel?: number
   isSynthetic?: boolean
 }> = ({location, isSelected, zoomLevel, isSynthetic}) => {
-  const scaleClass = isSelected ? "scale-150" : ""
+  const scaleClass = isSelected ? "transform scale-[3]" : ""
 
   // Determine size based on zoom level, but not for synthetic data or checked-in locations
   let sizeClass = "w-8 h-8"
