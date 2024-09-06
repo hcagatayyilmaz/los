@@ -14,8 +14,7 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: "Los - Gamified Experiences with Exciting Rewards!",
-  description:
-    "Los is super city app that gamifies your city exploration with exciting rewards!"
+  description: "Gamified experiences map of your city with exciting rewards!"
 }
 
 export default function RootLayout({

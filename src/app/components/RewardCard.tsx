@@ -34,14 +34,16 @@ export const RewardCard = ({reward}: any) => {
             <h1 className={`font-bold text-xl  break-words whitespace-normal`}>
               {reward.name_en}
             </h1>
-            <span className='inline-block'>
-              <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
-                <CoinIcon className='w-4 h-4 text-white' />
-                <span className='mt-1 ml-1 text-xs text-white'>
-                  + {reward.points}
-                </span>
-              </div>
-            </span>
+            <div className='flex gap-2 shrink-0'>
+              <span className='inline-block'>
+                <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
+                  <CoinIcon className='w-4 h-4 text-white' />
+                  <span className='mt-1 ml-1 text-xs text-white'>
+                    {reward.points}
+                  </span>
+                </div>
+              </span>
+            </div>
           </div>
           <p className='text-gray-500 text-xs text-wrap my-2'>
             {reward.description_en}
