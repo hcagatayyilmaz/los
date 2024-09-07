@@ -44,15 +44,19 @@ const Map: React.FC<{
     []
   )
 
-  const tübingenCoordinates = cityCenter
-    ? {
-        lat: cityCenter.lat,
-        lng: cityCenter.lng
-      }
-    : {
-        lat: 48.5216,
-        lng: 9.0576
-      }
+  const tübingenCoordinates = useMemo(
+    () =>
+      cityCenter
+        ? {
+            lat: cityCenter.lat,
+            lng: cityCenter.lng
+          }
+        : {
+            lat: 48.5216,
+            lng: 9.0576
+          },
+    [cityCenter]
+  )
 
   const initialCenter = useMemo(() => {
     if (userLocation) {
@@ -63,7 +67,7 @@ const Map: React.FC<{
     } else {
       return tübingenCoordinates
     }
-  }, [userLocation, locations])
+  }, [userLocation, locations, tübingenCoordinates])
 
   const onMapLoad = useCallback(
     (map: google.maps.Map) => {

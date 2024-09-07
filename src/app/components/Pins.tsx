@@ -160,3 +160,5 @@ export const ItemPin = React.memo<{
     </div>
   )
 })
+
+ItemPin.displayName = "ItemPin"
