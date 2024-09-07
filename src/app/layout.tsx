@@ -13,8 +13,8 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-  title: "Los - Gamified Experiences with Rewards!",
-  description: "Los - Experiences Travel with Rewards!"
+  title: "Los - Gamified Experiences with Exciting Rewards!",
+  description: "Gamified experiences map of your city with exciting rewards!"
 }
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <Head>
-        <link rel='icon' href='/favicon.png' />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
       <body className={roboto.className}>
         <ToastProvider>

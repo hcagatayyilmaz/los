@@ -52,12 +52,28 @@ export const ItemPin: React.FC<{
   zoomLevel?: number
   isSynthetic?: boolean
 }> = ({location, isSelected, zoomLevel, isSynthetic}) => {
-  const scaleClass = isSelected ? "scale-150" : ""
-  const baseClassName = `relative group transition-transform duration-200 ${scaleClass}`
+  const scaleClass = isSelected ? "transform scale-[2]" : ""
 
+  // Determine size based on zoom level, but not for synthetic data or checked-in locations
+  let sizeClass = "w-8 h-8"
+  if (!isSynthetic && !location.checkedIn && zoomLevel !== undefined) {
+    if (zoomLevel < 13) {
+      sizeClass = "w-5 h-5"
+    } else if (zoomLevel < 15) {
+      sizeClass = "w-8 h-8"
+    } else if (zoomLevel > 16) {
+      sizeClass = "w-12 h-12"
+    }
+  }
+
+  const baseClassName = `relative group transition-transform duration-200 ${scaleClass} ${sizeClass}`
+
+  // Checked-in logic (unchanged)
   if (location.checkedIn === true) {
     return (
-      <div className={`${baseClassName} w-6 h-6`}>
+      <div
+        className={`relative group transition-transform duration-200 ${scaleClass} w-6 h-6`}
+      >
         <div className='absolute  w-[18px] h-[18px] rounded-full border-2 border-black bg-green-400'>
           <span className='flex items-center justify-center w-full h-full'>
             <FaCheck className='text-black' />
@@ -67,9 +83,12 @@ export const ItemPin: React.FC<{
     )
   }
 
+  // Synthetic data logic (unchanged)
   if (isSynthetic) {
     return location.checkedIn ? (
-      <div className={`${baseClassName} w-6 h-6`}>
+      <div
+        className={`relative group transition-transform duration-200 ${scaleClass} w-6 h-6`}
+      >
         <div className='absolute w-[18px] h-[18px] rounded-full border-2 border-black bg-green-400'>
           <span className='flex items-center justify-center w-full h-full'>
             <FaCheck className='text-black' />
@@ -78,7 +97,7 @@ export const ItemPin: React.FC<{
       </div>
     ) : (
       <div
-        className={`${baseClassName} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black bg-white`}
+        className={`relative group transition-transform duration-200 ${scaleClass} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black bg-white`}
       >
         <FaStar size={8} className='text-center text-customYellow' />
       </div>
@@ -87,7 +106,7 @@ export const ItemPin: React.FC<{
 
   if (location.isTheme) {
     return (
-      <div className={`${baseClassName} w-12 h-12`}>
+      <div className={`${baseClassName}`}>
         <Image
           src='/holderlin.png'
           alt='Theme Pin'
@@ -102,9 +121,9 @@ export const ItemPin: React.FC<{
     location.pin &&
     location.endDate
   ) {
-    const endDate = new Date(location.endDate) // Ensure endDate is a Date object
+    const endDate = new Date(location.endDate)
     return (
-      <div className={`${baseClassName} w-8 h-8 relative`}>
+      <div className={`${baseClassName} relative`}>
         <Image
           src={location.pin}
           alt='Location Pin'
@@ -117,7 +136,7 @@ export const ItemPin: React.FC<{
     )
   } else if (location.pin) {
     return (
-      <div className={`${baseClassName} w-8 h-8 relative`}>
+      <div className={`${baseClassName} relative`}>
         <Image
           src={location.pin}
           alt='Location Pin'
@@ -130,7 +149,7 @@ export const ItemPin: React.FC<{
   }
 
   return (
-    <div className={`${baseClassName} w-8 h-8`}>
+    <div className={`${baseClassName}`}>
       <Image
         src={"/poi.png"}
         alt='Location Pin'

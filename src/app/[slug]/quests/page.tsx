@@ -117,7 +117,7 @@ async function QuestsPage({params}: QuestsPageParams) {
           ))}
         </div>
         <h1
-          className={`text-4xl underline underline-offset-6 font-semibold my-2 px-6 ${museumModerno.className}`}
+          className={`text-4xl underline underline-offset-6 font-semibold my-2 px-6 mb-4 ${museumModerno.className}`}
         >
           My Rewards
         </h1>

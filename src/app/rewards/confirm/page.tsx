@@ -6,10 +6,14 @@ import Header from "@/app/components/Header"
 
 const museoModerno = MuseoModerno({subsets: ["latin"]})
 
-async function ConfirmRewards({searchParams}: {searchParams: {id?: string}}) {
-  const id = searchParams.id
+async function ConfirmRewards({
+  searchParams
+}: {
+  searchParams: {rewardId?: string}
+}) {
+  const rewardId = searchParams.rewardId
 
-  if (!id) {
+  if (!rewardId) {
     return (
       <>
         <Header />
@@ -18,7 +22,7 @@ async function ConfirmRewards({searchParams}: {searchParams: {id?: string}}) {
     )
   }
 
-  const reward = await getRewardsById(id)
+  const reward = await getRewardsById(rewardId)
 
   if (!reward) {
     return (

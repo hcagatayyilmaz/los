@@ -118,6 +118,36 @@ export default async function Home() {
               MAP
             </button>
           </Link> */}
+          <div className='grid grid-cols-2 gap-4 mb-4'>
+            <div className='relative'>
+              <Image
+                src='/googleplay.png'
+                alt='Google Play'
+                width={150}
+                height={50}
+                className='w-full'
+              />
+              <span
+                className={`absolute top-0 right-0 bg-customYellow text-white text-xs px-2 py-1 rounded ${museoModerno.className}`}
+              >
+                Soon
+              </span>
+            </div>
+            <div className='relative'>
+              <Image
+                src='/appstore.png'
+                alt='App Store'
+                width={150}
+                height={50}
+                className='w-full'
+              />
+              <span
+                className={`absolute top-0 right-0 bg-customYellow text-white text-xs px-2 py-1 rounded ${museoModerno.className} `}
+              >
+                Soon
+              </span>
+            </div>
+          </div>
         </div>
         <div className='py-4'>
           <h1 className={`${museoModerno.className} text-4xl font-medium`}>
