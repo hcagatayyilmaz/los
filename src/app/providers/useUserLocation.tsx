@@ -1,5 +1,11 @@
 "use client"
-import React, {createContext, useState, useEffect, useContext} from "react"
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useCallback
+} from "react"
 
 // Define the shape of the context
 type LocationContextType = {
@@ -27,7 +33,7 @@ export const UserLocationProvider: React.FC<{children: React.ReactNode}> = ({
     console.log("User location updated:", location)
   }
 
-  const requestLocationPermission = async () => {
+  const requestLocationPermission = useCallback(async () => {
     if (navigator.geolocation) {
       return new Promise<void>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
@@ -54,7 +60,7 @@ export const UserLocationProvider: React.FC<{children: React.ReactNode}> = ({
     } else {
       console.log("Geolocation is not supported by this browser.")
     }
-  }
+  }, [])
 
   useEffect(() => {
     requestLocationPermission().catch(console.error)
@@ -81,7 +87,7 @@ export const UserLocationProvider: React.FC<{children: React.ReactNode}> = ({
     return () => {
       navigator.geolocation.clearWatch(watchId)
     }
-  }, [])
+  }, [requestLocationPermission])
 
   return (
     <LocationContext.Provider

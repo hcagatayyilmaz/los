@@ -36,8 +36,6 @@ const Map: React.FC<{
   const [isCentered, setIsCentered] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(15)
 
-  console.log("synhetic data: ", syntheticData)
-
   const mapContainerStyle = useMemo(
     () => ({
       width: "100%",
@@ -46,15 +44,19 @@ const Map: React.FC<{
     []
   )
 
-  const tübingenCoordinates = cityCenter
-    ? {
-        lat: cityCenter.lat,
-        lng: cityCenter.lng
-      }
-    : {
-        lat: 48.5216,
-        lng: 9.0576
-      }
+  const tübingenCoordinates = useMemo(
+    () =>
+      cityCenter
+        ? {
+            lat: cityCenter.lat,
+            lng: cityCenter.lng
+          }
+        : {
+            lat: 48.5216,
+            lng: 9.0576
+          },
+    [cityCenter]
+  )
 
   const initialCenter = useMemo(() => {
     if (userLocation) {
@@ -65,7 +67,7 @@ const Map: React.FC<{
     } else {
       return tübingenCoordinates
     }
-  }, [userLocation, locations])
+  }, [userLocation, locations, tübingenCoordinates])
 
   const onMapLoad = useCallback(
     (map: google.maps.Map) => {
@@ -171,10 +173,21 @@ const Map: React.FC<{
   //   }
   // }, [isMapPage, userLocation]) // Update dependencies
 
-  const handlePinClick = (location: Location) => {
-    console.log(zoomLevel)
-    updateSelectedLocation(location)
-  }
+  const handlePinClick = useCallback(
+    (location: Location) => {
+      console.log(zoomLevel)
+      updateSelectedLocation(location)
+      if (map) {
+        map.panTo({lat: location.latitude, lng: location.longitude})
+      }
+    },
+    [zoomLevel, updateSelectedLocation, map]
+  )
+
+  const allLocations = useMemo(
+    () => [...(locations || []), ...(syntheticData || [])],
+    [locations, syntheticData]
+  )
 
   if (loadError) return <div>Error loading maps</div>
   if (!isLoaded) return <div>Loading maps</div>
@@ -203,24 +216,22 @@ const Map: React.FC<{
         }
       }}
     >
-      {[...(locations || []), ...(syntheticData || [])].map(
-        (location, index) => (
-          <OverlayView
-            key={index}
-            position={{lat: location.latitude, lng: location.longitude}}
-            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-          >
-            <div onClick={() => handlePinClick(location)}>
-              <ItemPin
-                location={location}
-                isSelected={selectedLocation?.id === location.id}
-                zoomLevel={zoomLevel}
-                isSynthetic={location.isSynthetic}
-              />
-            </div>
-          </OverlayView>
-        )
-      )}
+      {allLocations.map((location, index) => (
+        <OverlayView
+          key={index}
+          position={{lat: location.latitude, lng: location.longitude}}
+          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+        >
+          <div onClick={() => handlePinClick(location)}>
+            <ItemPin
+              location={location}
+              isSelected={selectedLocation?.id === location.id}
+              zoomLevel={zoomLevel}
+              isSynthetic={location.isSynthetic}
+            />
+          </div>
+        </OverlayView>
+      ))}
       {userLocation && (
         <OverlayView
           position={userLocation}
@@ -233,4 +244,4 @@ const Map: React.FC<{
   )
 }
 
-export default Map
+export default React.memo(Map)
