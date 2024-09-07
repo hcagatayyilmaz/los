@@ -46,25 +46,26 @@ const EventDateDisplay: React.FC<{date: string; zoomLevel?: number}> = ({
   )
 }
 
-export const ItemPin: React.FC<{
+export const ItemPin = React.memo<{
   location: Location
   isSelected: boolean
   zoomLevel?: number
   isSynthetic?: boolean
-}> = ({location, isSelected, zoomLevel, isSynthetic}) => {
-  const scaleClass = isSelected ? "transform scale-[2]" : ""
-
-  // Determine size based on zoom level, but not for synthetic data or checked-in locations
-  let sizeClass = "w-8 h-8"
-  if (!isSynthetic && !location.checkedIn && zoomLevel !== undefined) {
-    if (zoomLevel < 13) {
-      sizeClass = "w-5 h-5"
-    } else if (zoomLevel < 15) {
-      sizeClass = "w-8 h-8"
-    } else if (zoomLevel > 16) {
-      sizeClass = "w-12 h-12"
+}>(({location, isSelected, zoomLevel, isSynthetic}) => {
+  const {sizeClass, scaleClass} = useMemo(() => {
+    let sizeClass = "w-8 h-8"
+    if (!isSynthetic && !location.checkedIn && zoomLevel !== undefined) {
+      if (zoomLevel < 13) {
+        sizeClass = "w-5 h-5"
+      } else if (zoomLevel < 15) {
+        sizeClass = "w-8 h-8"
+      } else if (zoomLevel > 16) {
+        sizeClass = "w-12 h-12"
+      }
     }
-  }
+    const scaleClass = isSelected ? "transform scale-[2]" : ""
+    return {sizeClass, scaleClass}
+  }, [isSynthetic, location.checkedIn, zoomLevel, isSelected])
 
   const baseClassName = `relative group transition-transform duration-200 ${scaleClass} ${sizeClass}`
 
@@ -147,7 +148,6 @@ export const ItemPin: React.FC<{
       </div>
     )
   }
-
   return (
     <div className={`${baseClassName}`}>
       <Image
@@ -159,4 +159,4 @@ export const ItemPin: React.FC<{
       />
     </div>
   )
-}
+})
