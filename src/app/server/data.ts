@@ -6,7 +6,8 @@ import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {faker} from "@faker-js/faker"
 import mongoose from "mongoose"
 import SyntheticPlaceSchema, {ISyntheticPlace} from "../../../mongodb/schema"
-import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
+import {DESCRIPTIONS} from "../lib/constants"
+//import {getRedisClient, closeRedisConnection} from "../../../redis/redis"
 
 const prisma = new PrismaClient()
 
@@ -410,7 +411,7 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
     }
 
     const radius = 0.02 // Approximately 10km radius
-    const newSyntheticData = Array.from({length: 20}, () => {
+    const newSyntheticData = Array.from({length: 40}, () => {
       const angle = Math.random() * 2 * Math.PI
       const distance = Math.sqrt(Math.random()) * radius
       const lat = city.centerLat! + distance * Math.cos(angle)
@@ -418,15 +419,15 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
 
       return new SyntheticPlaceSchema({
         cityId: cityId,
-        name_en: faker.company.name(),
-        name_de: faker.company.name(),
+        name_en: faker.location.street(),
+        name_de: faker.location.street(),
         location: {
           type: "Point",
           coordinates: [parseFloat(lng.toFixed(6)), parseFloat(lat.toFixed(6))]
         },
-        points: 10,
-        description_en: faker.hacker.phrase(),
-        description_de: faker.hacker.phrase(),
+        points: Math.floor(Math.random() * (66 - 10 + 1)) + 10, // Random between 10-66
+        description_en: faker.helpers.arrayElement(DESCRIPTIONS),
+        description_de: faker.helpers.arrayElement(DESCRIPTIONS),
         isActive: true,
         taxonomy: faker.helpers.arrayElement([
           "ATTRACTION",
