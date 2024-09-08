@@ -371,15 +371,15 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
 
     if (syntheticPlaces.length > 0) {
       // Convert MongoDB documents to plain JavaScript objects and serialize fields
-      return syntheticPlaces.map((place) => {
+      return syntheticPlaces.map((place, index) => {
         const plainObject = place.toObject() as ISyntheticPlace & {
           _id: mongoose.Types.ObjectId
         }
 
         return {
           id: plainObject._id.toString(),
-          name_en: plainObject.name_en,
-          name_de: plainObject.name_de,
+          name_en: `Checkpoint #${index + 1}`,
+          name_de: `Checkpoint #${index + 1}`,
           points: plainObject.points,
           description_en: plainObject.description_en,
           description_de: plainObject.description_de,
@@ -411,7 +411,7 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
     }
 
     const radius = 0.02 // Approximately 10km radius
-    const newSyntheticData = Array.from({length: 40}, () => {
+    const newSyntheticData = Array.from({length: 40}, (_, index) => {
       const angle = Math.random() * 2 * Math.PI
       const distance = Math.sqrt(Math.random()) * radius
       const lat = city.centerLat! + distance * Math.cos(angle)
@@ -419,8 +419,8 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
 
       return new SyntheticPlaceSchema({
         cityId: cityId,
-        name_en: faker.location.street(),
-        name_de: faker.location.street(),
+        name_en: `Checkpoint #${index + 1}`,
+        name_de: `Checkpoint #${index + 1}`,
         location: {
           type: "Point",
           coordinates: [parseFloat(lng.toFixed(6)), parseFloat(lat.toFixed(6))]
@@ -443,15 +443,15 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
     await SyntheticPlaceSchema.insertMany(newSyntheticData)
 
     // Convert MongoDB documents to plain JavaScript objects and serialize fields
-    return newSyntheticData.map((place) => {
+    return newSyntheticData.map((place, index) => {
       const plainObject = place.toObject() as ISyntheticPlace & {
         _id: mongoose.Types.ObjectId
       }
 
       return {
         id: plainObject._id.toString(),
-        name_en: plainObject.name_en,
-        name_de: plainObject.name_de,
+        name_en: `Checkpoint #${index + 1}`,
+        name_de: `Checkpoint #${index + 1}`,
         points: plainObject.points,
         description_en: plainObject.description_en,
         description_de: plainObject.description_de,
