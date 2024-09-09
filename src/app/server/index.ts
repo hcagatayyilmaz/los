@@ -54,7 +54,7 @@ export async function checkIn({
     place.latitude,
     place.longitude
   )
-  if (distance <= 20) {
+  if (distance <= 40) {
     // 25 meters threshold
     const checkIn = await prisma.checkIn.create({
       data: {
@@ -139,7 +139,7 @@ export async function checkInSyntheticLocation({
     place.location.coordinates[1],
     place.location.coordinates[0]
   )
-  if (distance <= 20) {
+  if (distance <= 40) {
     // 40 meters threshold for synthetic places
     const checkIn = await prisma.checkIn.create({
       data: {
