@@ -114,6 +114,22 @@ export async function checkInSyntheticLocation({
 
   await dbConnect()
 
+  // Check if the user has already checked in to this synthetic place
+  const existingCheckIn = await prisma.checkIn.findFirst({
+    where: {
+      userId: user.id,
+      syntheticPlaceId: placeId,
+      isSynthetic: true
+    }
+  })
+
+  if (existingCheckIn) {
+    return {
+      success: false,
+      message: "You have already checked in to this place"
+    }
+  }
+
   let place: ISyntheticPlace | null
   try {
     const result = await SyntheticPlaceSchema.findById(placeId).lean()
