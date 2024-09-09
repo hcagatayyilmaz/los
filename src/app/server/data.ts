@@ -381,8 +381,8 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
           name_en: `Checkpoint #${index + 1}`,
           name_de: `Checkpoint #${index + 1}`,
           points: plainObject.points,
-          description_en: plainObject.description_en,
-          description_de: plainObject.description_de,
+          description_en: "", // Return empty string instead of description
+          description_de: "", // Return empty string instead of description
           isActive: plainObject.isActive,
           taxonomy: plainObject.taxonomy,
           isSynthetic: plainObject.isSynthetic,
@@ -426,8 +426,8 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
           coordinates: [parseFloat(lng.toFixed(6)), parseFloat(lat.toFixed(6))]
         },
         points: Math.floor(Math.random() * (66 - 10 + 1)) + 10, // Random between 10-66
-        description_en: faker.helpers.arrayElement(DESCRIPTIONS),
-        description_de: faker.helpers.arrayElement(DESCRIPTIONS),
+        description_en: "", // Set empty string instead of faker description
+        description_de: "", // Set empty string instead of faker description
         isActive: true,
         taxonomy: faker.helpers.arrayElement([
           "ATTRACTION",
@@ -453,8 +453,8 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
         name_en: `Checkpoint #${index + 1}`,
         name_de: `Checkpoint #${index + 1}`,
         points: plainObject.points,
-        description_en: plainObject.description_en,
-        description_de: plainObject.description_de,
+        description_en: "", // Return empty string instead of description
+        description_de: "", // Return empty string instead of description
         isActive: plainObject.isActive,
         taxonomy: plainObject.taxonomy,
         isSynthetic: plainObject.isSynthetic,
