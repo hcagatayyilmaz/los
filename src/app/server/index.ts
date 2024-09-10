@@ -10,32 +10,24 @@ import SyntheticPlaceSchema from "../../../mongodb/schema"
 import {ISyntheticPlace} from "../../../mongodb/schema"
 import dbConnect from "../../../mongodb/mongodb"
 import {getRedisClient} from "../../../redis/redis"
+import {unstable_cache} from "next/cache"
 
 //import { getRedisClient, closeRedisConnection } from "../../../redis/redis"
 
 const prisma = new PrismaClient()
 
-async function getCachedSyntheticPlace(
-  placeId: string
-): Promise<ISyntheticPlace | null> {
-  const redis = await getRedisClient()
-  const cacheKey = `synthetic_place:${placeId}`
+const getPlace = unstable_cache(
+  async (placeId: string) =>
+    prisma.attraction.findUnique({where: {id: placeId}}),
+  ["place"],
+  {revalidate: 3600} // Cache for 1 hour
+)
 
-  let place = await redis.get(cacheKey)
-
-  if (!place) {
-    await dbConnect()
-    const result = await SyntheticPlaceSchema.findById(placeId).lean()
-    if (result) {
-      place = JSON.stringify(result)
-      await redis.set(cacheKey, place, {
-        EX: 3600
-      })
-    }
-  }
-
-  return place ? JSON.parse(place) : null
-}
+const getSyntheticPlace = unstable_cache(
+  async (placeId: string) => SyntheticPlaceSchema.findById(placeId).lean(),
+  ["synthetic-place"],
+  {revalidate: 3600} // Cache for 1 hour
+)
 
 export async function checkIn({
   placeId,
@@ -46,64 +38,63 @@ export async function checkIn({
   userLat: number
   userLng: number
 }) {
-  "use server"
-
   const {getUser} = getKindeServerSession()
   const user = await getUser()
 
   if (!user) {
     console.error("User not authenticated")
-    return {
-      success: false,
-      message: "Please login to check in"
-    }
+    return {success: false, message: "Please login to check in"}
   }
 
-  const place = await prisma.attraction.findUnique({
-    where: {id: placeId}
-  })
+  const place = await getPlace(placeId)
 
   if (!place) {
     console.error("Place not found")
-    return {
-      success: false,
-      message: "Place not found"
-    }
+    return {success: false, message: "Place not found"}
   }
 
-  const distance = await calculateDistance4(
+  const distance = calculateDistance4(
     userLat,
     userLng,
     place.latitude,
     place.longitude
   )
-  console.log("Distance:", distance)
+
   if (distance <= 50) {
-    const checkIn = await prisma.checkIn.create({
-      data: {
-        userId: user.id,
-        attractionId: placeId
+    try {
+      const result = await prisma.$transaction(async (prisma) => {
+        const checkIn = await prisma.checkIn.create({
+          data: {userId: user.id, attractionId: placeId}
+        })
+
+        await prisma.user.update({
+          where: {id: user.id},
+          data: {points: {increment: place.points}}
+        })
+
+        await prisma.transaction.create({
+          data: {
+            userId: user.id,
+            points: place.points,
+            details: `checkin_id:${checkIn.id}`,
+            type: "EARN_POINTS"
+          }
+        })
+
+        return {
+          success: true,
+          message: "Checked in successfully",
+          points: place.points
+        }
+      })
+
+      return result
+    } catch (error) {
+      console.error("Error during check-in process:", error)
+      return {
+        success: false,
+        message: "An error occurred during check-in. Please try again."
       }
-    })
-
-    await prisma.user.update({
-      where: {id: user.id},
-      data: {points: {increment: place.points}}
-    })
-
-    await prisma.transaction.create({
-      data: {
-        userId: user.id,
-        points: place.points,
-        details: `checkin_id:${checkIn.id}`,
-        type: "EARN_POINTS"
-      }
-    })
-
-    return {
-      success: true,
-      message: "Checked in successfully",
-      points: place.points
     }
   } else {
     return {
@@ -122,28 +113,19 @@ export async function checkInSyntheticLocation({
   userLat: number
   userLng: number
 }) {
-  "use server"
-
   const {getUser} = getKindeServerSession()
   const user = await getUser()
 
   if (!user) {
     console.error("User not authenticated")
-    return {
-      success: false,
-      message: "Please login to check in"
-    }
+    return {success: false, message: "Please login to check in"}
   }
 
   const [existingCheckIn, place] = await Promise.all([
     prisma.checkIn.findFirst({
-      where: {
-        userId: user.id,
-        syntheticPlaceId: placeId,
-        isSynthetic: true
-      }
+      where: {userId: user.id, syntheticPlaceId: placeId, isSynthetic: true}
     }),
-    SyntheticPlaceSchema.findById(placeId).lean()
+    getSyntheticPlace(placeId)
   ])
 
   if (existingCheckIn) {
@@ -170,40 +152,39 @@ export async function checkInSyntheticLocation({
 
   if (distance <= 50) {
     try {
-      const [checkIn, _, __, updatedPlace] = await Promise.all([
-        prisma.checkIn.create({
-          data: {
-            userId: user.id,
-            isSynthetic: true,
-            syntheticPlaceId: placeId
-          }
-        }),
-        prisma.user.update({
+      const result = await prisma.$transaction(async (prisma) => {
+        await prisma.checkIn.create({
+          data: {userId: user.id, isSynthetic: true, syntheticPlaceId: placeId}
+        })
+
+        await prisma.user.update({
           where: {id: user.id},
           data: {points: {increment: place.points}}
-        }),
-        prisma.transaction.create({
+        })
+
+        await prisma.transaction.create({
           data: {
             userId: user.id,
             points: place.points,
             details: `checkin_id:${placeId}`,
             type: "EARN_POINTS"
           }
-        }),
-        SyntheticPlaceSchema.findByIdAndUpdate(
+        })
+
+        await SyntheticPlaceSchema.findByIdAndUpdate(
           placeId,
           {checkedIn: true},
           {new: true}
         ).lean()
-      ])
 
-      // Redis cache update removed
+        return {
+          success: true,
+          message: "Checked in successfully",
+          points: place.points
+        }
+      })
 
-      return {
-        success: true,
-        message: "Checked in successfully",
-        points: place.points
-      }
+      return result
     } catch (error) {
       console.error("Error during check-in process:", error)
       return {
