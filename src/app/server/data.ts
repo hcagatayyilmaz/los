@@ -26,53 +26,63 @@ export async function getRewardsByCity(slug: string) {
   return rewards
 }
 
+const getBaseAttractions = unstable_cache(
+  async (cityId: string, filter: any) => {
+    const now = new Date()
+
+    const whereClause: any = {
+      cityId,
+      isActive: true,
+      OR: [
+        {
+          AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
+        },
+        {
+          startDate: null,
+          endDate: null
+        },
+        {
+          startDate: null,
+          endDate: {gte: now}
+        }
+      ]
+    }
+
+    if (filter.taxonomy) {
+      whereClause.taxonomy = filter.taxonomy.toUpperCase()
+    } else if (filter.date) {
+      const date = new Date(filter.date)
+      whereClause.OR = [
+        {
+          AND: [{startDate: {lte: date}}, {endDate: {gte: date}}]
+        },
+        {
+          startDate: null,
+          endDate: null
+        },
+        {
+          startDate: null,
+          endDate: {gte: date}
+        }
+      ]
+    }
+
+    return prisma.attraction.findMany({
+      where: whereClause
+    })
+  },
+  ["base-attractions"],
+  {revalidate: 3600} // Cache for 1 hour
+)
+
 export async function getAttractions(cityId: string, filter: any) {
   "use server"
 
   const {getUser} = await getKindeServerSession()
   const user = await getUser()
-  const now = new Date()
 
-  const whereClause: any = {
-    cityId,
-    isActive: true,
-    OR: [
-      {
-        AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
-      },
-      {
-        startDate: null,
-        endDate: null
-      },
-      {
-        startDate: null,
-        endDate: {gte: now}
-      }
-    ]
-  }
-
-  if (filter.taxonomy) {
-    whereClause.taxonomy = filter.taxonomy.toUpperCase()
-  } else if (filter.date) {
-    const date = new Date(filter.date)
-    whereClause.OR = [
-      {
-        AND: [{startDate: {lte: date}}, {endDate: {gte: date}}]
-      },
-      {
-        startDate: null,
-        endDate: null
-      },
-      {
-        startDate: null,
-        endDate: {gte: date}
-      }
-    ]
-  }
-
-  let attractions = await prisma.attraction.findMany({
-    where: whereClause
-  })
+  // Fetch base attractions (this will be cached)
+  let attractions = await getBaseAttractions(cityId, filter)
 
   // Generate synthetic data
   const syntheticData = await generateSyntheticPlaces(cityId, user?.id)
@@ -100,9 +110,6 @@ export async function getAttractions(cityId: string, filter: any) {
       checkedIn: false
     }))
   }
-
-  // console.log("Attractions:", attractions)
-  // console.log("Synthetic Data:", syntheticData)
 
   return {attractions, syntheticData}
 }
