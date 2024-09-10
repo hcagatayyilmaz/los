@@ -376,7 +376,7 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
           _id: mongoose.Types.ObjectId
         }
 
-        const description = `Collect all checkpoints in your city to get your rewards. This checkpoint is worth ${plainObject.points} points.`
+        const description = ` `
 
         return {
           id: plainObject._id.toString(),
