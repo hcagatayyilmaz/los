@@ -413,7 +413,7 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
     }
 
     const radius = 0.02 // Approximately 10km radius
-    const newSyntheticData = Array.from({length: 40}, (_, index) => {
+    const newSyntheticData = Array.from({length: 30}, (_, index) => {
       const angle = Math.random() * 2 * Math.PI
       const distance = Math.sqrt(Math.random()) * radius
       const lat = city.centerLat! + distance * Math.cos(angle)
