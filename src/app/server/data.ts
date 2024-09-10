@@ -380,8 +380,8 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
 
         return {
           id: plainObject._id.toString(),
-          name_en: `Checkpoint #${index + 1}`,
-          name_de: `Checkpoint #${index + 1}`,
+          name_en: `Random City Point #${index + 1}`,
+          name_de: `Random City Point #${index + 1}`,
           points: plainObject.points,
           description_en: description,
           description_de: description,
@@ -420,12 +420,12 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
       const lng = city.centerLng! + distance * Math.sin(angle)
       const points = Math.floor(Math.random() * (66 - 10 + 1)) + 10 // Random between 10-66
 
-      const description = `Collect all checkpoints in your city to get your rewards. This checkpoint is worth ${points} points.`
+      const description = `Visit this checkpoint to get points, it is worth  of ${points} points.`
 
       return new SyntheticPlaceSchema({
         cityId: cityId,
-        name_en: `Checkpoint #${index + 1}`,
-        name_de: `Checkpoint #${index + 1}`,
+        name_en: `Random City Point #${index + 1}`,
+        name_de: `Random City Point #${index + 1}`,
         location: {
           type: "Point",
           coordinates: [parseFloat(lng.toFixed(6)), parseFloat(lat.toFixed(6))]
