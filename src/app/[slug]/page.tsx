@@ -1,4 +1,5 @@
-// src/app/[slug]/page.tsx
+import {Suspense} from "react"
+import {notFound} from "next/navigation"
 import prisma from "@/app/lib/db"
 import Header from "@/app/components/Header"
 import Navbar from "@/app/components/Navbar"
@@ -25,99 +26,77 @@ type CityPageParams = {
   searchParams?: {[key: string]: string | string[] | undefined} | undefined
 }
 
-export const revalidate = 3600
-
 export async function generateStaticParams() {
-  //unstable_noStore()
   const cities = await prisma.city.findMany()
   return cities.map((city) => ({
     slug: city.slug
   }))
 }
 
-export async function generateMetadata({params}: CityPageParams) {
-  //unstable_noStore()
+async function getCityData(slug: string, searchParams: any) {
   const city = await prisma.city.findUnique({
-    where: {
-      slug: params.slug,
-      isActive: true
-    }
+    where: {slug}
   })
-  return {
-    title: city ? `Los - ${city.name}` : "City not found"
+
+  if (!city) {
+    notFound()
   }
+
+  const filter = searchParams && {
+    date: searchParams.date,
+    taxonomy: searchParams.taxonomy
+  }
+
+  const {attractions, syntheticData} = await getAttractions(city.id, filter)
+
+  return {city, attractions, syntheticData}
 }
 
-const CityPage = async ({params, searchParams}: CityPageParams) => {
-  try {
-    const city = await prisma.city.findUnique({
-      where: {
-        slug: params.slug
-      }
-    })
+export default async function CityPage({params, searchParams}: CityPageParams) {
+  const {city, attractions, syntheticData} = await getCityData(
+    params.slug,
+    searchParams
+  )
 
-    if (!city) {
-      return (
-        <main className='h-screen w-screen flex items-center justify-center'>
-          <h1 className='text-4xl'>City not found</h1>
-        </main>
-      )
-    }
+  const {getUser} = getKindeServerSession()
+  const kindeUser = await getUser()
+  const user = kindeUser ? await getDBUser(kindeUser.id) : null
 
-    const filter = searchParams && {
-      date: searchParams.date,
-      taxonomy: searchParams.taxonomy
-    }
-
-    const {attractions, syntheticData} = await getAttractions(city.id, filter)
-    const {getUser} = getKindeServerSession()
-
-    const kindeUser = await getUser()
-    const user = kindeUser ? await getDBUser(kindeUser.id) : null
-
-    return (
-      <UIProvider>
-        <SelectedItemProvider initialLocation={attractions[0]}>
-          <main className='h-dvh w-full max-w-md mx-auto relative '>
-            <div className='absolute inset-0 pointer-events-none'>
-              <div className='h-full w-full pointer-events-auto'>
-                <MainLayout
-                  locations={attractions}
-                  syntheticData={syntheticData}
-                  cityCenter={{
-                    lat: city.centerLat ?? 48.520770613433,
-                    lng: city.centerLng ?? 9.057862627849184
-                  }}
-                />
-              </div>
-            </div>
-            <Banner />
-            <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
-              <Header user={user} name={city.name} />
-              <Navbar isMapPage={false} />
-              <ActionsButtons slug={city.slug} />
-              {/* <Banner /> */}
-            </div>
-            <div className='absolute bottom-0 left-0 w-full z-1'>
-              <CardButtonWrapper
-                points={user ? user.points : 0}
-                location={attractions[0]}
+  return (
+    <UIProvider>
+      <SelectedItemProvider initialLocation={attractions[0]}>
+        <main className='h-dvh w-full max-w-md mx-auto relative '>
+          <div className='absolute inset-0 pointer-events-none'>
+            <div className='h-full w-full pointer-events-auto'>
+              <MainLayout
+                locations={attractions}
+                syntheticData={syntheticData}
+                cityCenter={{
+                  lat: city.centerLat ?? 48.520770613433,
+                  lng: city.centerLng ?? 9.057862627849184
+                }}
               />
-              {/* <SliderWrapper locations={attractions} /> */}
-              <MapItemWrapper />
             </div>
-          </main>
-        </SelectedItemProvider>
-      </UIProvider>
-    )
-  } catch (error) {
-    console.error(error)
-    return (
-      <main className='h-dvh w-screen flex items-center justify-center'>
-        <h1 className='text-4xl'>An error occurred</h1>
-      </main>
-    )
-  }
+          </div>
+          <Banner />
+          <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
+            <Header user={user} name={city.name} />
+            <Navbar isMapPage={false} />
+            <ActionsButtons slug={city.slug} />
+            {/* <Banner /> */}
+          </div>
+          <div className='absolute bottom-0 left-0 w-full z-1'>
+            <CardButtonWrapper
+              points={user ? user.points : 0}
+              location={attractions[0]}
+            />
+            {/* <SliderWrapper locations={attractions} /> */}
+            <MapItemWrapper />
+          </div>
+        </main>
+      </SelectedItemProvider>
+    </UIProvider>
+  )
 }
 
-export default CityPage
+export const revalidate = 3600 // revalidate every hour
