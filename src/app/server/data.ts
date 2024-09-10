@@ -376,13 +376,15 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
           _id: mongoose.Types.ObjectId
         }
 
+        const description = `Collect all checkpoints in your city to get your rewards. This checkpoint is worth ${plainObject.points} points.`
+
         return {
           id: plainObject._id.toString(),
           name_en: `Checkpoint #${index + 1}`,
           name_de: `Checkpoint #${index + 1}`,
           points: plainObject.points,
-          description_en: "", // Return empty string instead of description
-          description_de: "", // Return empty string instead of description
+          description_en: description,
+          description_de: description,
           isActive: plainObject.isActive,
           taxonomy: plainObject.taxonomy,
           isSynthetic: plainObject.isSynthetic,
@@ -416,6 +418,9 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
       const distance = Math.sqrt(Math.random()) * radius
       const lat = city.centerLat! + distance * Math.cos(angle)
       const lng = city.centerLng! + distance * Math.sin(angle)
+      const points = Math.floor(Math.random() * (66 - 10 + 1)) + 10 // Random between 10-66
+
+      const description = `Collect all checkpoints in your city to get your rewards. This checkpoint is worth ${points} points.`
 
       return new SyntheticPlaceSchema({
         cityId: cityId,
@@ -425,9 +430,9 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
           type: "Point",
           coordinates: [parseFloat(lng.toFixed(6)), parseFloat(lat.toFixed(6))]
         },
-        points: Math.floor(Math.random() * (66 - 10 + 1)) + 10, // Random between 10-66
-        description_en: "", // Set empty string instead of faker description
-        description_de: "", // Set empty string instead of faker description
+        points: points,
+        description_en: description,
+        description_de: description,
         isActive: true,
         taxonomy: faker.helpers.arrayElement([
           "ATTRACTION",
@@ -453,8 +458,8 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
         name_en: `Checkpoint #${index + 1}`,
         name_de: `Checkpoint #${index + 1}`,
         points: plainObject.points,
-        description_en: "", // Return empty string instead of description
-        description_de: "", // Return empty string instead of description
+        description_en: plainObject.description_en,
+        description_de: plainObject.description_de,
         isActive: plainObject.isActive,
         taxonomy: plainObject.taxonomy,
         isSynthetic: plainObject.isSynthetic,
