@@ -29,6 +29,10 @@ const getSyntheticPlace = unstable_cache(
   {revalidate: 3600} // Cache for 1 hour
 )
 
+type CheckInResult =
+  | {success: true; message: string; points: number}
+  | {success: false; message: string}
+
 export async function checkIn({
   placeId,
   userLat,
@@ -37,7 +41,7 @@ export async function checkIn({
   placeId: string
   userLat: number
   userLng: number
-}) {
+}): Promise<CheckInResult> {
   const {getUser} = getKindeServerSession()
   const user = await getUser()
 
@@ -112,7 +116,7 @@ export async function checkInSyntheticLocation({
   placeId: string
   userLat: number
   userLng: number
-}) {
+}): Promise<CheckInResult> {
   const {getUser} = getKindeServerSession()
   const user = await getUser()
 
