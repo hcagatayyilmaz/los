@@ -127,7 +127,11 @@ export async function checkInSyntheticLocation({
 
   const [existingCheckIn, place] = await Promise.all([
     prisma.checkIn.findFirst({
-      where: {userId: user.id, syntheticPlaceId: placeId, isSynthetic: true}
+      where: {
+        userId: user.id,
+        syntheticPlaceId: placeId,
+        isSynthetic: true
+      }
     }),
     getSyntheticPlace(placeId)
   ])
@@ -154,7 +158,7 @@ export async function checkInSyntheticLocation({
     place.location.coordinates[0]
   )
 
-  if (distance <= 50) {
+  if (distance <= 300) {
     try {
       const result = await prisma.$transaction(async (prisma) => {
         await prisma.checkIn.create({
