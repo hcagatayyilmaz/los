@@ -34,8 +34,16 @@ const SyntheticPlaceSchema = new mongoose.Schema({
     }
   },
   points: {type: Number, required: true},
-  description_en: {type: String, required: true},
-  description_de: {type: String, required: true},
+  description_en: {
+    type: String,
+    required: true,
+    default: "" // Allow empty string as default
+  },
+  description_de: {
+    type: String,
+    required: true,
+    default: "" // Allow empty string as default
+  },
   isActive: {type: Boolean, required: true},
   taxonomy: {
     type: String,

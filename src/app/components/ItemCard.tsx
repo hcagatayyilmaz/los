@@ -30,8 +30,10 @@ export const ItemCard = ({location}: ItemCardProps) => {
             location.imageUrl ? "w-2/3" : "w-full"
           }`}
         >
-          <h2 className='text-md font-bold text-wrap'>{location.name_en}</h2>
-          <div className='flex gap-2'>
+          <h2 className='text-md font-bold text-wrap mr-4'>
+            {location.name_en}
+          </h2>
+          <div className='flex gap-2 shrink-0'>
             <span className='inline-block'>
               <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                 <CoinIcon className='w-4 h-4 text-white' />

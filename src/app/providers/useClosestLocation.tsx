@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react"
 import {Location} from "../lib/types"
-import {calculateDistance3} from "../lib/func"
+import {calculateDistance3, calculateDistance4} from "../lib/func"
 import {useUserLocation} from "../providers/useUserLocation"
 
 export default function useClosestLocation(location: Location): number | null {
@@ -11,7 +11,7 @@ export default function useClosestLocation(location: Location): number | null {
     const findClosestLocation = () => {
       if (!userLocation) return null
 
-      const distance = calculateDistance3(
+      const distance = calculateDistance4(
         userLocation.lat,
         userLocation.lng,
         location.latitude,

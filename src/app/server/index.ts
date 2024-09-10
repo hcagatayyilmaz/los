@@ -2,17 +2,40 @@
 
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import {PrismaClient} from "@prisma/client"
-import {calculateDistance3} from "@/app/lib/utils"
+import {calculateDistance3, calculateDistance4} from "@/app/lib/utils"
 import {revalidatePath} from "next/cache"
 import {redirect} from "next/navigation"
 import mongoose from "mongoose"
 import SyntheticPlaceSchema from "../../../mongodb/schema"
 import {ISyntheticPlace} from "../../../mongodb/schema"
 import dbConnect from "../../../mongodb/mongodb"
+import {getRedisClient} from "../../../redis/redis"
 
 //import { getRedisClient, closeRedisConnection } from "../../../redis/redis"
 
 const prisma = new PrismaClient()
+
+async function getCachedSyntheticPlace(
+  placeId: string
+): Promise<ISyntheticPlace | null> {
+  const redis = await getRedisClient()
+  const cacheKey = `synthetic_place:${placeId}`
+
+  let place = await redis.get(cacheKey)
+
+  if (!place) {
+    await dbConnect()
+    const result = await SyntheticPlaceSchema.findById(placeId).lean()
+    if (result) {
+      place = JSON.stringify(result)
+      await redis.set(cacheKey, place, {
+        EX: 3600
+      })
+    }
+  }
+
+  return place ? JSON.parse(place) : null
+}
 
 export async function checkIn({
   placeId,
@@ -48,14 +71,14 @@ export async function checkIn({
     }
   }
 
-  const distance = await calculateDistance3(
+  const distance = await calculateDistance4(
     userLat,
     userLng,
     place.latitude,
     place.longitude
   )
-  if (distance <= 20) {
-    // 25 meters threshold
+  console.log("Distance:", distance)
+  if (distance <= 50) {
     const checkIn = await prisma.checkIn.create({
       data: {
         userId: user.id,
@@ -112,72 +135,81 @@ export async function checkInSyntheticLocation({
     }
   }
 
-  await dbConnect()
-
-  let place: ISyntheticPlace | null
-  try {
-    const result = await SyntheticPlaceSchema.findById(placeId).lean()
-    place = result as ISyntheticPlace
-    if (!place) {
-      console.error("Synthetic place not found")
-      return {
-        success: false,
-        message: "Place not found. Please reach the support."
+  const [existingCheckIn, place] = await Promise.all([
+    prisma.checkIn.findFirst({
+      where: {
+        userId: user.id,
+        syntheticPlaceId: placeId,
+        isSynthetic: true
       }
+    }),
+    SyntheticPlaceSchema.findById(placeId).lean()
+  ])
+
+  if (existingCheckIn) {
+    return {
+      success: false,
+      message: "You have already checked in to this place"
     }
-  } catch (error) {
-    console.error("Error fetching synthetic place:", error)
+  }
+
+  if (!place) {
+    console.error("Synthetic place not found")
     return {
       success: false,
       message: "Place not found. Please reach the support."
     }
   }
 
-  const distance = await calculateDistance3(
+  const distance = calculateDistance4(
     userLat,
     userLng,
     place.location.coordinates[1],
     place.location.coordinates[0]
   )
-  if (distance <= 20) {
-    // 40 meters threshold for synthetic places
-    const checkIn = await prisma.checkIn.create({
-      data: {
-        userId: user.id,
-        isSynthetic: true,
-        syntheticPlaceId: placeId
-      }
-    })
 
-    await prisma.user.update({
-      where: {id: user.id},
-      data: {points: {increment: place.points}}
-    })
-
-    await prisma.transaction.create({
-      data: {
-        userId: user.id,
-        points: place.points,
-        details: `checkin_id:${checkIn.id}`,
-        type: "EARN_POINTS"
-      }
-    })
-
-    // Update the synthetic place document to set checkedIn to true
+  if (distance <= 50) {
     try {
-      await SyntheticPlaceSchema.findByIdAndUpdate(placeId, {checkedIn: true})
+      const [checkIn, _, __, updatedPlace] = await Promise.all([
+        prisma.checkIn.create({
+          data: {
+            userId: user.id,
+            isSynthetic: true,
+            syntheticPlaceId: placeId
+          }
+        }),
+        prisma.user.update({
+          where: {id: user.id},
+          data: {points: {increment: place.points}}
+        }),
+        prisma.transaction.create({
+          data: {
+            userId: user.id,
+            points: place.points,
+            details: `checkin_id:${placeId}`,
+            type: "EARN_POINTS"
+          }
+        }),
+        SyntheticPlaceSchema.findByIdAndUpdate(
+          placeId,
+          {checkedIn: true},
+          {new: true}
+        ).lean()
+      ])
+
+      // Redis cache update removed
+
+      return {
+        success: true,
+        message: "Checked in successfully",
+        points: place.points
+      }
     } catch (error) {
-      console.error("Error updating synthetic place:", error)
+      console.error("Error during check-in process:", error)
       return {
         success: false,
-        message: "Place not found. Please reach the support."
+        message: "An error occurred during check-in. Please try again."
       }
-    }
-
-    return {
-      success: true,
-      message: "Checked in successfully",
-      points: place.points
     }
   } else {
     return {
@@ -303,7 +335,7 @@ export async function foundHideAndSeek({
   })
 
   if (hideAndSeek && hideAndSeek.attraction) {
-    const distance = await calculateDistance3(
+    const distance = await calculateDistance4(
       userLat,
       userLng,
       hideAndSeek.attraction.latitude,

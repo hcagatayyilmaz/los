@@ -371,18 +371,20 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
 
     if (syntheticPlaces.length > 0) {
       // Convert MongoDB documents to plain JavaScript objects and serialize fields
-      return syntheticPlaces.map((place) => {
+      return syntheticPlaces.map((place, index) => {
         const plainObject = place.toObject() as ISyntheticPlace & {
           _id: mongoose.Types.ObjectId
         }
 
+        const description = ` `
+
         return {
           id: plainObject._id.toString(),
-          name_en: plainObject.name_en,
-          name_de: plainObject.name_de,
+          name_en: `Random City Point #${index + 1}`,
+          name_de: `Random City Point #${index + 1}`,
           points: plainObject.points,
-          description_en: plainObject.description_en,
-          description_de: plainObject.description_de,
+          description_en: description,
+          description_de: description,
           isActive: plainObject.isActive,
           taxonomy: plainObject.taxonomy,
           isSynthetic: plainObject.isSynthetic,
@@ -411,23 +413,26 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
     }
 
     const radius = 0.02 // Approximately 10km radius
-    const newSyntheticData = Array.from({length: 40}, () => {
+    const newSyntheticData = Array.from({length: 30}, (_, index) => {
       const angle = Math.random() * 2 * Math.PI
       const distance = Math.sqrt(Math.random()) * radius
       const lat = city.centerLat! + distance * Math.cos(angle)
       const lng = city.centerLng! + distance * Math.sin(angle)
+      const points = Math.floor(Math.random() * (66 - 10 + 1)) + 10 // Random between 10-66
+
+      const description = `Visit this checkpoint to get points, it is worth  of ${points} points.`
 
       return new SyntheticPlaceSchema({
         cityId: cityId,
-        name_en: faker.location.street(),
-        name_de: faker.location.street(),
+        name_en: `Random City Point #${index + 1}`,
+        name_de: `Random City Point #${index + 1}`,
         location: {
           type: "Point",
           coordinates: [parseFloat(lng.toFixed(6)), parseFloat(lat.toFixed(6))]
         },
-        points: Math.floor(Math.random() * (66 - 10 + 1)) + 10, // Random between 10-66
-        description_en: faker.helpers.arrayElement(DESCRIPTIONS),
-        description_de: faker.helpers.arrayElement(DESCRIPTIONS),
+        points: points,
+        description_en: description,
+        description_de: description,
         isActive: true,
         taxonomy: faker.helpers.arrayElement([
           "ATTRACTION",
@@ -443,15 +448,15 @@ export async function generateSyntheticPlaces(cityId: string, userId?: string) {
     await SyntheticPlaceSchema.insertMany(newSyntheticData)
 
     // Convert MongoDB documents to plain JavaScript objects and serialize fields
-    return newSyntheticData.map((place) => {
+    return newSyntheticData.map((place, index) => {
       const plainObject = place.toObject() as ISyntheticPlace & {
         _id: mongoose.Types.ObjectId
       }
 
       return {
         id: plainObject._id.toString(),
-        name_en: plainObject.name_en,
-        name_de: plainObject.name_de,
+        name_en: `Checkpoint #${index + 1}`,
+        name_de: `Checkpoint #${index + 1}`,
         points: plainObject.points,
         description_en: plainObject.description_en,
         description_de: plainObject.description_de,
