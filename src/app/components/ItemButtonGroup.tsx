@@ -45,7 +45,9 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
           toast.custom(
             (t) => (
               <CustomToast
-                message={`Checked in successfully! You earned ${result.points} points.`}
+                message={`Checked in successfully! You earned ${
+                  result.points || 0
+                } points.`}
                 type='success'
               />
             ),
