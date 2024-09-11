@@ -81,34 +81,49 @@ export async function getAttractions(cityId: string, filter: any) {
   const {getUser} = await getKindeServerSession()
   const user = await getUser()
 
-  // Fetch base attractions (this will be cached)
-  let attractions = await getBaseAttractions(cityId, filter)
-
-  // Generate synthetic data
-  const syntheticData = await generateSyntheticPlaces(cityId, user?.id)
+  // Parallelize fetching attractions and synthetic data
+  let [attractions, syntheticData] = await Promise.all([
+    getBaseAttractions(cityId, filter),
+    generateSyntheticPlaces(cityId, user?.id)
+  ])
 
   if (user) {
+    // Fetch check-ins in a single query
     const checkIns = await prisma.checkIn.findMany({
       where: {
         userId: user.id,
-        attractionId: {in: attractions.map((attr) => attr.id)}
+        OR: [
+          {attractionId: {in: attractions.map((attr) => attr.id)}},
+          {syntheticPlaceId: {in: syntheticData.map((place) => place.id)}}
+        ]
       },
-      select: {attractionId: true}
+      select: {attractionId: true, syntheticPlaceId: true}
     })
 
     const checkedInAttractionIds = new Set(
-      checkIns.map((checkIn) => checkIn.attractionId)
+      checkIns.filter((ci) => ci.attractionId).map((ci) => ci.attractionId)
+    )
+    const checkedInSyntheticIds = new Set(
+      checkIns
+        .filter((ci) => ci.syntheticPlaceId)
+        .map((ci) => ci.syntheticPlaceId)
     )
 
     attractions = attractions.map((attraction) => ({
       ...attraction,
       checkedIn: checkedInAttractionIds.has(attraction.id)
     }))
+
+    syntheticData = syntheticData.map((place) => ({
+      ...place,
+      checkedIn: checkedInSyntheticIds.has(place.id)
+    }))
   } else {
     attractions = attractions.map((attraction) => ({
       ...attraction,
       checkedIn: false
     }))
+    syntheticData = syntheticData.map((place) => ({...place, checkedIn: false}))
   }
 
   return {attractions, syntheticData}
