@@ -64,7 +64,7 @@ export async function checkIn({
     place.longitude
   )
 
-  if (distance <= 50) {
+  if (distance <= 40) {
     try {
       const result = await prisma.$transaction(async (prisma) => {
         const checkIn = await prisma.checkIn.create({
@@ -158,7 +158,7 @@ export async function checkInSyntheticLocation({
     place.location.coordinates[0]
   )
 
-  if (distance <= 300) {
+  if (distance <= 40) {
     try {
       const result = await prisma.$transaction(async (prisma) => {
         await prisma.checkIn.create({
