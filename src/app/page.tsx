@@ -156,7 +156,7 @@ export default async function Home() {
         </div>
         <div className='grid grid-cols-2 gap-2 '>
           {sortedCities.map((city) => (
-            <Link key={city.id} href={`/${city.slug}`}>
+            <Link key={city.id} href={`/${city.slug}`} prefetch={true}>
               <button
                 className={`${museoModerno.className} rounded-full bg-white text-black font-medium py-1 text-sm px-4 mb-2 border w-full border-black`}
               >
