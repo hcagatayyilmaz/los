@@ -1,9 +1,9 @@
 import {Location} from "../lib/types"
 import Image from "next/image"
-import {FaStar} from "react-icons/fa"
+import {Marker} from "@react-google-maps/api"
 import React, {useMemo} from "react"
 import {FaCheck} from "react-icons/fa"
-// border-white or border-black for live location pin
+import {EventIcon} from "../lib/CustomIcons"
 
 export const LiveLocationPin: React.FC = React.memo(() => (
   <div className='relative group'>
@@ -11,15 +11,7 @@ export const LiveLocationPin: React.FC = React.memo(() => (
     <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75 group-hover:scale-150 transition-transform duration-200'></div>
   </div>
 ))
-
 LiveLocationPin.displayName = "LiveLocationPin"
-
-const colors = [
-  {background: "#ffffff", text: "#FF1493"}, // gold
-  {background: "#ffffff", text: "#FF1493"}, //neon green
-  {background: "#ffffff", text: "#FF1493"}, //pink
-  {background: "#ffffff", text: "#FF1493"} // black
-]
 
 const EventDateDisplay: React.FC<{date: string; zoomLevel?: number}> = ({
   date,
@@ -51,7 +43,8 @@ export const ItemPin = React.memo<{
   isSelected: boolean
   zoomLevel?: number
   isSynthetic?: boolean
-}>(({location, isSelected, zoomLevel, isSynthetic}) => {
+  updateSelectedLocation: (location: Location) => void
+}>(({location, isSelected, zoomLevel, isSynthetic, updateSelectedLocation}) => {
   const {sizeClass, scaleClass} = useMemo(() => {
     let sizeClass = "w-8 h-8"
     if (!isSynthetic && !location.checkedIn && zoomLevel !== undefined) {
@@ -69,96 +62,106 @@ export const ItemPin = React.memo<{
 
   const baseClassName = `relative group transition-transform duration-200 ${scaleClass} ${sizeClass}`
 
-  // Checked-in logic (unchanged)
-  if (location.checkedIn === true) {
+  // Checked-in logic
+  if (location.checkedIn) {
     return (
-      <div
-        className={`relative group transition-transform duration-200 ${scaleClass} w-6 h-6`}
-      >
-        <div className='absolute  w-[18px] h-[18px] rounded-full border-2 border-black bg-green-400'>
-          <span className='flex items-center justify-center w-full h-full'>
-            <FaCheck className='text-black' />
-          </span>
-        </div>
-      </div>
+      <Marker
+        onClick={() => updateSelectedLocation(location)}
+        icon={{
+          url: "/checked-in.svg",
+          scaledSize: new window.google.maps.Size(
+            isSelected ? 32 : 16,
+            isSelected ? 32 : 16
+          ),
+          anchor: new window.google.maps.Point(
+            isSelected ? 24 : 12,
+            isSelected ? 24 : 12
+          )
+        }}
+        position={{lat: location.latitude, lng: location.longitude}}
+      />
     )
-  }
-
-  // Synthetic data logic (unchanged)
-  if (isSynthetic) {
-    return location.checkedIn ? (
-      <div
-        className={`relative group transition-transform duration-200 ${scaleClass} w-6 h-6`}
-      >
-        <div className='absolute w-[18px] h-[18px] rounded-full border-2 border-black bg-green-400'>
-          <span className='flex items-center justify-center w-full h-full'>
-            <FaCheck className='text-black' />
-          </span>
-        </div>
-      </div>
-    ) : (
-      <div
-        className={`relative group transition-transform duration-200 ${scaleClass} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black bg-white`}
-      >
-        <FaStar size={8} className='text-center text-customYellow' />
-      </div>
-    )
-  }
-
-  if (location.isTheme) {
+  } else if (isSynthetic) {
     return (
-      <div className={`${baseClassName}`}>
-        <Image
-          src='/holderlin.png'
-          alt='Theme Pin'
-          fill
-          objectFit='contain'
-          className='absolute'
-        />
-      </div>
+      <Marker
+        onClick={() => updateSelectedLocation(location)}
+        icon={{
+          url: "/synthetic.svg",
+          scaledSize: new window.google.maps.Size(
+            isSelected ? 32 : 16,
+            isSelected ? 32 : 16
+          ),
+          anchor: new window.google.maps.Point(
+            isSelected ? 24 : 12,
+            isSelected ? 24 : 12
+          )
+        }}
+        position={{lat: location.latitude, lng: location.longitude}}
+      />
     )
-  } else if (
-    location.taxonomy === "EVENT" &&
-    location.pin &&
-    location.endDate
-  ) {
-    const endDate = new Date(location.endDate)
-    return (
-      <div className={`${baseClassName} relative`}>
-        <Image
-          src={location.pin}
-          alt='Location Pin'
-          fill
-          objectFit='contain'
-          className='absolute'
-        />
-        <EventDateDisplay date={endDate.toISOString()} zoomLevel={zoomLevel} />
-      </div>
-    )
+  } else if (location.taxonomy === "EVENT" && location.endDate) {
+    if (location.pin && location.endDate) {
+      const endDate = new Date(location.endDate)
+      return (
+        <svg
+          className={`${baseClassName} relative`}
+          style={{transform: isSelected ? "scale(2)" : "none"}}
+          width='100%'
+          height='100%'
+          viewBox='0 0 100 100'
+        >
+          <image
+            href={location.pin}
+            width='100'
+            height='100'
+            preserveAspectRatio='xMidYMid meet'
+          />
+          <svg x='50' y='0' width='32' height='32' viewBox='0 0 50 50'>
+            <EventIcon endDate={endDate} zoomLevel={zoomLevel} />
+          </svg>
+        </svg>
+      )
+    } else {
+      const endDate = new Date(location.endDate)
+      return <EventIcon endDate={endDate} zoomLevel={zoomLevel} />
+    }
   } else if (location.pin) {
     return (
-      <div className={`${baseClassName} relative`}>
-        <Image
-          src={location.pin}
-          alt='Location Pin'
-          fill
-          objectFit='contain'
-          className='absolute'
-        />
-      </div>
+      <Marker
+        onClick={() => updateSelectedLocation(location)}
+        icon={{
+          url: location.pin,
+          scaledSize: new window.google.maps.Size(
+            isSelected ? 64 : 32,
+            isSelected ? 64 : 32
+          ),
+          anchor: new window.google.maps.Point(
+            isSelected ? 32 : 16,
+            isSelected ? 64 : 32
+          )
+        }}
+        position={{lat: location.latitude, lng: location.longitude}}
+      />
+    )
+  } else {
+    return (
+      <Marker
+        onClick={() => updateSelectedLocation(location)}
+        icon={{
+          url: "/poi.png",
+          scaledSize: new window.google.maps.Size(
+            isSelected ? 64 : 32,
+            isSelected ? 64 : 32
+          ),
+          anchor: new window.google.maps.Point(
+            isSelected ? 32 : 16,
+            isSelected ? 64 : 32
+          )
+        }}
+        position={{lat: location.latitude, lng: location.longitude}}
+      />
     )
   }
-  return (
-    <div className={`${baseClassName}`}>
-      <Image
-        src={"/poi.png"}
-        alt='Location Pin'
-        fill
-        objectFit='contain'
-        className='absolute'
-      />
-    </div>
-  )
 })
 
 ItemPin.displayName = "ItemPin"

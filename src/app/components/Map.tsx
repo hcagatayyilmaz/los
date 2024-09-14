@@ -228,6 +228,7 @@ const Map: React.FC<{
               isSelected={selectedLocation?.id === location.id}
               zoomLevel={zoomLevel}
               isSynthetic={location.isSynthetic}
+              updateSelectedLocation={updateSelectedLocation}
             />
           </div>
         </OverlayView>
