@@ -1,4 +1,4 @@
-import {Suspense} from "react"
+import {use, Suspense} from "react"
 import {notFound} from "next/navigation"
 import prisma from "@/app/lib/db"
 import Header from "@/app/components/Header"
@@ -6,24 +6,18 @@ import Navbar from "@/app/components/Navbar"
 import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server"
 import Banner from "@/app/components/Banner"
 import CardButtonWrapper from "../components/CardButtonWrapper"
-
 import {SelectedItemProvider} from "@/app/providers/useSelectedItem"
 import {getAttractions, getDBUser} from "@/app/server/data"
-import {unstable_noStore} from "next/cache"
-import LocationPermissionButton from "../components/LocationPermissionButton"
-import TotalPoints from "../components/TotalPoints"
-import ActionsButtons from "../components/ActionsButtons"
-import ClosestPlace from "../components/ClosestPlace"
-import {UIProvider} from "@/app/providers/UIProvider" // Ensure this is the correct path
+import {UIProvider} from "@/app/providers/UIProvider"
 import MainLayout from "../components/MainLayout"
-import SliderWrapper from "../components/SliderWrapper"
 import MapItemWrapper from "../components/MapItemWrapper"
+import ActionsButtons from "../components/ActionsButtons"
 
 type CityPageParams = {
   params: {
     slug: string
   }
-  searchParams?: {[key: string]: string | string[] | undefined} | undefined
+  searchParams?: {[key: string]: string | string[] | undefined}
 }
 
 export async function generateStaticParams() {
@@ -34,13 +28,8 @@ export async function generateStaticParams() {
 }
 
 async function getCityData(slug: string, searchParams: any) {
-  const city = await prisma.city.findUnique({
-    where: {slug}
-  })
-
-  if (!city) {
-    notFound()
-  }
+  const city = await prisma.city.findUnique({where: {slug}})
+  if (!city) notFound()
 
   const filter = searchParams && {
     date: searchParams.date,
@@ -48,24 +37,41 @@ async function getCityData(slug: string, searchParams: any) {
   }
 
   const {attractions, syntheticData} = await getAttractions(city.id, filter)
-
   return {city, attractions, syntheticData}
 }
 
-export default async function CityPage({params, searchParams}: CityPageParams) {
-  const {city, attractions, syntheticData} = await getCityData(
-    params.slug,
-    searchParams
-  )
-
+async function getUserData() {
   const {getUser} = getKindeServerSession()
   const kindeUser = await getUser()
-  const user = kindeUser ? await getDBUser(kindeUser.id) : null
+  return kindeUser ? await getDBUser(kindeUser.id) : null
+}
+
+export default function CityPage({params, searchParams}: CityPageParams) {
+  const cityDataPromise = getCityData(params.slug, searchParams)
+  const userDataPromise = getUserData()
+
+  return (
+    <CityPageContent
+      cityDataPromise={cityDataPromise}
+      userDataPromise={userDataPromise}
+    />
+  )
+}
+
+function CityPageContent({
+  cityDataPromise,
+  userDataPromise
+}: {
+  cityDataPromise: ReturnType<typeof getCityData>
+  userDataPromise: ReturnType<typeof getUserData>
+}) {
+  const {city, attractions, syntheticData} = use(cityDataPromise)
+  const user = use(userDataPromise)
 
   return (
     <UIProvider>
       <SelectedItemProvider initialLocation={attractions[0]}>
-        <main className='h-dvh w-full max-w-md mx-auto relative '>
+        <main className='h-dvh w-full max-w-md mx-auto relative'>
           <div className='absolute inset-0 pointer-events-none'>
             <div className='h-full w-full pointer-events-auto'>
               <MainLayout
@@ -83,14 +89,12 @@ export default async function CityPage({params, searchParams}: CityPageParams) {
             <Header user={user} name={city.name} />
             <Navbar isMapPage={false} />
             <ActionsButtons slug={city.slug} />
-            {/* <Banner /> */}
           </div>
           <div className='absolute bottom-0 left-0 w-full z-1'>
             <CardButtonWrapper
               points={user ? user.points : 0}
               location={attractions[0]}
             />
-            {/* <SliderWrapper locations={attractions} /> */}
             <MapItemWrapper />
           </div>
         </main>
