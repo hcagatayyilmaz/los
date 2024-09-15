@@ -25,7 +25,9 @@ const LocationPermissionButton: React.FC = () => {
         console.error("Error getting location permission:", error)
         toast.custom(
           <CustomToast
+
             message='Error getting location. Please try again or reach support@los.city'
+
             type='error'
           />,
           {position: "top-center", duration: 3000}
