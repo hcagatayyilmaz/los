@@ -10,7 +10,7 @@ const handleClick = async (id: string) => {
     const response = await obtainBadge(id)
     toast.custom(<CustomToast message={response.message} type='success' />, {
       position: "top-center",
-      duration: 3000
+      duration: 1000
     })
   } catch (error: any) {
     toast.custom(
@@ -20,7 +20,7 @@ const handleClick = async (id: string) => {
       />,
       {
         position: "top-center",
-        duration: 3000
+        duration: 1000
       }
     )
   }

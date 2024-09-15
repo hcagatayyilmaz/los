@@ -103,27 +103,27 @@ export const ItemPin = React.memo<{
     if (location.pin && location.endDate) {
       const endDate = new Date(location.endDate)
       return (
-        <svg
-          className={`${baseClassName} relative`}
-          style={{transform: isSelected ? "scale(2)" : "none"}}
-          width='100%'
-          height='100%'
-          viewBox='0 0 100 100'
-        >
-          <image
-            href={location.pin}
-            width='100'
-            height='100'
-            preserveAspectRatio='xMidYMid meet'
+        <div className={`${baseClassName} relative`}>
+          <Image
+            src={location.pin}
+            alt='Event Pin'
+            width={100}
+            height={100}
+            className={`w-full h-full ${isSelected ? "scale-[2]" : ""}`}
           />
-          <svg x='50' y='0' width='32' height='32' viewBox='0 0 50 50'>
-            <EventIcon endDate={endDate} zoomLevel={zoomLevel} />
-          </svg>
-        </svg>
+          <div className='absolute top-0 right-0'>
+            <EventDateDisplay
+              date={endDate.toISOString()}
+              zoomLevel={zoomLevel}
+            />
+          </div>
+        </div>
       )
     } else {
       const endDate = new Date(location.endDate)
-      return <EventIcon endDate={endDate} zoomLevel={zoomLevel} />
+      return (
+        <EventDateDisplay date={endDate.toISOString()} zoomLevel={zoomLevel} />
+      )
     }
   } else if (location.pin) {
     return (
@@ -149,14 +149,11 @@ export const ItemPin = React.memo<{
         onClick={() => updateSelectedLocation(location)}
         icon={{
           url: "/poi.png",
-          scaledSize: new window.google.maps.Size(
-            isSelected ? 64 : 32,
-            isSelected ? 64 : 32
-          ),
           anchor: new window.google.maps.Point(
-            isSelected ? 32 : 16,
-            isSelected ? 64 : 32
-          )
+            isSelected ? 24 : 12,
+            isSelected ? 48 : 24
+          ),
+          origin: new window.google.maps.Point(0, 0)
         }}
         position={{lat: location.latitude, lng: location.longitude}}
       />

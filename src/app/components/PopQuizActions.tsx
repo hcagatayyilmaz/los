@@ -22,21 +22,21 @@ const PopQuizActions = ({
       if (response.success === false) {
         toast.custom(<CustomToast message={response.message} type='error' />, {
           position: "top-center",
-          duration: 3000
+          duration: 1000
         })
       } else {
         toast.custom(
           <CustomToast message={response.message} type='success' />,
           {
             position: "top-center",
-            duration: 3000
+            duration: 1000
           }
         )
       }
     } catch (error: any) {
       toast.custom(<CustomToast message={error.message} type='error' />, {
         position: "top-center",
-        duration: 3000
+        duration: 1000
       })
     }
   }
