@@ -12,8 +12,8 @@ const SlugFallback: React.FC = () => {
   console.log("SlugFallback rendering")
 
   return (
-    <div className='w-dvw h-dvh max-w-xl bg-pink-100 flex flex-col mx-auto'>
-      <div className='max-w-xl mx-auto w-full bg-transparent font-sans border'>
+    <div className='w-dvw h-dvh max-w-md bg-pink-100 flex flex-col mx-auto'>
+      <div className='max-w-md mx-auto w-full bg-transparent font-sans border'>
         <div className='px-2 flex items-center justify-center bg-white border rounded-b-full'>
           <Link href={"/"}>
             <div

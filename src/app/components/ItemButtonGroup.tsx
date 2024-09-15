@@ -1,19 +1,20 @@
 "use client"
-import React from "react"
+import React, {useState} from "react"
 import {Location} from "../lib/types"
 import {CoinIcon} from "../lib/CustomIcons"
-import {checkIn} from "../server/index"
+import {checkIn, checkInSyntheticLocation} from "../server/index"
 import {useUserLocation} from "../providers/useUserLocation"
 import toast from "react-hot-toast"
 import {useKindeBrowserClient} from "@kinde-oss/kinde-auth-nextjs"
 import CustomToast from "./CustomToast"
 import {FaLock} from "react-icons/fa"
 import {ImUnlocked} from "react-icons/im"
-import {checkInSyntheticLocation} from "../server/index"
+import LoadingSpinner from "./LoadingSpinner"
 
 const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
   const {userLocation} = useUserLocation()
   const {isAuthenticated} = useKindeBrowserClient()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleCheckIn = async () => {
     if (!isAuthenticated) {
@@ -24,7 +25,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
             type='error'
           />
         ),
-        {id: "auth-error", position: "top-center", duration: 5000}
+        {id: "auth-error", position: "top-center", duration: 1000}
       )
       return
     }
@@ -32,6 +33,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
     if (userLocation) {
       const {lat: userLat, lng: userLng} = userLocation
 
+      setIsLoading(true)
       try {
         const result = location.isSynthetic
           ? await checkInSyntheticLocation({
@@ -51,7 +53,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
                 type='success'
               />
             ),
-            {id: "checkin-success", position: "top-center", duration: 3000}
+            {id: "checkin-success", position: "top-center", duration: 1000}
           )
         } else {
           toast.custom(
@@ -59,7 +61,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
             {
               id: "checkin-error",
               position: "top-center",
-              duration: 3000
+              duration: 1000
             }
           )
         }
@@ -74,9 +76,11 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
           {
             id: "checkin-error",
             position: "top-center",
-            duration: 3000
+            duration: 1000
           }
         )
+      } finally {
+        setIsLoading(false)
       }
     } else {
       toast.custom(
@@ -86,17 +90,19 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
             type='error'
           />
         ),
-        {id: "location-error", position: "top-center", duration: 3000}
+        {id: "location-error", position: "top-center", duration: 1000}
       )
     }
   }
 
   return (
     <div className='w-full'>
+      {isLoading && <LoadingSpinner />}
       {location.checkedIn ? (
         <button
           className='w-full border-2 border-customYellow text-white bg-customYellow rounded-2xl py-1 flex items-center justify-center gap-2'
           onClick={handleCheckIn}
+          disabled={isLoading}
         >
           <div className='flex items-center'>
             <ImUnlocked className='w-3 h-3 text-customYellow  mr-1' />
@@ -107,6 +113,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
         <button
           className='w-full border-2 border-customYellow text-customYellow rounded-2xl py-1 flex items-center justify-center gap-2'
           onClick={handleCheckIn}
+          disabled={isLoading}
         >
           <div className='flex items-center'>
             <FaLock className='w-3 h-3 text-customYellow  mr-1' />

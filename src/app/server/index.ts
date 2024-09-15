@@ -50,11 +50,28 @@ export async function checkIn({
     return {success: false, message: "Please login to check in"}
   }
 
-  const place = await getPlace(placeId)
+  const [place, existingCheckIn] = await Promise.all([
+    getPlace(placeId),
+    prisma.checkIn.findUnique({
+      where: {
+        userId_attractionId: {
+          userId: user.id,
+          attractionId: placeId
+        }
+      }
+    })
+  ])
 
   if (!place) {
     console.error("Place not found")
     return {success: false, message: "Place not found"}
+  }
+
+  if (existingCheckIn) {
+    return {
+      success: false,
+      message: "You have already checked in to this place"
+    }
   }
 
   const distance = calculateDistance4(
@@ -67,14 +84,15 @@ export async function checkIn({
   if (distance <= 40) {
     try {
       const result = await prisma.$transaction(async (prisma) => {
-        const checkIn = await prisma.checkIn.create({
-          data: {userId: user.id, attractionId: placeId}
-        })
-
-        await prisma.user.update({
-          where: {id: user.id},
-          data: {points: {increment: place.points}}
-        })
+        const [checkIn, updatedUser] = await Promise.all([
+          prisma.checkIn.create({
+            data: {userId: user.id, attractionId: placeId}
+          }),
+          prisma.user.update({
+            where: {id: user.id},
+            data: {points: {increment: place.points}}
+          })
+        ])
 
         await prisma.transaction.create({
           data: {
