@@ -149,11 +149,14 @@ export const ItemPin = React.memo<{
         onClick={() => updateSelectedLocation(location)}
         icon={{
           url: "/poi.png",
+          scaledSize: new window.google.maps.Size(
+            isSelected ? 48 : 24,
+            isSelected ? 48 : 24
+          ),
           anchor: new window.google.maps.Point(
             isSelected ? 24 : 12,
             isSelected ? 48 : 24
-          ),
-          origin: new window.google.maps.Point(0, 0)
+          )
         }}
         position={{lat: location.latitude, lng: location.longitude}}
       />
