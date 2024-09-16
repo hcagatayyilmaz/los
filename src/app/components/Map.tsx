@@ -216,7 +216,7 @@ const Map: React.FC<{
         }
       }}
     >
-      {allLocations.map((location, index) => (
+      {/* {allLocations.map((location, index) => (
         <OverlayView
           key={index}
           position={{lat: location.latitude, lng: location.longitude}}
@@ -240,7 +240,7 @@ const Map: React.FC<{
         >
           <LiveLocationPin />
         </OverlayView>
-      )}
+      )} */}
     </GoogleMap>
   )
 }

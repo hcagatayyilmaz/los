@@ -71,7 +71,7 @@ function CityPageContent({
   return (
     <UIProvider>
       <SelectedItemProvider initialLocation={attractions[0]}>
-        <main className='h-dvh w-full max-w-md mx-auto relative'>
+        <main className='h-dvh w-full max-w-full mx-auto relative'>
           <div className='absolute inset-0 pointer-events-none'>
             <div className='h-full w-full pointer-events-auto'>
               <MainLayout
@@ -85,12 +85,12 @@ function CityPageContent({
             </div>
           </div>
           <Banner />
-          <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
+          <div className=' absolute top-0 left-0 w-full z-20 bg-transparent'>
             <Header user={user} name={city.name} />
             <Navbar isMapPage={false} />
             <ActionsButtons slug={city.slug} />
           </div>
-          <div className='absolute bottom-0 left-0 w-full z-1'>
+          <div className=' hidden absolute bottom-0 left-0 w-full z-1'>
             <CardButtonWrapper
               points={user ? user.points : 0}
               location={attractions[0]}
