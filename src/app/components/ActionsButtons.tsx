@@ -29,28 +29,7 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
   }
 
   const handleAddPlaceClick = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          })
-        },
-        (error) => {
-          console.error("Error getting user location:", error)
-          setUserLocation(null) // Reset location on error
-        }
-      )
-    } else {
-      setUserLocation(null) // Reset location if geolocation is not supported
-    }
-    setIsPopupVisible(true) // Show the popup regardless of location success or failure
-  }
-
-  const handleClosePopup = () => {
-    setIsPopupVisible(false)
-    setUserLocation(null) // Reset the user location state after closing the popup
+    router.push(`/${slug}/quests#add-new-place`)
   }
 
   return (
@@ -122,12 +101,6 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
         <Image src={"/logo.png"} width={24} height={24} alt='Logo Icon' />
         <span className='ml-1'>Add Place</span>
       </div>
-      {isPopupVisible && (
-        <AddLocationPopup
-          onClose={handleClosePopup}
-          userLocation={userLocation ?? undefined}
-        />
-      )}
     </div>
   )
 }

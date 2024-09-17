@@ -45,6 +45,17 @@ export const ItemPin = React.memo<{
   isSynthetic?: boolean
   updateSelectedLocation: (location: Location) => void
 }>(({location, isSelected, zoomLevel, isSynthetic, updateSelectedLocation}) => {
+  const getMarkerSize = (baseSize: number) => {
+    let size
+    if (zoomLevel === undefined) size = baseSize
+    else if (zoomLevel < 14) size = 12
+    else if (zoomLevel < 16) size = 16
+    else if (zoomLevel < 17) size = 32
+    else size = 64
+
+    return isSelected ? size * 1.5 : size
+  }
+
   const {sizeClass, scaleClass} = useMemo(() => {
     let sizeClass = "w-8 h-8"
     if (!isSynthetic && !location.checkedIn && zoomLevel !== undefined) {
@@ -64,6 +75,7 @@ export const ItemPin = React.memo<{
 
   // Checked-in logic
   if (location.checkedIn) {
+    const size = getMarkerSize(16)
     return (
       <Marker
         onClick={() => updateSelectedLocation(location)}
@@ -82,6 +94,7 @@ export const ItemPin = React.memo<{
       />
     )
   } else if (isSynthetic) {
+    const size = getMarkerSize(16)
     return (
       <Marker
         onClick={() => updateSelectedLocation(location)}
@@ -126,37 +139,27 @@ export const ItemPin = React.memo<{
       )
     }
   } else if (location.pin) {
+    const size = getMarkerSize(32)
     return (
       <Marker
         onClick={() => updateSelectedLocation(location)}
         icon={{
           url: location.pin,
-          scaledSize: new window.google.maps.Size(
-            isSelected ? 64 : 32,
-            isSelected ? 64 : 32
-          ),
-          anchor: new window.google.maps.Point(
-            isSelected ? 32 : 16,
-            isSelected ? 64 : 32
-          )
+          scaledSize: new window.google.maps.Size(size, size),
+          anchor: new window.google.maps.Point(size / 2, size)
         }}
         position={{lat: location.latitude, lng: location.longitude}}
       />
     )
   } else {
+    const size = getMarkerSize(24)
     return (
       <Marker
         onClick={() => updateSelectedLocation(location)}
         icon={{
           url: "/poi2.png",
-          scaledSize: new window.google.maps.Size(
-            isSelected ? 48 : 24,
-            isSelected ? 48 : 24
-          ),
-          anchor: new window.google.maps.Point(
-            isSelected ? 24 : 12,
-            isSelected ? 48 : 24
-          ),
+          scaledSize: new window.google.maps.Size(size, size),
+          anchor: new window.google.maps.Point(size / 2, size),
           origin: new window.google.maps.Point(0, 0)
         }}
         position={{lat: location.latitude, lng: location.longitude}}
