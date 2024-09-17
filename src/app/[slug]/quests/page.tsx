@@ -84,7 +84,7 @@ async function QuestsPage({params}: QuestsPageParams) {
 
         {hideAndSeek && <HideAndSeek quest={hideAndSeek} />}
 
-        {/* <AddLocation /> */}
+        <AddLocation />
       </div>
 
       <div>
