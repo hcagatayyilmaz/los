@@ -103,7 +103,7 @@ const AddLocation: React.FC = () => {
       </div>
       <form
         onSubmit={handleSubmit}
-        className='w-full bg-pink-100 rounded-xl flex flex-col mt-4 px-4'
+        className='w-full bg-pink-100 rounded-xl flex flex-col mt-4 px-4 pb-4'
       >
         <div className='mb-4 flex justify-between'>
           <button
@@ -184,14 +184,6 @@ const AddLocation: React.FC = () => {
               </div>
             )}
             <div className='mb-4'>
-              <button
-                type='button'
-                className={`block text-sm font-medium text-black text-center w-full ${museumModerno.className} mt-1`}
-                onClick={() => setIsMapVisible(true)}
-              >
-                Choose on Map
-              </button>
-
               {selectedLocation && (
                 <div className='mt-2 text-sm text-black font-bold text-center'>
                   Location <br />
