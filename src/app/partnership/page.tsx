@@ -38,7 +38,7 @@ const Partnership: React.FC = () => {
           message='Partnership application submitted successfully!'
           type='success'
         />,
-        {position: "top-center", duration: 3000}
+        {position: "top-center", duration: 1000}
       )
     } catch (error) {
       console.error("Error creating partnership:", error)
@@ -47,7 +47,7 @@ const Partnership: React.FC = () => {
           message='Failed to submit the application. Please try again.'
           type='error'
         />,
-        {position: "top-center", duration: 3000}
+        {position: "top-center", duration: 1000}
       )
     }
   }

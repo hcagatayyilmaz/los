@@ -26,7 +26,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
         <CustomToast message='Unable to get your location.' type='error' />,
         {
           position: "top-center",
-          duration: 3000
+          duration: 1000
         }
       )
       return
@@ -42,14 +42,14 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
       if (response.success === false) {
         toast.custom(<CustomToast message={response.message} type='error' />, {
           position: "top-center",
-          duration: 3000
+          duration: 1000
         })
       } else {
         toast.custom(
           <CustomToast message={response.message} type='success' />,
           {
             position: "top-center",
-            duration: 3000
+            duration: 1000
           }
         )
       }
@@ -60,7 +60,7 @@ const HideAndSeek: React.FC<HideAndSeekProps> = ({quest}) => {
       }
       toast.custom(<CustomToast message={errorMessage} type='error' />, {
         position: "top-center",
-        duration: 3000
+        duration: 1000
       })
     }
   }

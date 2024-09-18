@@ -6,6 +6,7 @@ import ToastProvider from "./providers/ToastProvider"
 import Head from "next/head"
 import {UIProvider} from "./providers/UIProvider"
 import CookieConsent from "../app/components/CookieConsent"
+import {Analytics} from "@vercel/analytics/react"
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
         <ToastProvider>
           <UserLocationProvider>
             {children}
+            <Analytics />
             <CookieConsent />
           </UserLocationProvider>
         </ToastProvider>

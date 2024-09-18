@@ -1,9 +1,9 @@
 import {Location} from "../lib/types"
 import Image from "next/image"
-import {FaStar} from "react-icons/fa"
+import {Marker} from "@react-google-maps/api"
 import React, {useMemo} from "react"
 import {FaCheck} from "react-icons/fa"
-// border-white or border-black for live location pin
+import {EventIcon} from "../lib/CustomIcons"
 
 export const LiveLocationPin: React.FC = React.memo(() => (
   <div className='relative group'>
@@ -11,15 +11,7 @@ export const LiveLocationPin: React.FC = React.memo(() => (
     <div className='absolute w-6 h-6 bg-[#FF1493] rounded-full animate-ping opacity-75 group-hover:scale-150 transition-transform duration-200'></div>
   </div>
 ))
-
 LiveLocationPin.displayName = "LiveLocationPin"
-
-const colors = [
-  {background: "#ffffff", text: "#FF1493"}, // gold
-  {background: "#ffffff", text: "#FF1493"}, //neon green
-  {background: "#ffffff", text: "#FF1493"}, //pink
-  {background: "#ffffff", text: "#FF1493"} // black
-]
 
 const EventDateDisplay: React.FC<{date: string; zoomLevel?: number}> = ({
   date,
@@ -51,7 +43,19 @@ export const ItemPin = React.memo<{
   isSelected: boolean
   zoomLevel?: number
   isSynthetic?: boolean
-}>(({location, isSelected, zoomLevel, isSynthetic}) => {
+  updateSelectedLocation: (location: Location) => void
+}>(({location, isSelected, zoomLevel, isSynthetic, updateSelectedLocation}) => {
+  const getMarkerSize = (baseSize: number) => {
+    let size
+    if (zoomLevel === undefined) size = baseSize
+    else if (zoomLevel < 14) size = 12
+    else if (zoomLevel < 16) size = 16
+    else if (zoomLevel < 17) size = 32
+    else size = 64
+
+    return isSelected ? size * 1.5 : size
+  }
+
   const {sizeClass, scaleClass} = useMemo(() => {
     let sizeClass = "w-8 h-8"
     if (!isSynthetic && !location.checkedIn && zoomLevel !== undefined) {
@@ -69,96 +73,99 @@ export const ItemPin = React.memo<{
 
   const baseClassName = `relative group transition-transform duration-200 ${scaleClass} ${sizeClass}`
 
-  // Checked-in logic (unchanged)
-  if (location.checkedIn === true) {
+  // Checked-in logic
+  if (location.checkedIn) {
+    const size = getMarkerSize(16)
     return (
-      <div
-        className={`relative group transition-transform duration-200 ${scaleClass} w-6 h-6`}
-      >
-        <div className='absolute  w-[18px] h-[18px] rounded-full border-2 border-black bg-green-400'>
-          <span className='flex items-center justify-center w-full h-full'>
-            <FaCheck className='text-black' />
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  // Synthetic data logic (unchanged)
-  if (isSynthetic) {
-    return location.checkedIn ? (
-      <div
-        className={`relative group transition-transform duration-200 ${scaleClass} w-6 h-6`}
-      >
-        <div className='absolute w-[18px] h-[18px] rounded-full border-2 border-black bg-green-400'>
-          <span className='flex items-center justify-center w-full h-full'>
-            <FaCheck className='text-black' />
-          </span>
-        </div>
-      </div>
-    ) : (
-      <div
-        className={`relative group transition-transform duration-200 ${scaleClass} w-[16px] h-[16px] rounded-full flex items-center justify-center border-2 border-black bg-white`}
-      >
-        <FaStar size={8} className='text-center text-customYellow' />
-      </div>
-    )
-  }
-
-  if (location.isTheme) {
-    return (
-      <div className={`${baseClassName}`}>
-        <Image
-          src='/holderlin.png'
-          alt='Theme Pin'
-          fill
-          objectFit='contain'
-          className='absolute'
-        />
-      </div>
-    )
-  } else if (
-    location.taxonomy === "EVENT" &&
-    location.pin &&
-    location.endDate
-  ) {
-    const endDate = new Date(location.endDate)
-    return (
-      <div className={`${baseClassName} relative`}>
-        <Image
-          src={location.pin}
-          alt='Location Pin'
-          fill
-          objectFit='contain'
-          className='absolute'
-        />
-        <EventDateDisplay date={endDate.toISOString()} zoomLevel={zoomLevel} />
-      </div>
-    )
-  } else if (location.pin) {
-    return (
-      <div className={`${baseClassName} relative`}>
-        <Image
-          src={location.pin}
-          alt='Location Pin'
-          fill
-          objectFit='contain'
-          className='absolute'
-        />
-      </div>
-    )
-  }
-  return (
-    <div className={`${baseClassName}`}>
-      <Image
-        src={"/poi.png"}
-        alt='Location Pin'
-        fill
-        objectFit='contain'
-        className='absolute'
+      <Marker
+        onClick={() => updateSelectedLocation(location)}
+        icon={{
+          url: "/checked-in.svg",
+          scaledSize: new window.google.maps.Size(
+            isSelected ? 32 : 16,
+            isSelected ? 32 : 16
+          ),
+          anchor: new window.google.maps.Point(
+            isSelected ? 24 : 12,
+            isSelected ? 24 : 12
+          )
+        }}
+        position={{lat: location.latitude, lng: location.longitude}}
       />
-    </div>
-  )
+    )
+  } else if (isSynthetic) {
+    const size = getMarkerSize(16)
+    return (
+      <Marker
+        onClick={() => updateSelectedLocation(location)}
+        icon={{
+          url: "/synthetic.svg",
+          scaledSize: new window.google.maps.Size(
+            isSelected ? 32 : 16,
+            isSelected ? 32 : 16
+          ),
+          anchor: new window.google.maps.Point(
+            isSelected ? 24 : 12,
+            isSelected ? 24 : 12
+          )
+        }}
+        position={{lat: location.latitude, lng: location.longitude}}
+      />
+    )
+  } else if (location.taxonomy === "EVENT" && location.endDate) {
+    if (location.pin && location.endDate) {
+      const endDate = new Date(location.endDate)
+      return (
+        <div className={`${baseClassName} relative`}>
+          <Image
+            src={location.pin}
+            alt='Event Pin'
+            width={100}
+            height={100}
+            className={`w-full h-full ${isSelected ? "scale-[2]" : ""}`}
+          />
+          <div className='absolute top-0 right-0'>
+            <EventDateDisplay
+              date={endDate.toISOString()}
+              zoomLevel={zoomLevel}
+            />
+          </div>
+        </div>
+      )
+    } else {
+      const endDate = new Date(location.endDate)
+      return (
+        <EventDateDisplay date={endDate.toISOString()} zoomLevel={zoomLevel} />
+      )
+    }
+  } else if (location.pin) {
+    const size = getMarkerSize(32)
+    return (
+      <Marker
+        onClick={() => updateSelectedLocation(location)}
+        icon={{
+          url: location.pin,
+          scaledSize: new window.google.maps.Size(size, size),
+          anchor: new window.google.maps.Point(size / 2, size)
+        }}
+        position={{lat: location.latitude, lng: location.longitude}}
+      />
+    )
+  } else {
+    const size = getMarkerSize(24)
+    return (
+      <Marker
+        onClick={() => updateSelectedLocation(location)}
+        icon={{
+          url: "/poi2.png",
+          scaledSize: new window.google.maps.Size(size, size),
+          anchor: new window.google.maps.Point(size / 2, size),
+          origin: new window.google.maps.Point(0, 0)
+        }}
+        position={{lat: location.latitude, lng: location.longitude}}
+      />
+    )
+  }
 })
 
 ItemPin.displayName = "ItemPin"

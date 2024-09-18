@@ -34,7 +34,7 @@ const Map: React.FC<{
     useSelectedItem()
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [isCentered, setIsCentered] = useState(false)
-  const [zoomLevel, setZoomLevel] = useState(15)
+  const [zoomLevel, setZoomLevel] = useState(16)
 
   const mapContainerStyle = useMemo(
     () => ({
@@ -96,7 +96,7 @@ const Map: React.FC<{
         map.setCenter(
           new window.google.maps.LatLng(userLocation.lat, userLocation.lng)
         )
-        map.setZoom(13)
+        map.setZoom(16)
         setIsCentered(true)
       } else if (locations.length > 0 && !isCentered) {
         const firstLocation = locations[0]
@@ -104,11 +104,11 @@ const Map: React.FC<{
           lat: firstLocation.latitude,
           lng: firstLocation.longitude
         })
-        map.setZoom(13)
+        map.setZoom(16)
         setIsCentered(true)
       } else if (!isCentered) {
         map.setCenter(tübingenCoordinates)
-        map.setZoom(13)
+        map.setZoom(16)
         setIsCentered(true)
       }
     },
@@ -196,10 +196,10 @@ const Map: React.FC<{
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
       onLoad={onMapLoad}
-      zoom={isMapPage ? 4 : 12}
+      zoom={isMapPage ? 4 : 16}
       onZoomChanged={() => {
         if (map) {
-          const newZoom = map.getZoom() || 15
+          const newZoom = map.getZoom() || 16
           console.log(`Zoom changed to: ${newZoom}`)
           setZoomLevel(newZoom)
         }
@@ -228,6 +228,7 @@ const Map: React.FC<{
               isSelected={selectedLocation?.id === location.id}
               zoomLevel={zoomLevel}
               isSynthetic={location.isSynthetic}
+              updateSelectedLocation={updateSelectedLocation}
             />
           </div>
         </OverlayView>

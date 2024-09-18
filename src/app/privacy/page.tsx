@@ -2,17 +2,11 @@ import React from "react"
 import {MuseoModerno} from "next/font/google"
 import Header from "../components/Header"
 
-const museoModerno = MuseoModerno({
-  subsets: ["latin"]
-})
-
 function Page() {
   return (
     <>
       <Header />{" "}
-      <div
-        className={`h-screen w-screen p-4 flex flex-col items-center ${museoModerno.className}`}
-      >
+      <div className={`h-screen w-screen p-4 flex flex-col items-center `}>
         <h1 className={`text-2xl font-bold mb-4 `}>Privacy Policy for Los</h1>
         <div className='privacy-policy text-left max-w-3xl'>
           <p>

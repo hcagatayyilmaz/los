@@ -84,7 +84,7 @@ async function QuestsPage({params}: QuestsPageParams) {
 
         {hideAndSeek && <HideAndSeek quest={hideAndSeek} />}
 
-        {/* <AddLocation /> */}
+        <AddLocation />
       </div>
 
       <div>
@@ -116,11 +116,7 @@ async function QuestsPage({params}: QuestsPageParams) {
             <RewardCard key={reward.id} reward={reward} />
           ))}
         </div>
-        <h1
-          className={`text-4xl underline underline-offset-6 font-semibold my-2 px-6 mb-4 ${museumModerno.className}`}
-        >
-          My Rewards
-        </h1>
+
         <div className='px-4'>
           <MyRewards />
         </div>
