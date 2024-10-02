@@ -36,21 +36,21 @@ export default function Navbar({
       <div className='flex justify-around px-2 items-center bg-transparent text-sm'>
         <Link href={`/${slug}`} onClick={() => setIsListView(false)}>
           <div className='flex flex-col  items-center text-muted-foreground bg-white px-2 py-1 rounded  text-sm '>
-            <CiMap className='w-5 h-5 ' />
+            <CiMap className='w-4 h-4 ' />
             <span className='text-xs'>Map</span>
           </div>
         </Link>
 
         <Link href={`/${slug}/rewards`}>
           <div className='flex flex-col   items-center text-muted-foreground bg-white px-2 py-1 rounded  hover:text-customYellow  text-sm'>
-            <img src='/coupon-code.png' alt='Rewards' className='w-5 h-5' />
+            <img src='/coupon-code.png' alt='Rewards' className='w-4 h-4' />
             <span className='text-xs'>Rewards</span>
           </div>
         </Link>
 
         <Link href={`/${slug}/quests`}>
           <div className='flex flex-col   items-center text-muted-foreground bg-white px-2 py-1 rounded  hover:text-customYellow  text-sm'>
-            <MapIcon className='w-5 h-5' />
+            <MapIcon className='w-4 h-4' />
             <span className='text-xs'>Quests</span>
           </div>
         </Link>
@@ -64,7 +64,7 @@ export default function Navbar({
         ) : (
           <LoginLink>
             <div className='flex flex-col  items-center text-muted-foreground bg-white px-2 py-1 rounded  hover:text-customYellow '>
-              <VscAccount className='w-5 h-5 font-light' />
+              <VscAccount className='w-4 h-4 font-light' />
               <span className='text-xs'>Login</span>
             </div>
           </LoginLink>
