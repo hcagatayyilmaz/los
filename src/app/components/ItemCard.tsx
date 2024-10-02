@@ -1,5 +1,4 @@
 import React, {useState} from "react"
-import {motion, AnimatePresence} from "framer-motion"
 import {CoinIcon} from "../lib/CustomIcons"
 import Image from "next/image"
 import {Location} from "../lib/types"
