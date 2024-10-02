@@ -30,14 +30,14 @@ function CityBadge({
         <h1 className={` mt-2 text-xl font-bold ${museoModerno.className}`}>
           {name}
         </h1>
-        {points && (
+        {/* {points && (
           <span className='inline-block'>
             <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
               <CoinIcon className='w-4 h-4 text-white' />
               <span className='mt-1 ml-1 text-xs text-white'>+ {points}</span>
             </div>
           </span>
-        )}
+        )} */}
       </div>
       <p className={`px-4 ${museoModerno.className} text-sm`}>{description}</p>
       <div className='flex mt-2 flex-row flex-wrap gap-4 px-4'>

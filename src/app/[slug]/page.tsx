@@ -87,7 +87,6 @@ function CityPageContent({
           <Banner />
           <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
             <Header user={user} name={city.name} />
-            <Navbar isMapPage={false} />
             <ActionsButtons slug={city.slug} />
           </div>
           <div className='absolute bottom-0 left-0 w-full z-1'>
@@ -96,7 +95,9 @@ function CityPageContent({
               location={attractions[0]}
             />
             <MapItemWrapper />
+            <Navbar sticky={false} slug={city.slug} />
           </div>
+          <div></div>
         </main>
       </SelectedItemProvider>
     </UIProvider>

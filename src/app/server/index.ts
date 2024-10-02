@@ -341,45 +341,7 @@ export async function foundHideAndSeek({
     include: {attraction: true}
   })
 
-  if (hideAndSeek && hideAndSeek.attraction) {
-    const distance = await calculateDistance4(
-      userLat,
-      userLng,
-      hideAndSeek.attraction.latitude,
-      hideAndSeek.attraction.longitude
-    )
-
-    if (distance <= 20) {
-      const userHideAndSeek = await prisma.userHideAndSeek.create({
-        data: {
-          userId: user.id,
-          hideAndSeekId: hideAndSeek.id
-        }
-      })
-
-      await prisma.user.update({
-        where: {id: user.id},
-        data: {points: {increment: hideAndSeek.points}}
-      })
-
-      await prisma.transaction.create({
-        data: {
-          userId: user.id,
-          points: hideAndSeek.points,
-          details: `hide_and_seek_id:${userHideAndSeek.id}`,
-          type: "EARN_POINTS"
-        }
-      })
-
-      return {
-        message: "Congratulations! You've found the location and earned points!"
-      }
-    } else {
-      return {
-        message: `You are ${distance} meters away from the correct location.`
-      }
-    }
-  } else {
+  if (!hideAndSeek || !hideAndSeek.attraction) {
     console.error(
       "HideAndSeek or attraction data not found for ID:",
       hideAndSeekId
@@ -387,6 +349,61 @@ export async function foundHideAndSeek({
     return {
       success: false,
       message: "HideAndSeek or attraction data not found"
+    }
+  }
+
+  // Check if user has already found this location
+  const existingUserHideAndSeek = await prisma.userHideAndSeek.findFirst({
+    where: {
+      userId: user.id,
+      hideAndSeekId: hideAndSeek.id
+    }
+  })
+
+  if (existingUserHideAndSeek) {
+    return {
+      success: false,
+      message: "You have already found this location."
+    }
+  }
+
+  const distance = await calculateDistance4(
+    userLat,
+    userLng,
+    hideAndSeek.attraction.latitude,
+    hideAndSeek.attraction.longitude
+  )
+
+  if (distance <= 50) {
+    const userHideAndSeek = await prisma.userHideAndSeek.create({
+      data: {
+        userId: user.id,
+        hideAndSeekId: hideAndSeek.id
+      }
+    })
+
+    await prisma.user.update({
+      where: {id: user.id},
+      data: {points: {increment: hideAndSeek.points}}
+    })
+
+    await prisma.transaction.create({
+      data: {
+        userId: user.id,
+        points: hideAndSeek.points,
+        details: `hide_and_seek_id:${userHideAndSeek.id}`,
+        type: "EARN_POINTS"
+      }
+    })
+
+    return {
+      success: true,
+      message: "Congratulations! You've found the location and earned points!"
+    }
+  } else {
+    return {
+      success: false,
+      message: `You are ${distance} meters away from the correct location.`
     }
   }
 }

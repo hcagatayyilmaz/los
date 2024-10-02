@@ -1,9 +1,11 @@
+import React, {useState} from "react"
 import {CoinIcon} from "../lib/CustomIcons"
 import Image from "next/image"
 import {Location} from "../lib/types"
 import Link from "next/link"
 import ItemButtonGroup from "./ItemButtonGroup"
 import {FaDirections} from "react-icons/fa"
+import ChatComponent from "./ChatComponent"
 
 type ItemCardProps = {
   location: Location
@@ -11,6 +13,7 @@ type ItemCardProps = {
 
 export const ItemCard = ({location}: ItemCardProps) => {
   const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}&travelmode=transit&dir_action=navigate`
+
   return (
     <div className='w-full max-w-md bg-white rounded-t-xl shadow-xl p-4 flex flex-col border border-gray-300'>
       <div className='flex'>
@@ -52,22 +55,15 @@ export const ItemCard = ({location}: ItemCardProps) => {
         {location.description_en}
       </p>
 
-      <div className='px-4 flex justify-between mt-4'>
-        {/* <div className='flex items-center gap-1'>
-                    <span className='text-sm text-gray-800 '>Added by</span>
-                    <Image
-                        src='/favicon.png' // replace with your avatar path
-                        alt='Avatar'
-                        width={16} // w-4 in Tailwind CSS is equivalent to 16px
-                        height={16} // h-4 in Tailwind CSS is equivalent to 16px
-                        className='rounded-full'
-                    />
-                </div> */}
-        {/* <p className='text-xs text-gray-800'>1.4K check-in</p> */}
-      </div>
       <div className='w-full mt-2'>
         <ItemButtonGroup location={location} />
       </div>
+
+      {/* {location.checkedIn && (
+        <div className='w-full mt-2 rounded-lg'>
+          <ChatComponent locationId={location.id} />
+        </div>
+      )} */}
     </div>
   )
 }
