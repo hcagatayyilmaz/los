@@ -25,9 +25,7 @@ const LocationPermissionButton: React.FC = () => {
         console.error("Error getting location permission:", error)
         toast.custom(
           <CustomToast
-
             message='Error getting location. Please try again or reach support@los.city'
-
             type='error'
           />,
           {position: "top-center", duration: 3000}
@@ -42,11 +40,7 @@ const LocationPermissionButton: React.FC = () => {
       className='flex justify-center items-center gap-2 bg-white p-[6px] rounded-full shadow-md cursor-pointer border-2 border-customYellow'
     >
       <MdGpsFixed className='text-black text-2xl ' />
-      {userLocation ? (
-        "Center Map"
-      ) : (
-        <span className='text-xs'>Enable location</span>
-      )}
+      {userLocation ? "" : <span className='text-xs'>Enable location</span>}
     </div>
   )
 }

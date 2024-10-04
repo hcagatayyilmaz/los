@@ -15,7 +15,7 @@ export const ItemCard = ({location}: ItemCardProps) => {
   const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}&travelmode=transit&dir_action=navigate`
 
   return (
-    <div className='w-full max-w-md bg-white rounded-t-xl shadow-xl p-4 flex flex-col border border-gray-300'>
+    <div className='w-full max-w-md bg-white rounded-t-xl shadow-xl px-4 py-3 flex flex-col border border-gray-300'>
       <div className='flex'>
         {location.imageUrl && (
           <div className='w-1/3 h-24 relative'>

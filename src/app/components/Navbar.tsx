@@ -29,7 +29,7 @@ export default function Navbar({
     <div
       className={
         sticky
-          ? "fixed bottom-0 left-0 right-0 bg-white border-t pt-1"
+          ? "sticky bottom-0 left-0 right-0 bg-white border-t pt-1"
           : "h-full w-full bg-white border-t pt-1"
       }
     >
