@@ -9,6 +9,7 @@ import {RankingIcon} from "../../lib/CustomIcons"
 import Navbar from "../../components/Navbar"
 import {UIProvider} from "../../providers/UIProvider"
 import Header from "../../components/Header"
+import Image from "next/image"
 
 const museumModerno = MuseoModerno({
   subsets: ["latin"]
@@ -26,8 +27,30 @@ const RewardsPage = async ({params}: RewardsPageParams) => {
 
   return (
     <UIProvider>
-      <div className='max-w-2xl mx-auto bg-white rounded-lg flex flex-col gap-2'>
-        <Header />
+      <div className='max-w-2xl mx-auto bg-white rounded-lg flex flex-col gap-2 border'>
+        <div
+          className={`flex flex-col items-center justify-center bg-white border-b `}
+        >
+          <Link href={"/tuebingen"}>
+            <div
+              className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
+              style={{border: "1px dashed white"}}
+            >
+              <div className='relative'>
+                <Image
+                  src='/logo-text-2.png'
+                  alt='Los'
+                  width={80}
+                  height={60}
+                  className={`text-black ${museumModerno.className}`}
+                />
+                <div className='absolute top-0 -right-8 bg-[#2cff05] text-black px-2 py-1 text-[8px] rounded-full'>
+                  BETA
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
 
         <h1
           className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}
@@ -64,6 +87,7 @@ const RewardsPage = async ({params}: RewardsPageParams) => {
         <div className='px-4'>
           <MyRewards />
         </div>
+
         <Navbar sticky={true} slug={slug} />
       </div>
     </UIProvider>

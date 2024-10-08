@@ -48,13 +48,18 @@ async function QuestsPage({params}: QuestsPageParams) {
               className={`flex items-center bg-white px-4 py-1 text-center space-x-2 ${museumModerno.className}`}
               style={{border: "1px dashed white"}}
             >
-              <Image
-                src='/logo-text-2.png'
-                alt='Los'
-                width={120}
-                height={100}
-                className={`text-black ${museumModerno.className}`}
-              />
+              <div className='relative'>
+                <Image
+                  src='/logo-text-2.png'
+                  alt='Los'
+                  width={80}
+                  height={60}
+                  className={`text-black ${museumModerno.className}`}
+                />
+                <div className='absolute top-0 -right-8 bg-[#2cff05] text-black px-2 py-1 text-[8px] rounded-full'>
+                  BETA
+                </div>
+              </div>
             </div>
           </Link>
         </div>
