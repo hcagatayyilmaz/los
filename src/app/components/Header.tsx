@@ -15,11 +15,11 @@ interface LogoProps {
 export default function Header({name, user, isMap}: LogoProps) {
   return (
     <div
-      className={`px-2  flex items-center justify-center bg-white border  -xl shadow-xl rounded-b-full`}
+      className={`px-2  flex items-center justify-center bg-transparent   rounded-b-full`}
     >
       <Link href={"/"}>
         <div
-          className={`flex items-center bg-white px-4  text-center space-x-2 ${museumModerno.className}`}
+          className={`flex items-center bg-white  rounded-b-full px-4  text-center space-x-2 ${museumModerno.className}`}
           style={{border: "1px dashed white"}}
         >
           <div className='relative'>

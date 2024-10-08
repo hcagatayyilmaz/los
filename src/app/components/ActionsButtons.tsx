@@ -33,7 +33,7 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
   }
 
   return (
-    <div className='w-full flex mt-2 items-center justify-between'>
+    <div className='w-full flex px-3 mt-2 items-center justify-between'>
       <div className='relative inline-block text-left'>
         <div
           className='flex gap-2 bg-white px-2 py-1 items-center rounded-full cursor-pointer border shadow-lg ml-1'
@@ -99,7 +99,7 @@ const ActionsButtons: React.FC<ActionsButtonsProps> = ({slug}) => {
         onClick={handleAddPlaceClick}
       >
         <Image src={"/logo.png"} width={24} height={24} alt='Logo Icon' />
-        <span className='ml-1'>Add Place</span>
+        <span className='ml-1'>+ Place</span>
       </div>
     </div>
   )

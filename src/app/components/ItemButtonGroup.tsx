@@ -96,7 +96,7 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full px-2'>
       {isLoading && <LoadingSpinner />}
       {location.checkedIn ? (
         <button
