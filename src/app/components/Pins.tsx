@@ -112,7 +112,7 @@ export const ItemPin = React.memo<{
         position={{lat: location.latitude, lng: location.longitude}}
       />
     )
-  } else if (location.taxonomy === "EVENT" && location.endDate) {
+  } else if (location.endDate) {
     if (location.pin && location.endDate) {
       const endDate = new Date(location.endDate)
       return (

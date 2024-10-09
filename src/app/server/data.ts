@@ -32,24 +32,41 @@ const getBaseAttractions = unstable_cache(
 
     const whereClause: any = {
       cityId,
-      isActive: true,
-      OR: [
-        {
-          AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
-        },
-        {
-          startDate: null,
-          endDate: null
-        },
-        {
-          startDate: null,
-          endDate: {gte: now}
-        }
-      ]
+      isActive: true
     }
 
     if (filter.taxonomy) {
       whereClause.taxonomy = filter.taxonomy.toUpperCase()
+
+      if (filter.taxonomy.toUpperCase() === "ATTRACTION") {
+        whereClause.OR = [
+          {
+            AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
+          },
+          {
+            startDate: null,
+            endDate: null
+          },
+          {
+            startDate: null,
+            endDate: {gte: now}
+          },
+          // Include expired attractions
+          {
+            endDate: {lt: now}
+          }
+        ]
+      } else if (filter.taxonomy.toUpperCase() === "EVENT") {
+        whereClause.OR = [
+          {
+            AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
+          },
+          {
+            startDate: null,
+            endDate: {gte: now}
+          }
+        ]
+      }
     } else if (filter.date) {
       const date = new Date(filter.date)
       whereClause.OR = [
@@ -63,6 +80,20 @@ const getBaseAttractions = unstable_cache(
         {
           startDate: null,
           endDate: {gte: date}
+        }
+      ]
+    } else {
+      whereClause.OR = [
+        {
+          AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
+        },
+        {
+          startDate: null,
+          endDate: null
+        },
+        {
+          startDate: null,
+          endDate: {gte: now}
         }
       ]
     }

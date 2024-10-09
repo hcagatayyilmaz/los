@@ -12,7 +12,7 @@ const ToggleSwitch = () => {
   }
 
   return (
-    <div className='flex items-center bg-white ml-5 gap-2 rounded-full border shadow-lg'>
+    <div className='flex items-center bg-white ml-7 gap-2 rounded-full border shadow-lg'>
       <button
         className={`${
           isListView ? "bg-customYellow text-white" : "text-black"
