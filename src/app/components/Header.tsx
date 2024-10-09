@@ -19,7 +19,7 @@ export default function Header({name, user, isMap}: LogoProps) {
     >
       <Link href={"/"}>
         <div
-          className={`flex items-center bg-white  rounded-b-full px-4  text-center space-x-2 ${museumModerno.className}`}
+          className={`flex items-center bg-white  rounded-b-full rounded-t-full px-4  text-center space-x-2 ${museumModerno.className}`}
           style={{border: "1px dashed white"}}
         >
           <div className='relative'>
