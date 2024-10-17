@@ -4,7 +4,7 @@ import "./globals.css"
 import {UserLocationProvider} from "./providers/useUserLocation"
 import ToastProvider from "./providers/ToastProvider"
 import Head from "next/head"
-import {UIProvider} from "./providers/UIProvider"
+import {CSPostHogProvider} from "./providers/PostHogProvider"
 import CookieConsent from "../app/components/CookieConsent"
 import {Analytics} from "@vercel/analytics/react"
 
@@ -25,18 +25,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <Head>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <body className={roboto.className}>
-        <ToastProvider>
-          <UserLocationProvider>
-            {children}
-            <Analytics />
-            <CookieConsent />
-          </UserLocationProvider>
-        </ToastProvider>
-      </body>
+      <CSPostHogProvider>
+        <Head>
+          <link rel='icon' href='/favicon.ico' />
+        </Head>
+        <body className={roboto.className}>
+          <ToastProvider>
+            <UserLocationProvider>
+              {children}
+              <Analytics />
+              <CookieConsent />
+            </UserLocationProvider>
+          </ToastProvider>
+        </body>
+      </CSPostHogProvider>
     </html>
   )
 }
