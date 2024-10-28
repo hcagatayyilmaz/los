@@ -3,7 +3,7 @@ import {CiMap, CiBoxList, CiGift, CiLogin} from "react-icons/ci"
 import {RiAccountCircleLine} from "react-icons/ri"
 import {VscAccount} from "react-icons/vsc"
 import {RiCoupon2Line} from "react-icons/ri"
-
+import Header from "./Header"
 import {MapIcon, QuestIcon, RewardsIcon} from "../lib/CustomIcons"
 import Link from "next/link"
 import {MdOutlineLeaderboard} from "react-icons/md"
@@ -14,26 +14,23 @@ import {useUIContext} from "../providers/UIProvider"
 
 // I am not sure whether should we have  color or not. TO BE DISCUSSED
 
-export default function Navbar({
-  sticky,
-  slug
-}: {
-  sticky?: boolean
+type NavbarProps = {
+  isHidden?: boolean
   slug: string
-}) {
-  const {setIsListView} = useUIContext()
+}
+
+export default function Navbar({isHidden, slug}: NavbarProps) {
+  const {setIsListView, isListView} = useUIContext()
   const currentPath = usePathname() // Get the current path
   const {isAuthenticated} = useKindeBrowserClient()
 
   return (
     <div
       className={
-        sticky
-          ? "sticky bottom-0 left-0 right-0 bg-white border-t pt-1 w-full"
-          : "h-full w-full bg-white border-t pt-1"
+        isListView ? "hidden" : "h-full w-full bg-white border-t pt-1 border"
       }
     >
-      <div className='flex justify-around px-2 items-center bg-transparent text-sm'>
+      <div className='flex justify-around px-2 items-center bg-transparent text-sm '>
         <Link href={`/${slug}`} onClick={() => setIsListView(false)}>
           <div className='flex flex-col  items-center text-muted-foreground bg-white px-2 py-1 rounded  text-sm '>
             <CiMap className='w-4 h-4 ' />
@@ -47,6 +44,8 @@ export default function Navbar({
             <span className='text-xs'>Rewards</span>
           </div>
         </Link>
+
+        <Header name={slug} />
 
         <Link href={`/${slug}/quests`}>
           <div className='flex flex-col   items-center text-muted-foreground bg-white px-2 py-1 rounded  hover:text-customYellow  text-sm'>

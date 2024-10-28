@@ -86,7 +86,7 @@ function CityPageContent({
           </div>
           <Banner />
           <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
-            <Header user={user} name={city.name} />
+            {/* <Header user={user} name={city.name} /> */}
             <ActionsButtons slug={city.slug} />
           </div>
           <div className='absolute bottom-0 left-0 w-full z-10 flex flex-col'>

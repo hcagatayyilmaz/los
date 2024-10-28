@@ -11,6 +11,7 @@ import mapStyle from "../lib/style"
 import {Location} from "../lib/types"
 import {useSelectedItem} from "@/app/providers/useSelectedItem"
 import {LiveLocationPin, ItemPin} from "./Pins"
+import posthog from "posthog-js"
 // import {generateSyntheticMapPlaces} from "../server/data" // Import the function
 
 const libraries: Libraries = ["places", "geometry"]
@@ -28,6 +29,8 @@ const Map: React.FC<{
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
     libraries
   })
+
+  posthog.capture("my event", {property: "value"})
 
   const {userLocation} = useUserLocation()
   const {setSelectedLocation, updateSelectedLocation, selectedLocation} =

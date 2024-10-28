@@ -88,7 +88,7 @@ const RewardsPage = async ({params}: RewardsPageParams) => {
           <MyRewards />
         </div>
 
-        <Navbar sticky={true} slug={slug} />
+        <Navbar slug={slug} />
       </div>
     </UIProvider>
   )

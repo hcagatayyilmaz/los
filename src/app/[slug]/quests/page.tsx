@@ -130,7 +130,7 @@ async function QuestsPage({params}: QuestsPageParams) {
         </div>
       </div>
        */}
-        <Navbar sticky={true} slug={slug} />
+        <Navbar slug={slug} />
       </div>
     </UIProvider>
   )
