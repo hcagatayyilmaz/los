@@ -16,11 +16,6 @@ async function MyRewards() {
     const myRewards = await getMyRewards(user.id)
     return (
       <>
-        <h1
-          className={`text-4xl underline underline-offset-6 font-semibold my-2 px-6 mb-4 ${museoModerno.className}`}
-        >
-          My Rewards
-        </h1>
         <div className='max-w-2xl mx-auto bg-white rounded-lg flex flex-col gap-2'>
           <div className=''>
             {myRewards.map((userReward: any) => (

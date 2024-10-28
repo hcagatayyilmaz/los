@@ -87,15 +87,19 @@ function CityPageContent({
           <Banner />
           <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
             <Header user={user} name={city.name} />
-            <Navbar isMapPage={false} />
             <ActionsButtons slug={city.slug} />
           </div>
-          <div className='absolute bottom-0 left-0 w-full z-1'>
-            <CardButtonWrapper
-              points={user ? user.points : 0}
-              location={attractions[0]}
-            />
-            <MapItemWrapper />
+          <div className='absolute bottom-0 left-0 w-full z-10 flex flex-col'>
+            <div className='flex-grow overflow-y-auto'>
+              <CardButtonWrapper
+                points={user ? user.points : 0}
+                location={attractions[0]}
+              />
+              <MapItemWrapper />
+            </div>
+            <div className='sticky bottom-0 w-full'>
+              <Navbar slug={city.slug} />
+            </div>
           </div>
         </main>
       </SelectedItemProvider>

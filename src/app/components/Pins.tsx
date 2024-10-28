@@ -48,10 +48,10 @@ export const ItemPin = React.memo<{
   const getMarkerSize = (baseSize: number) => {
     let size
     if (zoomLevel === undefined) size = baseSize
-    else if (zoomLevel < 14) size = 12
-    else if (zoomLevel < 16) size = 16
-    else if (zoomLevel < 17) size = 32
-    else size = 64
+    else if (zoomLevel < 13) size = 16
+    else if (zoomLevel < 15) size = 25
+    else if (zoomLevel < 17) size = 36
+    else size = 48
 
     return isSelected ? size * 1.5 : size
   }
@@ -112,7 +112,7 @@ export const ItemPin = React.memo<{
         position={{lat: location.latitude, lng: location.longitude}}
       />
     )
-  } else if (location.taxonomy === "EVENT" && location.endDate) {
+  } else if (location.endDate) {
     if (location.pin && location.endDate) {
       const endDate = new Date(location.endDate)
       return (
