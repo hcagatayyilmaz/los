@@ -15,7 +15,7 @@ interface LogoProps {
 export default function Header({name, user, isMap}: LogoProps) {
   return (
     <div
-      className={`px-2  flex items-center justify-center bg-transparent   rounded-b-full`}
+      className={`px-2  flex items-center justify-center bg-transparent rounded-b-full`}
     >
       <Link href={"/"}>
         <div
@@ -30,9 +30,9 @@ export default function Header({name, user, isMap}: LogoProps) {
               height={60}
               className={`text-black ${museumModerno.className}`}
             />
-            <div className='absolute top-0 -right-8 bg-[#2cff05] text-black px-2 py-1 text-[8px] rounded-full'>
+            {/* <div className='absolute top-0 -right-7 bg-[#2cff05] text-black px-2  text-[8px] rounded-full'>
               BETA
-            </div>
+            </div> */}
           </div>
           <div className='flex items-end justify-end mt-2'>
             {/* {!isMap && (
