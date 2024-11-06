@@ -109,12 +109,12 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
             // There will be AI Guide redirection
             <div className='flex items-center text-sm'>
               <CgLockUnlock className='w-4 h-4 text-white mr-2' />
-              "Great! You&apos;ve checked in to this attraction."
+              {"Great! You've checked in to this attraction."}
             </div>
           ) : (
             <div className='flex items-center text-sm'>
               <CgLockUnlock className='w-4 h-4 text-white mr-2' />
-              "Great! You&apos;ve checked in to this event."
+              {"Great! You've checked in to this event."}
             </div>
           )}
         </button>
