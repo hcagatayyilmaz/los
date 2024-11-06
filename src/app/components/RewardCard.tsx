@@ -45,9 +45,16 @@ export const RewardCard = ({reward}: any) => {
               </span>
             </div>
           </div>
-          <p className='text-gray-500 text-xs text-wrap my-2'>
-            {reward.description_en}
-          </p>
+          <div className='flex justify-between'>
+            <p className='text-gray-500 text-xs text-wrap my-2'>
+              {reward.description_en}
+            </p>
+            <p className='text-black text-xs text-wrap my-2 text-right'>
+              {reward.numberOfUses >= 1 && (
+                <span className='text-xs'>{reward.numberOfUses} uses left</span>
+              )}
+            </p>
+          </div>
         </div>
       </div>
       <div className='w-full my-2 flex flex-col items-end gap-1'>

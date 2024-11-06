@@ -74,7 +74,7 @@ export const ItemPin = React.memo<{
   const baseClassName = `relative group transition-transform duration-200 ${scaleClass} ${sizeClass}`
 
   // Checked-in logic
-  if (location.checkedIn) {
+  if (location.checkedIn && location.taxonomy !== "EVENT") {
     const size = getMarkerSize(16)
     return (
       <Marker
