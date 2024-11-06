@@ -44,10 +44,33 @@ function ConfirmRewards({searchParams}: {searchParams: {rewardId?: string}}) {
     }
   }
 
+  // TODO: Fix this!
   if (!reward) {
     return (
       <>
         <Header />
+        <div className='flex justify-center'>
+          <div
+            className={`${museoModerno.className} max-w-md w-full mx-auto p-6 border`}
+          >
+            <h1 className='text-2xl font-bold mb-4'>Confirm Reward Usage</h1>
+            <p className='mb-2'>
+              <strong>Reward:</strong> {reward.name_en}
+            </p>
+            <p className='mb-4'>
+              <strong>Description:</strong> {reward.description_en}
+            </p>
+            <form action={handleConfirmUsage}>
+              <input type='hidden' name='rewardId' value={reward.id} />
+              <button
+                type='submit'
+                className='w-full bg-black text-white py-2 px-4 rounded-full hover:bg-customYellow transition duration-300'
+              >
+                Confirm Usage
+              </button>
+            </form>
+          </div>
+        </div>
       </>
     )
   }
