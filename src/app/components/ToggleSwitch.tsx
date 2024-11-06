@@ -5,7 +5,7 @@ import {MdMap} from "react-icons/md"
 import {useUIContext} from "@/app/providers/UIProvider" // Ensure the correct path
 
 const ToggleSwitch = () => {
-  const {isListView, setIsListView} = useUIContext() // Use context to manage view state
+  const {isListView, setIsListView, isSticky, setIsSticky} = useUIContext() // Use context to manage view state
 
   const toggleView = (view: string) => {
     setIsListView(view === "list")
@@ -17,7 +17,10 @@ const ToggleSwitch = () => {
         className={`${
           isListView ? "bg-customYellow text-white" : "text-black"
         } flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-200 ease-in-out`}
-        onClick={() => toggleView("list")}
+        onClick={() => {
+          toggleView("list")
+          setIsSticky(!isSticky)
+        }}
       >
         <BsList size={20} />
       </button>

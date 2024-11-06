@@ -50,7 +50,7 @@ const MapPage = async ({searchParams}: MapPageParams) => {
           <Banner />
           <div className='absolute top-0 left-0 w-full z-20 bg-transparent'>
             <Header user={user} isMap={true} />
-            <Navbar sticky={false} slug={"map"} />
+            <Navbar slug={"map"} />
             <ActionsButtons slug={"map"} />
             {/* <Banner /> */}
           </div>

@@ -10,6 +10,7 @@ import CustomToast from "./CustomToast"
 import {FaLock} from "react-icons/fa"
 import {ImUnlocked} from "react-icons/im"
 import LoadingSpinner from "./LoadingSpinner"
+import {CgLockUnlock} from "react-icons/cg"
 
 const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
   const {userLocation} = useUserLocation()
@@ -104,9 +105,9 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
           onClick={handleCheckIn}
           disabled={isLoading}
         >
-          <div className='flex items-center'>
-            <ImUnlocked className='w-3 h-3 text-customYellow  mr-1' />
-            Great! You are already checked in.
+          <div className='flex items-center text-sm'>
+            <CgLockUnlock className='w-4 h-4 text-white mr-2' />
+            Great! Click here to reach Los Virtual Guide!
           </div>
         </button>
       ) : (

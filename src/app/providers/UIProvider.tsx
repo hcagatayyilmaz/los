@@ -3,24 +3,35 @@ import React, {createContext, useState, useContext} from "react"
 
 // Define the shape of the UI context
 type UIContextType = {
-    isListView: boolean
-    setIsListView: React.Dispatch<React.SetStateAction<boolean>>
+  isListView: boolean
+  setIsListView: React.Dispatch<React.SetStateAction<boolean>>
+  isSticky: boolean
+  setIsSticky: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 // Create the context with a default value
 const UIContext = createContext<UIContextType | undefined>(undefined)
 
-export const UIProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
-    const [isListView, setIsListView] = useState(false)
+export const UIProvider: React.FC<{children: React.ReactNode}> = ({
+  children
+}) => {
+  const [isListView, setIsListView] = useState(false)
+  const [isSticky, setIsSticky] = useState(false)
 
-    return <UIContext.Provider value={{isListView, setIsListView}}>{children}</UIContext.Provider>
+  return (
+    <UIContext.Provider
+      value={{isListView, setIsListView, isSticky, setIsSticky}}
+    >
+      {children}
+    </UIContext.Provider>
+  )
 }
 
 // Custom hook to use the UI context
 export const useUIContext = () => {
-    const context = useContext(UIContext)
-    if (context === undefined) {
-        throw new Error("useUIContext must be used within a UIProvider")
-    }
-    return context
+  const context = useContext(UIContext)
+  if (context === undefined) {
+    throw new Error("useUIContext must be used within a UIProvider")
+  }
+  return context
 }
