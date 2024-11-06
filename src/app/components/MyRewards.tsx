@@ -28,6 +28,7 @@ async function MyRewards() {
                 key={userReward.reward.id}
                 reward={userReward.reward}
                 isUsed={userReward.isUsed}
+                userId={user.id}
               />
             ))}
           </div>
