@@ -560,7 +560,10 @@ export async function redeemReward(rewardId: string) {
 
   await prisma.reward.update({
     where: {id: reward.id},
-    data: {available: false}
+    data: {
+      numberOfUses: {decrement: 1},
+      available: reward.numberOfUses > 1
+    }
   })
 
   return {success: true, message: "Reward obtained successfully!"}

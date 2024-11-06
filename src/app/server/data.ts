@@ -62,6 +62,9 @@ const getBaseAttractions = unstable_cache(
             AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
           },
           {
+            AND: [{startDate: {gte: now}}, {endDate: {gte: now}}]
+          },
+          {
             startDate: null,
             endDate: {gte: now}
           }
@@ -86,6 +89,9 @@ const getBaseAttractions = unstable_cache(
       whereClause.OR = [
         {
           AND: [{startDate: {lte: now}}, {endDate: {gte: now}}]
+        },
+        {
+          AND: [{startDate: {gte: now}}, {endDate: {gte: now}}]
         },
         {
           startDate: null,
@@ -156,7 +162,7 @@ export async function getAttractions(cityId: string, filter: any) {
     }))
     syntheticData = syntheticData.map((place) => ({...place, checkedIn: false}))
   }
-
+  console.log("ATTRACTIONS*****", attractions)
   return {attractions, syntheticData}
 }
 

@@ -79,12 +79,8 @@ const RewardsPage = async ({params}: RewardsPageParams) => {
             <RewardCard key={reward.id} reward={reward} />
           ))}
         </div>
-        <h1
-          className={`text-4xl font-semibold my-2 px-6 ${museumModerno.className}`}
-        >
-          My Rewards
-        </h1>
-        <div className='px-4'>
+
+        <div className=''>
           <MyRewards />
         </div>
 

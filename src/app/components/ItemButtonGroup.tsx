@@ -105,10 +105,18 @@ const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
           onClick={handleCheckIn}
           disabled={isLoading}
         >
-          <div className='flex items-center text-sm'>
-            <CgLockUnlock className='w-4 h-4 text-white mr-2' />
-            Great! Click here to reach Los Virtual Guide!
-          </div>
+          {location.taxonomy !== "EVENT" ? (
+            // There will be AI Guide redirection
+            <div className='flex items-center text-sm'>
+              <CgLockUnlock className='w-4 h-4 text-white mr-2' />
+              {"Great! You've checked in to this attraction."}
+            </div>
+          ) : (
+            <div className='flex items-center text-sm'>
+              <CgLockUnlock className='w-4 h-4 text-white mr-2' />
+              {"Great! You've checked in to this event."}
+            </div>
+          )}
         </button>
       ) : (
         <button
