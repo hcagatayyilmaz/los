@@ -91,3 +91,30 @@ export function calculateDistance4(
 
   return Math.round(distance)
 }
+
+interface RandomizedPoints {
+  [locationId: string]: number
+}
+
+export const getRandomizedPoints = (
+  min: number = 0,
+  max: number = 100
+): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export const getUserLocationPoints = (locationId: string): number => {
+  if (typeof window === "undefined") return 0
+
+  const storedPoints = localStorage.getItem("userLocationPoints")
+  const pointsMap: RandomizedPoints = storedPoints
+    ? JSON.parse(storedPoints)
+    : {}
+
+  if (!pointsMap[locationId]) {
+    pointsMap[locationId] = getRandomizedPoints()
+    localStorage.setItem("userLocationPoints", JSON.stringify(pointsMap))
+  }
+
+  return pointsMap[locationId]
+}
