@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import {Location} from "../lib/types"
 import {CoinIcon} from "../lib/CustomIcons"
 import {checkIn, checkInSyntheticLocation} from "../server/index"
@@ -11,11 +11,18 @@ import {FaLock} from "react-icons/fa"
 import {ImUnlocked} from "react-icons/im"
 import LoadingSpinner from "./LoadingSpinner"
 import {CgLockUnlock} from "react-icons/cg"
+import {getUserLocationPoints} from "../lib/func"
 
 const ItemButtonGroup: React.FC<{location: Location}> = ({location}) => {
   const {userLocation} = useUserLocation()
   const {isAuthenticated} = useKindeBrowserClient()
   const [isLoading, setIsLoading] = useState(false)
+  const [points, setPoints] = useState(location.points)
+
+  useEffect(() => {
+    const randomizedPoints = getUserLocationPoints(location.id)
+    setPoints(randomizedPoints)
+  }, [location.id])
 
   const handleCheckIn = async () => {
     if (!isAuthenticated) {
