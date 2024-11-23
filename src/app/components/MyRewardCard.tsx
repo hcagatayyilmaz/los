@@ -4,7 +4,15 @@ import {CoinIcon} from "../lib/CustomIcons"
 import QRCode from "./QRCode"
 import React from "react"
 
-export const MyRewardCard = ({reward, isUsed}: any) => {
+export const MyRewardCard = ({
+  reward,
+  isUsed,
+  userId
+}: {
+  reward: any
+  isUsed: boolean
+  userId: string
+}) => {
   return (
     <div className='w-full  bg-white rounded-xl shadow-xl p-4 flex flex-col border border-gray-300 mb-4'>
       <div className='flex'>
@@ -29,7 +37,7 @@ export const MyRewardCard = ({reward, isUsed}: any) => {
         </div>
       </div>
       <div className='mt-1 flex justify-center'>
-        <QRCode id={reward.id} />
+        <QRCode id={reward.id} userId={userId} />
       </div>
     </div>
   )

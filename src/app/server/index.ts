@@ -643,6 +643,7 @@ export async function confirmRewardUsage(formData: FormData) {
   "use server"
 
   const rewardId = formData.get("rewardId") as string
+  const userId = formData.get("userId") as string
   if (!rewardId) {
     console.error("Reward ID is required")
     return {
@@ -652,20 +653,9 @@ export async function confirmRewardUsage(formData: FormData) {
     }
   }
 
-  const {getUser} = getKindeServerSession()
-  const user = await getUser()
-
-  if (!user) {
-    console.error("User not authenticated")
-    return {
-      success: false,
-      message: "Please login to confirm reward usage."
-    }
-  }
-
   const userReward = await prisma.userReward.findFirst({
     where: {
-      userId: user.id,
+      userId: userId,
       rewardId: rewardId,
       isUsed: false
     },
@@ -691,6 +681,5 @@ export async function confirmRewardUsage(formData: FormData) {
     data: {isUsed: true}
   })
 
-  revalidatePath("/rewards")
-  redirect(`/${userReward.reward.city?.slug || ""}/quests`)
+  return {success: true, message: "Reward obtained successfully!"}
 }
