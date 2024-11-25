@@ -36,11 +36,13 @@ type CheckInResult =
 export async function checkIn({
   placeId,
   userLat,
-  userLng
+  userLng,
+  points
 }: {
   placeId: string
   userLat: number
   userLng: number
+  points: number
 }): Promise<CheckInResult> {
   const {getUser} = getKindeServerSession()
   const user = await getUser()
@@ -86,18 +88,21 @@ export async function checkIn({
       const result = await prisma.$transaction(async (prisma) => {
         const [checkIn, updatedUser] = await Promise.all([
           prisma.checkIn.create({
-            data: {userId: user.id, attractionId: placeId}
+            data: {
+              userId: user.id,
+              attractionId: placeId
+            }
           }),
           prisma.user.update({
             where: {id: user.id},
-            data: {points: {increment: place.points}}
+            data: {points: {increment: points}}
           })
         ])
 
         await prisma.transaction.create({
           data: {
             userId: user.id,
-            points: place.points,
+            points: points,
             details: `checkin_id:${checkIn.id}`,
             type: "EARN_POINTS"
           }
@@ -129,11 +134,13 @@ export async function checkIn({
 export async function checkInSyntheticLocation({
   placeId,
   userLat,
-  userLng
+  userLng,
+  points
 }: {
   placeId: string
   userLat: number
   userLng: number
+  points: number
 }): Promise<CheckInResult> {
   const {getUser} = getKindeServerSession()
   const user = await getUser()
@@ -180,18 +187,22 @@ export async function checkInSyntheticLocation({
     try {
       const result = await prisma.$transaction(async (prisma) => {
         await prisma.checkIn.create({
-          data: {userId: user.id, isSynthetic: true, syntheticPlaceId: placeId}
+          data: {
+            userId: user.id,
+            isSynthetic: true,
+            syntheticPlaceId: placeId
+          }
         })
 
         await prisma.user.update({
           where: {id: user.id},
-          data: {points: {increment: place.points}}
+          data: {points: {increment: points}}
         })
 
         await prisma.transaction.create({
           data: {
             userId: user.id,
-            points: place.points,
+            points: points,
             details: `checkin_id:${placeId}`,
             type: "EARN_POINTS"
           }
