@@ -158,9 +158,14 @@ export async function getAttractions(cityId: string, filter: any) {
   } else {
     attractions = attractions.map((attraction) => ({
       ...attraction,
-      checkedIn: false
+      checkedIn: false,
+      points: 0
     }))
-    syntheticData = syntheticData.map((place) => ({...place, checkedIn: false}))
+    syntheticData = syntheticData.map((place) => ({
+      ...place,
+      checkedIn: false,
+      points: 0
+    }))
   }
   console.log("ATTRACTIONS*****", attractions)
   return {attractions, syntheticData}

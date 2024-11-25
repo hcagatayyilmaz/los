@@ -35,7 +35,7 @@ const MainLayout: React.FC<LayoutProps> = ({
     if (!storedPoints) {
       const pointsMap = [...locations, ...(syntheticData || [])].reduce(
         (acc, location) => {
-          const randomPoints = Math.floor(Math.random() * (100 - 20 + 1)) + 20
+          const randomPoints = (Math.floor(Math.random() * 10) + 1) * 10
           return {
             ...acc,
             [location.id]: randomPoints

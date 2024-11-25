@@ -6,19 +6,12 @@ import {Location} from "../lib/types"
 import ItemButtonGroup from "./ItemButtonGroup"
 import {FaDirections} from "react-icons/fa"
 import {CoinIcon} from "../lib/CustomIcons"
-import {getUserLocationPoints} from "../lib/func"
+
 type ItemCardListProps = {
   location: Location
 }
 
 export const ItemCardList = ({location}: ItemCardListProps) => {
-  const [points, setPoints] = useState(0)
-
-  useEffect(() => {
-    const randomizedPoints = getUserLocationPoints(location.id)
-    setPoints(randomizedPoints)
-  }, [location.id])
-
   const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}&travelmode=transit&dir_action=navigate`
 
   return (
@@ -45,7 +38,9 @@ export const ItemCardList = ({location}: ItemCardListProps) => {
             <span className='inline-block'>
               <div className='flex items-center justify-center bg-customYellow rounded-md px-2 pb-[2px]'>
                 <CoinIcon className='w-4 h-4 text-white' />
-                <span className='mt-1 ml-1 text-xs text-white'>{points}</span>
+                <span className='mt-1 ml-1 text-xs text-white'>
+                  {location.points}
+                </span>
               </div>
             </span>
             <Link href={mapUrl} target='_blank' rel='noopener noreferrer'>
