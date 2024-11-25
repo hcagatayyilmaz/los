@@ -4,13 +4,28 @@ import {CoinIcon} from "../lib/CustomIcons"
 import QRCode from "./QRCode"
 import React, {useState} from "react"
 import {redeemReward} from "@/app/server/index"
+import {useKindeBrowserClient} from "@kinde-oss/kinde-auth-nextjs"
+import toast from "react-hot-toast"
+import CustomToast from "./CustomToast"
 
 export const RewardCard = ({reward}: any) => {
   const [showQRCode, setShowQRCode] = useState(false)
   const [claimed, setClaimed] = useState(false)
   const [message, setMessage] = useState("")
+  const {user} = useKindeBrowserClient()
 
   const handleObtainClick = async () => {
+    if (!user) {
+      toast.custom(
+        <CustomToast message='Please login to redeem rewards' type='error' />,
+        {
+          position: "top-center",
+          duration: 1000
+        }
+      )
+      return
+    }
+
     try {
       const response = await redeemReward(reward.id)
       setMessage(response.message)
@@ -79,7 +94,7 @@ export const RewardCard = ({reward}: any) => {
       </div>
       {showQRCode && (
         <div className='mt-4 flex justify-center'>
-          <QRCode id={reward.id} />
+          <QRCode id={reward.id} userId={user?.id} />
         </div>
       )}
     </div>

@@ -7,6 +7,7 @@ interface QRCodeComponentProps {
 }
 
 function QRCodeComponent({id, userId}: QRCodeComponentProps) {
+  console.log("USER ID: ", userId)
   return (
     <div className='mt-4' style={{display: "flex", justifyContent: "center"}}>
       <QRCode

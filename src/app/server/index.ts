@@ -548,11 +548,6 @@ export async function redeemReward(rewardId: string) {
     }
   }
 
-  await prisma.user.update({
-    where: {id: user.id},
-    data: {points: {decrement: reward.points}}
-  })
-
   await prisma.transaction.create({
     data: {
       userId: user.id,
@@ -567,6 +562,11 @@ export async function redeemReward(rewardId: string) {
       userId: user.id,
       rewardId: reward.id
     }
+  })
+
+  await prisma.user.update({
+    where: {id: user.id},
+    data: {points: {decrement: reward.points}}
   })
 
   await prisma.reward.update({
