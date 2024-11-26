@@ -115,6 +115,7 @@ export async function checkIn({
         }
       })
 
+      revalidatePath("/")
       return result
     } catch (error) {
       console.error("Error during check-in process:", error)
@@ -214,6 +215,7 @@ export async function checkInSyntheticLocation({
           {new: true}
         ).lean()
 
+        revalidatePath("/")
         return {
           success: true,
           message: "Checked in successfully",
